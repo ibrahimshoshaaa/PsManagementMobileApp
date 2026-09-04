@@ -1,6 +1,7 @@
 import 'dart:ui'; // مطلوب لـ FontFeature
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/device.dart';
 import '../services/app_state.dart';
 import '../widgets/device_card.dart';
@@ -55,7 +56,7 @@ class DeviceDetailScreen extends StatelessWidget {
         leading: const BackButton(color: Colors.white),
         // ✅ AppBar actions: فقط QR + pause/resume — باقي الخيارات انتقلت للبوكس
         actions: [
-          if (device.isActive) ...[
+          if (device.isActive) ...[\n            IconButton(\n              icon: Icon(\n                device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty\n                    ? Icons.phone\n                    : Icons.phone_outlined,\n                color: device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty\n                    ? Colors.green\n                    : Colors.white38,\n                size: 24,\n              ),\n              tooltip: 'رقم الواتساب',\n              onPressed: () => _showWhatsappEditDialog(context, state, device),\n            ),
             IconButton(
               icon: const Icon(Icons.qr_code, color: Colors.white54, size: 24),
               onPressed: () => Navigator.push(context,
@@ -968,6 +969,67 @@ class _BuffetSection extends StatelessWidget {
     );
   }
 
+  void _showWhatsappEditDialog(BuildContext context, AppState state, PSDevice device) {
+    final ctrl = TextEditingController(text: device.whatsappNumber ?? '');
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1c2128),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(children: [
+          Icon(Icons.phone, color: Colors.green, size: 20),
+          SizedBox(width: 8),
+          Text('رقم الواتساب', style: TextStyle(color: Colors.white, fontSize: 16)),
+        ]),
+        content: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0b0e14),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.white12),
+          ),
+          child: TextField(
+            controller: ctrl,
+            keyboardType: TextInputType.phone,
+            textDirection: TextDirection.ltr,
+            autofocus: true,
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+            decoration: const InputDecoration(
+              hintText: '01xxxxxxxxx',
+              hintStyle: TextStyle(color: Colors.white24),
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+            ),
+          ),
+        ),
+        actions: [
+          if (device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty)
+            TextButton(
+              onPressed: () {
+                device.whatsappNumber = null;
+                state.notifyListeners();
+                Navigator.pop(context);
+              },
+              child: const Text('حذف الرقم', style: TextStyle(color: Colors.red)),
+            ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إلغاء', style: TextStyle(color: Colors.white54)),
+          ),
+          FilledButton(
+            onPressed: () {
+              device.whatsappNumber = ctrl.text.trim().isEmpty ? null : ctrl.text.trim();
+              state.notifyListeners();
+              Navigator.pop(context);
+            },
+            style: FilledButton.styleFrom(backgroundColor: Colors.green),
+            child: const Text('حفظ'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showAddOrderDialog(BuildContext context, AppState state) {
     showBuffetOrderDialog(
       context: context,
@@ -1047,6 +1109,37 @@ class _StopButton extends StatelessWidget {
                       backgroundColor: Colors.red.shade700),
                   child: const Text('تأكيد'),
                 ),
+                if (device.whatsappNumber != null &&
+                    device.whatsappNumber!.isNotEmpty)
+                  FilledButton.icon(
+                    icon: const Icon(Icons.send, size: 16),
+                    label: const Text('تأكيد وإرسال'),
+                    onPressed: () async {
+                      final phone = device.whatsappNumber!;
+                      final name = device.displayName;
+                      final elapsed = device.elapsedSeconds;
+                      final orders = Map<String, int>.from(device.orders);
+                      final menu = state.menu;
+                      final shopName = state.shopName;
+                      state.stopDevice(device);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      await _launchWhatsapp(
+                        context: context,
+                        phone: phone,
+                        shopName: shopName,
+                        deviceName: name,
+                        elapsed: elapsed,
+                        timeCost: timePrice,
+                        buffetCost: buffetPrice,
+                        orders: orders,
+                        menu: menu,
+                      );
+                    },
+                    style: FilledButton.styleFrom(
+                        backgroundColor: const Color(0xFF25D366),
+                        foregroundColor: Colors.white),
+                  ),
               ],
             ),
           );
@@ -1063,7 +1156,60 @@ class _StopButton extends StatelessWidget {
   }
 }
 
-class _Row extends StatelessWidget {
+Future<void> _launchWhatsapp({
+  required BuildContext context,
+  required String phone,
+  required String shopName,
+  required String deviceName,
+  required int elapsed,
+  required double timeCost,
+  required double buffetCost,
+  required Map<String, int> orders,
+  required Map<String, int> menu,
+}) async {
+  final h = elapsed ~/ 3600;
+  final m = (elapsed % 3600) ~/ 60;
+  final durationStr = h > 0 ? '${h}س ${m}د' : '${m}د';
+
+  final buf = StringBuffer();
+  buf.writeln('🎮 *$shopName*');
+  buf.writeln('─────────────────');
+  buf.writeln('📍 *$deviceName*');
+  buf.writeln('');
+  buf.writeln('⏱ *مدة اللعب:* $durationStr');
+  buf.writeln('💵 *حساب الوقت:* ${timeCost.toStringAsFixed(1)} ج');
+
+  if (orders.isNotEmpty) {
+    buf.writeln('');
+    buf.writeln('🥤 *الأصناف والمشروبات:*');
+    orders.forEach((item, qty) {
+      final price = (menu[item] ?? 0) * qty;
+      buf.writeln('  • $item × $qty = ${price.toStringAsFixed(1)} ج');
+    });
+    buf.writeln('💵 *إجمالي المشروبات:* ${buffetCost.toStringAsFixed(1)} ج');
+  }
+
+  buf.writeln('');
+  buf.writeln('─────────────────');
+  buf.writeln('💰 *المطلوب: ${(timeCost + buffetCost).toStringAsFixed(1)} ج*');
+  buf.writeln('');
+  buf.writeln('🌟 نورتونا، يارب تعود تاني! 🌟');
+
+  final cleanPhone = phone.replaceAll(RegExp(r'[^0-9]'), '');
+  final intlPhone = cleanPhone.startsWith('0') ? '2$cleanPhone' : cleanPhone;
+  final encoded = Uri.encodeComponent(buf.toString());
+  final uri = Uri.parse('https://wa.me/$intlPhone?text=$encoded');
+
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+          content: Text('تعذر فتح واتساب'),
+          backgroundColor: Colors.red),
+    );
+  }
+}
   final String label;
   final String value;
   final bool bold;
@@ -1246,6 +1392,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   String _timeMode = 'open';
   int? _selectedSeconds;
   final _customCtrl = TextEditingController();
+  final _whatsappCtrl = TextEditingController();
   bool _customMinutes = true;
 
   static const List<Map<String, dynamic>> _presets = [
@@ -1259,6 +1406,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   @override
   void dispose() {
     _customCtrl.dispose();
+    _whatsappCtrl.dispose();
     super.dispose();
   }
 
@@ -1361,11 +1509,37 @@ class _StartModeDialogState extends State<_StartModeDialog> {
           ),
         ]),
         const SizedBox(height: 20),
+        // ── خانة رقم الواتساب (اختياري) ──────────────────────────────
+        const Text('رقم الواتساب (اختياري)',
+            style: TextStyle(
+                color: Colors.white54,
+                fontSize: 12,
+                fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0b0e14),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.white12),
+          ),
+          child: TextField(
+            controller: _whatsappCtrl,
+            keyboardType: TextInputType.phone,
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+            decoration: const InputDecoration(
+              hintText: '01xxxxxxxxx',
+              hintStyle: TextStyle(color: Colors.white24),
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
       ],
     );
   }
-
-  Widget _buildStep1() {
     return Column(
       key: const ValueKey('step1'),
       mainAxisSize: MainAxisSize.min,
@@ -1594,6 +1768,9 @@ class _StartModeDialogState extends State<_StartModeDialog> {
                     _playMode,
                     countdownSeconds:
                         _timeMode == 'fixed' ? _selectedSeconds : null,
+                    whatsappNumber: _whatsappCtrl.text.trim().isEmpty
+                        ? null
+                        : _whatsappCtrl.text.trim(),
                   );
                 }
               }

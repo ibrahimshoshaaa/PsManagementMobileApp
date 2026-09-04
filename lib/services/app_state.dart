@@ -1525,13 +1525,14 @@ void _startClock() {
   // DEVICE ACTIONS
   // ══════════════════════════════════════════════════════════════════════════
 
-  void startDevice(PSDevice d, String mode, {int? countdownSeconds}) {
+  void startDevice(PSDevice d, String mode, {int? countdownSeconds, String? whatsappNumber}) {
     d.mode = mode;
     d.status = 'شغال';
     d.startTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     d.addedSeconds = 0;
     d.isPaused = false;
     d.sessionLog = [];
+    d.whatsappNumber = whatsappNumber;
 
     final modeLabel = mode == 'multi' ? 'مالتي' : 'عادي';
 
@@ -1873,6 +1874,7 @@ void _startClock() {
     d.countdownTotalSeconds = null;
     d.countdownAlertSent = false;
     d.sessionLog = []; // 🔥 امسح الـ local log بعد الحفظ
+    d.whatsappNumber = null;
     _alertedDevices.remove(d.id);
     _countdownAlertedDevices.remove(d.id);
     } finally {

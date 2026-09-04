@@ -18,6 +18,7 @@ class PSDevice {
   bool countdownAlertSent;    // هل تم إرسال إشعار انتهاء الوقت؟
 
   List<Map<String, dynamic>> sessionLog; // سجل الجلسة
+  String? whatsappNumber; // رقم واتساب اختياري
 
   PSDevice({required this.id, this.deviceType = 'ps4'})
       : displayName = 'PS $id',
@@ -33,7 +34,8 @@ class PSDevice {
         isCountdown = false,
         countdownTotalSeconds = null,
         countdownAlertSent = false,
-        sessionLog = [];
+        sessionLog = [],
+        whatsappNumber = null;
 
   bool get isRunning => startTime != null && !isPaused;
   bool get isActive => startTime != null;

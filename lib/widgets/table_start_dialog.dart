@@ -24,6 +24,7 @@ class _TableStartDialogState extends State<TableStartDialog> {
   String _timeMode = 'open'; // open | fixed
   int? _selectedSeconds;
   final _customCtrl = TextEditingController();
+  final _whatsappCtrl = TextEditingController();
   bool _customMinutes = true;
 
   static const List<Map<String, dynamic>> _presets = [
@@ -37,6 +38,7 @@ class _TableStartDialogState extends State<TableStartDialog> {
   @override
   void dispose() {
     _customCtrl.dispose();
+    _whatsappCtrl.dispose();
     super.dispose();
   }
 
@@ -156,6 +158,8 @@ class _TableStartDialogState extends State<TableStartDialog> {
             ),
           ]),
           const SizedBox(height: 20),
+          _buildWhatsappField(),
+          const SizedBox(height: 20),
         ],
       );
     } else {
@@ -200,12 +204,46 @@ class _TableStartDialogState extends State<TableStartDialog> {
             ),
           ],
           const SizedBox(height: 20),
+          _buildWhatsappField(),
+          const SizedBox(height: 20),
         ],
       );
     }
   }
 
-  // ─── الخطوة 1: وقت مفتوح أم محدد ─────────────────────────────────────────
+  Widget _buildWhatsappField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('رقم الواتساب (اختياري)',
+            style: TextStyle(
+                color: Colors.white54,
+                fontSize: 12,
+                fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0b0e14),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.white12),
+          ),
+          child: TextField(
+            controller: _whatsappCtrl,
+            keyboardType: TextInputType.phone,
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+            decoration: const InputDecoration(
+              hintText: '01xxxxxxxxx',
+              hintStyle: TextStyle(color: Colors.white24),
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildStep1(Color color) {
     return Column(
@@ -483,6 +521,9 @@ class _TableStartDialogState extends State<TableStartDialog> {
                     countdownSeconds:
                         _timeMode == 'fixed' ? _selectedSeconds : null,
                     customRate: rateToUse,
+                    whatsappNumber: _whatsappCtrl.text.trim().isEmpty
+                        ? null
+                        : _whatsappCtrl.text.trim(),
                   );
                 }
               }

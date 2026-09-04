@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../services/app_state.dart';
 import 'qr_screen.dart';
 import '../widgets/table_start_dialog.dart';
@@ -117,6 +118,20 @@ class _TableDetailScreenState extends State<TableDetailScreen> {
             ),
           ),
           if (isActive) ...[
+            // ✅ زرار الواتساب
+            IconButton(
+              icon: Icon(
+                t['whatsapp_number'] != null && (t['whatsapp_number'] as String).isNotEmpty
+                    ? Icons.phone
+                    : Icons.phone_outlined,
+                color: t['whatsapp_number'] != null && (t['whatsapp_number'] as String).isNotEmpty
+                    ? Colors.green
+                    : Colors.white38,
+                size: 24,
+              ),
+              tooltip: 'رقم الواتساب',
+              onPressed: () => _showWhatsappEditDialog(context, state),
+            ),
             IconButton(
               icon: Icon(isPaused ? Icons.play_circle_fill : Icons.pause_circle_filled,
                   color: isPaused ? Colors.amber : const Color(0xFF38bdf8), size: 30),
@@ -247,6 +262,69 @@ if (!isActive)
     );
   }
 
+  void _showWhatsappEditDialog(BuildContext context, AppState state) {
+    final t = state.tables[widget.tableIndex];
+    final ctrl = TextEditingController(text: t['whatsapp_number']?.toString() ?? '');
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1c2128),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(children: [
+          Icon(Icons.phone, color: Colors.green, size: 20),
+          SizedBox(width: 8),
+          Text('رقم الواتساب', style: TextStyle(color: Colors.white, fontSize: 16)),
+        ]),
+        content: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0b0e14),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.white12),
+          ),
+          child: TextField(
+            controller: ctrl,
+            keyboardType: TextInputType.phone,
+            textDirection: TextDirection.ltr,
+            autofocus: true,
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+            decoration: const InputDecoration(
+              hintText: '01xxxxxxxxx',
+              hintStyle: TextStyle(color: Colors.white24),
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+            ),
+          ),
+        ),
+        actions: [
+          if (t['whatsapp_number'] != null && (t['whatsapp_number'] as String).isNotEmpty)
+            TextButton(
+              onPressed: () {
+                state.tables[widget.tableIndex]['whatsapp_number'] = null;
+                state.notifyListeners();
+                Navigator.pop(context);
+              },
+              child: const Text('حذف الرقم', style: TextStyle(color: Colors.red)),
+            ),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('إلغاء', style: TextStyle(color: Colors.white54)),
+          ),
+          FilledButton(
+            onPressed: () {
+              state.tables[widget.tableIndex]['whatsapp_number'] =
+                  ctrl.text.trim().isEmpty ? null : ctrl.text.trim();
+              state.notifyListeners();
+              Navigator.pop(context);
+            },
+            style: FilledButton.styleFrom(backgroundColor: Colors.green),
+            child: const Text('حفظ'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _confirmGame(BuildContext context, AppState state, int gamePrice) {
     showDialog(
       context: context,
@@ -278,6 +356,12 @@ if (!isActive)
   }
 
   void _confirmStop(BuildContext context, AppState state, double timeCost, double buffetCost) {
+    final t = state.tables[widget.tableIndex];
+    final whatsappNumber = t['whatsapp_number'] as String?;
+    final hasWhatsapp = whatsappNumber != null && whatsappNumber.isNotEmpty;
+    final elapsed = state.tableElapsed(widget.tableIndex);
+    final Map<String, int> orders = Map<String, int>.from(t['orders'] ?? {});
+
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -289,6 +373,14 @@ if (!isActive)
           _InfoRow('🥤 بوفيه', '${buffetCost.toStringAsFixed(1)} ج'),
           const Divider(color: Colors.white12),
           _InfoRow('💰 الإجمالي', '${(timeCost + buffetCost).toStringAsFixed(1)} ج', green: true),
+          if (hasWhatsapp) ...[
+            const SizedBox(height: 8),
+            Row(children: [
+              const Icon(Icons.phone, color: Colors.green, size: 14),
+              const SizedBox(width: 4),
+              Text(whatsappNumber!, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+            ]),
+          ],
         ]),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('إلغاء', style: TextStyle(color: Colors.white54))),
@@ -301,9 +393,84 @@ if (!isActive)
             style: FilledButton.styleFrom(backgroundColor: const Color(0xFF4ade80), foregroundColor: Colors.black),
             child: const Text('تأكيد'),
           ),
+          if (hasWhatsapp)
+            FilledButton.icon(
+              icon: const Icon(Icons.send, size: 16),
+              label: const Text('تأكيد وإرسال'),
+              onPressed: () async {
+                Navigator.pop(context);
+                final shopName = state.shopName;
+                final tableName = t['name']?.toString() ?? 'تربيزة';
+                final menu = state.menu;
+                state.stopTable(widget.tableIndex);
+                Navigator.pop(context);
+                await _sendWhatsappInvoice(
+                  context: context,
+                  phone: whatsappNumber!,
+                  shopName: shopName,
+                  tableName: tableName,
+                  elapsed: elapsed,
+                  timeCost: timeCost,
+                  buffetCost: buffetCost,
+                  orders: orders,
+                  menu: menu,
+                );
+              },
+              style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFF25D366),
+                  foregroundColor: Colors.white),
+            ),
         ],
       ),
     );
+  }
+
+  Future<void> _sendWhatsappInvoice({
+    required BuildContext context,
+    required String phone,
+    required String shopName,
+    required String tableName,
+    required int elapsed,
+    required double timeCost,
+    required double buffetCost,
+    required Map<String, int> orders,
+    required Map<String, int> menu,
+  }) async {
+    final h = elapsed ~/ 3600;
+    final m = (elapsed % 3600) ~/ 60;
+    final durationStr = h > 0 ? '${h}س ${m}د' : '${m}د';
+    final buf = StringBuffer();
+    buf.writeln('🎮 *$shopName*');
+    buf.writeln('─────────────────');
+    buf.writeln('📍 *$tableName*');
+    buf.writeln('');
+    buf.writeln('⏱ *مدة اللعب:* $durationStr');
+    buf.writeln('💵 *حساب الوقت:* ${timeCost.toStringAsFixed(1)} ج');
+    if (orders.isNotEmpty) {
+      buf.writeln('');
+      buf.writeln('🥤 *الأصناف والمشروبات:*');
+      orders.forEach((item, qty) {
+        final price = (menu[item] ?? 0) * qty;
+        buf.writeln('  • $item × $qty = ${price.toStringAsFixed(1)} ج');
+      });
+      buf.writeln('💵 *إجمالي المشروبات:* ${buffetCost.toStringAsFixed(1)} ج');
+    }
+    buf.writeln('');
+    buf.writeln('─────────────────');
+    buf.writeln('💰 *المطلوب: ${(timeCost + buffetCost).toStringAsFixed(1)} ج*');
+    buf.writeln('');
+    buf.writeln('🌟 نورتونا، يارب تعود تاني! 🌟');
+    final cleanPhone = phone.replaceAll(RegExp(r'[^0-9]'), '');
+    final intlPhone = cleanPhone.startsWith('0') ? '2$cleanPhone' : cleanPhone;
+    final encoded = Uri.encodeComponent(buf.toString());
+    final uri = Uri.parse('https://wa.me/$intlPhone?text=$encoded');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('تعذر فتح واتساب'), backgroundColor: Colors.red),
+      );
+    }
   }
 
   void _confirmCancel(BuildContext context, AppState state) {
