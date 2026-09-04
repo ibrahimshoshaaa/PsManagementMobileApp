@@ -56,7 +56,20 @@ class DeviceDetailScreen extends StatelessWidget {
         leading: const BackButton(color: Colors.white),
         // ✅ AppBar actions: فقط QR + pause/resume — باقي الخيارات انتقلت للبوكس
         actions: [
-          if (device.isActive) ...[\n            IconButton(\n              icon: Icon(\n                device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty\n                    ? Icons.phone\n                    : Icons.phone_outlined,\n                color: device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty\n                    ? Colors.green\n                    : Colors.white38,\n                size: 24,\n              ),\n              tooltip: 'رقم الواتساب',\n              onPressed: () => _showWhatsappEditDialog(context, state, device),\n            ),
+          if (device.isActive) ...[
+            IconButton(
+              icon: Icon(
+                device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty
+                    ? Icons.phone
+                    : Icons.phone_outlined,
+                color: device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty
+                    ? Colors.green
+                    : Colors.white38,
+                size: 24,
+              ),
+              tooltip: 'رقم الواتساب',
+              onPressed: () => _showWhatsappEditDialog(context, state, device),
+            ),
             IconButton(
               icon: const Icon(Icons.qr_code, color: Colors.white54, size: 24),
               onPressed: () => Navigator.push(context,
