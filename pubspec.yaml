@@ -1,0 +1,23 @@
+name: ElHarifa_PS
+description: ElHarifa PlayStation Manager
+publish_to: 'none'
+version: 2.0.0+5
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+  shared_preferences: ^2.2.2
+  provider: ^6.1.1
+  crypto: ^3.0.3
+  intl: ^0.19.0
+  flutter_local_notifications: ^17.2.2
+  qr_flutter: ^4.1.0
+  url_launcher: ^6.3.0
+
+
+flutter:
+  uses-material-design: true

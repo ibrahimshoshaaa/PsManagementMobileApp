@@ -1,0 +1,112 @@
+name: Build Flutter APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Fix Android project structure
+        run: python3 fix_android.py
+
+      - name: Fix Gradle wrapper
+        run: |
+          mkdir -p android/gradle/wrapper
+          cat > android/gradle/wrapper/gradle-wrapper.properties << 'EOF'
+          distributionBase=GRADLE_USER_HOME
+          distributionPath=wrapper/dists
+          zipStoreBase=GRADLE_USER_HOME
+          zipStorePath=wrapper/dists
+          distributionUrl=https\://services.gradle.org/distributions/gradle-8.0-all.zip
+          EOF
+
+      - name: Generate PS icon
+        run: |
+          sudo apt-get install -y imagemagick
+          mkdir -p android/app/src/main/res/mipmap-xxxhdpi
+          mkdir -p android/app/src/main/res/mipmap-xxhdpi
+          mkdir -p android/app/src/main/res/mipmap-xhdpi
+          mkdir -p android/app/src/main/res/mipmap-hdpi
+          mkdir -p android/app/src/main/res/mipmap-mdpi
+
+          convert -size 512x512 xc:"#0b0e14" \
+            \( -size 512x512 xc:none \
+               -fill "#1a1a2e" \
+               -draw "roundrectangle 30,30 482,482 80,80" \
+            \) -composite \
+            \( -size 512x512 xc:none \
+               -fill none \
+               -stroke "#38bdf8" \
+               -strokewidth 18 \
+               -draw "roundrectangle 30,30 482,482 80,80" \
+            \) -composite \
+            \( -size 512x512 xc:none \
+               -fill "#38bdf8" \
+               -font DejaVu-Sans-Bold \
+               -pointsize 240 \
+               -gravity Center \
+               -annotate 0 "PS" \
+            \) -composite \
+            \( -size 512x512 xc:none \
+               -fill none \
+               -stroke "#4ade80" \
+               -strokewidth 6 \
+               -draw "circle 390,370 390,340" \
+            \) -composite \
+            \( -size 512x512 xc:none \
+               -fill none \
+               -stroke "#f87171" \
+               -strokewidth 6 \
+               -draw "circle 430,340 430,310" \
+            \) -composite \
+            \( -size 512x512 xc:none \
+               -fill none \
+               -stroke "#fbbf24" \
+               -strokewidth 6 \
+               -draw "circle 390,310 390,280" \
+            \) -composite \
+            \( -size 512x512 xc:none \
+               -fill none \
+               -stroke "#a78bfa" \
+               -strokewidth 6 \
+               -draw "circle 350,340 350,310" \
+            \) -composite \
+            /tmp/icon.png
+
+          convert /tmp/icon.png -resize 192x192 android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          convert /tmp/icon.png -resize 144x144 android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          convert /tmp/icon.png -resize 96x96   android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          convert /tmp/icon.png -resize 72x72   android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          convert /tmp/icon.png -resize 48x48   android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release --no-tree-shake-icons
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ps-management-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 30

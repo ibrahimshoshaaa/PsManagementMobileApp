@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "182668341255",
+    "firebase_url": "https://psmanagementapp-default-rtdb.firebaseio.com",
+    "project_id": "psmanagementapp",
+    "storage_bucket": "psmanagementapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:182668341255:android:2409e38630ae290c497aa2",
+        "android_client_info": {
+          "package_name": "com.shosha.alharifa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpUEJK6sLiXC7Xp88jTOyGY1ZefebhonE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
