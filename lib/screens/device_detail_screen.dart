@@ -2,10 +2,13 @@ import 'dart:ui'; // مطلوب لـ FontFeature
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../models/customer.dart';
 import '../models/device.dart';
 import '../services/app_state.dart';
+import '../services/customer_service.dart';
 import '../widgets/device_card.dart';
 import '../widgets/buffet_order_dialog.dart';
+import 'customers_screen.dart';
 import 'qr_screen.dart';
 
 class DeviceDetailScreen extends StatelessWidget {
@@ -1402,6 +1405,8 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   final _customCtrl = TextEditingController();
   final _whatsappCtrl = TextEditingController();
   bool _customMinutes = true;
+  String? _customerName; // اسم العميل لو موجود
+  List<Customer> _customers = [];
 
   static const List<Map<String, dynamic>> _presets = [
     {'label': '30 د',  'seconds': 1800},
@@ -1412,7 +1417,40 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _loadCustomers();
+    _whatsappCtrl.addListener(_lookupCustomer);
+  }
+
+  Future<void> _loadCustomers() async {
+    final list = await CustomerService.fetchAll();
+    if (mounted) setState(() => _customers = list);
+  }
+
+  void _lookupCustomer() {
+    final phone = _whatsappCtrl.text.trim();
+    if (phone.length >= 8) {
+      final match = _customers.where((c) => c.phone == phone).firstOrNull;
+      if (mounted) setState(() => _customerName = match?.name);
+    } else {
+      if (mounted) setState(() => _customerName = null);
+    }
+  }
+
+  Future<void> _pickCustomer() async {
+    final picked = await CustomersScreen.pickCustomer(context);
+    if (picked != null && mounted) {
+      setState(() {
+        _whatsappCtrl.text = picked.phone;
+        _customerName = picked.name;
+      });
+    }
+  }
+
+  @override
   void dispose() {
+    _whatsappCtrl.removeListener(_lookupCustomer);
     _customCtrl.dispose();
     _whatsappCtrl.dispose();
     super.dispose();
@@ -1523,26 +1561,53 @@ class _StartModeDialogState extends State<_StartModeDialog> {
                 fontSize: 12,
                 fontWeight: FontWeight.bold)),
         const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0b0e14),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.white12),
-          ),
-          child: TextField(
-            controller: _whatsappCtrl,
-            keyboardType: TextInputType.phone,
-            textDirection: TextDirection.ltr,
-            style: const TextStyle(color: Colors.white, fontSize: 15),
-            decoration: const InputDecoration(
-              hintText: '01xxxxxxxxx',
-              hintStyle: TextStyle(color: Colors.white24),
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+        Row(children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: const Color(0xFF0b0e14),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: _customerName != null ? Colors.green : Colors.white12,
+                ),
+              ),
+              child: TextField(
+                controller: _whatsappCtrl,
+                keyboardType: TextInputType.phone,
+                textDirection: TextDirection.ltr,
+                style: const TextStyle(color: Colors.white, fontSize: 15),
+                decoration: const InputDecoration(
+                  hintText: '01xxxxxxxxx',
+                  hintStyle: TextStyle(color: Colors.white24),
+                  border: InputBorder.none,
+                  prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+                ),
+              ),
             ),
           ),
-        ),
+          const SizedBox(width: 8),
+          // زرار اختيار من قائمة العملاء
+          IconButton(
+            style: IconButton.styleFrom(
+              backgroundColor: const Color(0xFF0b0e14),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Colors.white12)),
+            ),
+            icon: const Icon(Icons.contacts, color: Colors.white54, size: 22),
+            onPressed: _pickCustomer,
+          ),
+        ]),
+        if (_customerName != null && _customerName!.isNotEmpty) ...[
+          const SizedBox(height: 6),
+          Row(children: [
+            const Icon(Icons.person_pin, color: Colors.green, size: 14),
+            const SizedBox(width: 4),
+            Text(_customerName!,
+                style: const TextStyle(color: Colors.green, fontSize: 12)),
+          ]),
+        ],
         const SizedBox(height: 20),
       ],
     );

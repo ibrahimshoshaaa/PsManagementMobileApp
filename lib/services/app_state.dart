@@ -8,6 +8,7 @@ import 'firebase_service.dart';
 import 'notification_service.dart';
 import '../services/shift_service.dart';
 import 'sync_service.dart';
+import 'customer_service.dart';
 import 'audit_log_service.dart';
 import '../models/buffet_category.dart';
 import 'package:http/http.dart' as http;
@@ -1874,6 +1875,10 @@ void _startClock() {
     d.countdownTotalSeconds = null;
     d.countdownAlertSent = false;
     d.sessionLog = []; // 🔥 امسح الـ local log بعد الحفظ
+    // ── تسجيل زيارة العميل لو في رقم واتساب ──
+    if (d.whatsappNumber != null && d.whatsappNumber!.isNotEmpty) {
+      CustomerService.recordVisit(d.whatsappNumber!, timePrice + buffetPrice);
+    }
     d.whatsappNumber = null;
     _alertedDevices.remove(d.id);
     _countdownAlertedDevices.remove(d.id);
@@ -2255,6 +2260,11 @@ void _startClock() {
     tables[index]['is_paused'] = false;
     tables[index]['pause_start_time'] = null;
     tables[index]['orders'] = <String, int>{};
+    // ── تسجيل زيارة العميل لو في رقم واتساب ──
+    final wp = tables[index]['whatsapp_number'] as String?;
+    if (wp != null && wp.isNotEmpty) {
+      CustomerService.recordVisit(wp, record['total'] as double);
+    }
     tables[index]['whatsapp_number'] = null;
     _stoppingTables.remove(index);
 

@@ -7,6 +7,7 @@ import 'qr_screen.dart';
 import '../widgets/table_start_dialog.dart';
 import '../widgets/buffet_order_dialog.dart';
 import '../services/notification_service.dart';
+import '../services/customer_service.dart';
 
 class TableDetailScreen extends StatefulWidget {
   final int tableIndex;

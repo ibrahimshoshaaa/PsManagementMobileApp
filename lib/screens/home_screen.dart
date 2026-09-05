@@ -13,6 +13,7 @@ import 'customer_orders_screen.dart';
 import '../services/firebase_service.dart';
 import '../services/notification_service.dart';
 import 'debts_screen.dart';
+import 'customers_screen.dart';
 import 'tournament_screen.dart';
 import 'dashboard_screen.dart';
 import '../widgets/table_start_dialog.dart';
@@ -314,6 +315,10 @@ Stack(
             Navigator.push(context,
                 MaterialPageRoute(builder: (_) => const TournamentScreen()));
             break;
+          case 'customers':
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const CustomersScreen()));
+            break;
         }
       },
       itemBuilder: (_) => [
@@ -356,6 +361,14 @@ Stack(
             Icon(Icons.emoji_events, color: Color(0xFFfbbf24), size: 20),
             SizedBox(width: 10),
             Text('البطولات'),
+          ]),
+        ),
+        const PopupMenuItem(
+          value: 'customers',
+          child: Row(children: [
+            Icon(Icons.people, color: Color(0xFF34d399), size: 20),
+            SizedBox(width: 10),
+            Text('العملاء'),
           ]),
         ),
       ],
