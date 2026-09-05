@@ -1183,7 +1183,6 @@ Future<void> _launchWhatsapp({
   final h = elapsed ~/ 3600;
   final m = (elapsed % 3600) ~/ 60;
   final durationStr = h > 0 ? '${h}س ${m}د' : '${m}د';
-
   final buf = StringBuffer();
   buf.writeln('🎮 *$shopName*');
   buf.writeln('─────────────────');
@@ -1191,7 +1190,6 @@ Future<void> _launchWhatsapp({
   buf.writeln('');
   buf.writeln('⏱ *مدة اللعب:* $durationStr');
   buf.writeln('💵 *حساب الوقت:* ${timeCost.toStringAsFixed(1)} ج');
-
   if (orders.isNotEmpty) {
     buf.writeln('');
     buf.writeln('🥤 *الأصناف والمشروبات:*');
@@ -1201,28 +1199,25 @@ Future<void> _launchWhatsapp({
     });
     buf.writeln('💵 *إجمالي المشروبات:* ${buffetCost.toStringAsFixed(1)} ج');
   }
-
   buf.writeln('');
   buf.writeln('─────────────────');
   buf.writeln('💰 *المطلوب: ${(timeCost + buffetCost).toStringAsFixed(1)} ج*');
   buf.writeln('');
   buf.writeln('🌟 نورتونا، يارب تعود تاني! 🌟');
-
   final cleanPhone = phone.replaceAll(RegExp(r'[^0-9]'), '');
   final intlPhone = cleanPhone.startsWith('0') ? '2$cleanPhone' : cleanPhone;
   final encoded = Uri.encodeComponent(buf.toString());
   final uri = Uri.parse('https://wa.me/$intlPhone?text=$encoded');
-
   if (await canLaunchUrl(uri)) {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   } else if (context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-          content: Text('تعذر فتح واتساب'),
-          backgroundColor: Colors.red),
+      const SnackBar(content: Text('تعذر فتح واتساب'), backgroundColor: Colors.red),
     );
   }
 }
+
+class _Row extends StatelessWidget {
   final String label;
   final String value;
   final bool bold;
@@ -1522,7 +1517,6 @@ class _StartModeDialogState extends State<_StartModeDialog> {
           ),
         ]),
         const SizedBox(height: 20),
-        // ── خانة رقم الواتساب (اختياري) ──────────────────────────────
         const Text('رقم الواتساب (اختياري)',
             style: TextStyle(
                 color: Colors.white54,
@@ -1553,6 +1547,8 @@ class _StartModeDialogState extends State<_StartModeDialog> {
       ],
     );
   }
+
+  Widget _buildStep1() {
     return Column(
       key: const ValueKey('step1'),
       mainAxisSize: MainAxisSize.min,
