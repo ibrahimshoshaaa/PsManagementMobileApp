@@ -68,7 +68,7 @@ class DeviceDetailScreen extends StatelessWidget {
                 size: 24,
               ),
               tooltip: 'رقم الواتساب',
-              onPressed: () => _showWhatsappEditDialog(context, state, device),
+              onPressed: () => showWhatsappEditDialogForDevice(context, state, device),
             ),
             IconButton(
               icon: const Icon(Icons.qr_code, color: Colors.white54, size: 24),
@@ -982,67 +982,6 @@ class _BuffetSection extends StatelessWidget {
     );
   }
 
-  void _showWhatsappEditDialog(BuildContext context, AppState state, PSDevice device) {
-    final ctrl = TextEditingController(text: device.whatsappNumber ?? '');
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        backgroundColor: const Color(0xFF1c2128),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Row(children: [
-          Icon(Icons.phone, color: Colors.green, size: 20),
-          SizedBox(width: 8),
-          Text('رقم الواتساب', style: TextStyle(color: Colors.white, fontSize: 16)),
-        ]),
-        content: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0b0e14),
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: Colors.white12),
-          ),
-          child: TextField(
-            controller: ctrl,
-            keyboardType: TextInputType.phone,
-            textDirection: TextDirection.ltr,
-            autofocus: true,
-            style: const TextStyle(color: Colors.white, fontSize: 15),
-            decoration: const InputDecoration(
-              hintText: '01xxxxxxxxx',
-              hintStyle: TextStyle(color: Colors.white24),
-              border: InputBorder.none,
-              prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
-            ),
-          ),
-        ),
-        actions: [
-          if (device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty)
-            TextButton(
-              onPressed: () {
-                device.whatsappNumber = null;
-                state.notifyListeners();
-                Navigator.pop(context);
-              },
-              child: const Text('حذف الرقم', style: TextStyle(color: Colors.red)),
-            ),
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('إلغاء', style: TextStyle(color: Colors.white54)),
-          ),
-          FilledButton(
-            onPressed: () {
-              device.whatsappNumber = ctrl.text.trim().isEmpty ? null : ctrl.text.trim();
-              state.notifyListeners();
-              Navigator.pop(context);
-            },
-            style: FilledButton.styleFrom(backgroundColor: Colors.green),
-            child: const Text('حفظ'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showAddOrderDialog(BuildContext context, AppState state) {
     showBuffetOrderDialog(
       context: context,
@@ -1167,6 +1106,67 @@ class _StopButton extends StatelessWidget {
       ),
     );
   }
+}
+
+void showWhatsappEditDialogForDevice(BuildContext context, AppState state, PSDevice device) {
+  final ctrl = TextEditingController(text: device.whatsappNumber ?? '');
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      backgroundColor: const Color(0xFF1c2128),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: const Row(children: [
+        Icon(Icons.phone, color: Colors.green, size: 20),
+        SizedBox(width: 8),
+        Text('رقم الواتساب', style: TextStyle(color: Colors.white, fontSize: 16)),
+      ]),
+      content: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0b0e14),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: Colors.white12),
+        ),
+        child: TextField(
+          controller: ctrl,
+          keyboardType: TextInputType.phone,
+          textDirection: TextDirection.ltr,
+          autofocus: true,
+          style: const TextStyle(color: Colors.white, fontSize: 15),
+          decoration: const InputDecoration(
+            hintText: '01xxxxxxxxx',
+            hintStyle: TextStyle(color: Colors.white24),
+            border: InputBorder.none,
+            prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+          ),
+        ),
+      ),
+      actions: [
+        if (device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty)
+          TextButton(
+            onPressed: () {
+              device.whatsappNumber = null;
+              state.notifyListeners();
+              Navigator.pop(context);
+            },
+            child: const Text('حذف الرقم', style: TextStyle(color: Colors.red)),
+          ),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('إلغاء', style: TextStyle(color: Colors.white54)),
+        ),
+        FilledButton(
+          onPressed: () {
+            device.whatsappNumber = ctrl.text.trim().isEmpty ? null : ctrl.text.trim();
+            state.notifyListeners();
+            Navigator.pop(context);
+          },
+          style: FilledButton.styleFrom(backgroundColor: Colors.green),
+          child: const Text('حفظ'),
+        ),
+      ],
+    ),
+  );
 }
 
 Future<void> _launchWhatsapp({
