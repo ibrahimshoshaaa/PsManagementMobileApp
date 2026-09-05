@@ -143,6 +143,7 @@ class AppState extends ChangeNotifier {
   final Set<int> _stoppingTables = {};
   final Set<int> _checkoutDrinkTables = {};
   final Map<int, int> _localTableUpdateTs = {};
+  final Map<int, int> _localDeviceUpdateTs = {};
 
   String _myDeviceId = '';
 
@@ -604,6 +605,8 @@ void _startClock() {
     return [];
   }
 
+  static const _localDeviceGuardMs = 4000;
+
   void _mergeRemoteDevices(List<Map<String, dynamic>> remoteDevices) {
     if (remoteDevices.isEmpty) return;
 
@@ -613,8 +616,16 @@ void _startClock() {
 
     devices.removeWhere((d) => !remoteIds.contains(d.id));
 
+    final now = DateTime.now().millisecondsSinceEpoch;
     for (final remoteJson in remoteDevices) {
       final remoteId = (remoteJson['id'] as num?)?.toInt() ?? 0;
+      // 🔥 RACE CONDITION FIX: زي التربيزات — تجاهل نسخة الريموت لو
+      // احنا عدّلنا الجهاز ده محلياً من كام ثانية قليلة
+      final lastLocalUpdate = _localDeviceUpdateTs[remoteId];
+      if (lastLocalUpdate != null &&
+          (now - lastLocalUpdate) < _localDeviceGuardMs) {
+        continue;
+      }
       final idx = devices.indexWhere((d) => d.id == remoteId);
       if (idx != -1) {
         // 🔥 احتفظ بـ session_log المحلي — لا تستبدله بالريموت (مفيش فيه)
@@ -634,6 +645,13 @@ void _startClock() {
   // 🔥 FIX: merge جهاز واحد بس بدون ما نمسح باقي الأجهزة
   void _mergeSingleDevice(Map<String, dynamic> remoteJson) {
     final remoteId = (remoteJson['id'] as num?)?.toInt() ?? 0;
+    // 🔥 RACE CONDITION FIX: نفس حماية _mergeRemoteDevices
+    final lastLocalUpdate = _localDeviceUpdateTs[remoteId];
+    if (lastLocalUpdate != null &&
+        (DateTime.now().millisecondsSinceEpoch - lastLocalUpdate) <
+            _localDeviceGuardMs) {
+      return;
+    }
     final idx = devices.indexWhere((d) => d.id == remoteId);
     if (idx != -1) {
       final localLog = devices[idx].sessionLog;
@@ -644,12 +662,25 @@ void _startClock() {
     }
   }
 
+  // 🔥 RACE CONDITION FIX: زي listenToDrinkTables بالظبط —
+  // لو احنا عدّلنا تربيزة معينة محلياً (زي إنهاء الجلسة) من كام ثانية،
+  // تجاهل نسخة الريموت الجاية لنفس التربيزة لأنها ممكن تكون نسخة قديمة
+  // جاية من جهاز تاني لسه ماوصلوش تحديثنا، وده اللي كان بيرجّع الجلسة
+  // "تشتغل تاني" بعد ما بنعمل إنهاء ليها.
+  static const _localTableGuardMs = 4000;
+
   void _mergeRemoteTables(List<Map<String, dynamic>> remoteTables) {
     if (remoteTables.isEmpty) return;
     while (tables.length < remoteTables.length) {
       tables.add(remoteTables[tables.length]);
     }
+    final now = DateTime.now().millisecondsSinceEpoch;
     for (int i = 0; i < remoteTables.length; i++) {
+      final lastLocalUpdate = _localTableUpdateTs[i];
+      if (lastLocalUpdate != null &&
+          (now - lastLocalUpdate) < _localTableGuardMs) {
+        continue; // احتفظ بالنسخة المحلية لحد ما نتأكد الريموت لحق بالتحديث
+      }
       tables[i] = remoteTables[i];
     }
     if (remoteTables.length < tables.length) {
@@ -1374,6 +1405,12 @@ void _startClock() {
     if (deviceId != null) {
       final idx = devices.indexWhere((d) => d.id == deviceId);
       if (idx != -1) {
+        // 🔥 RACE CONDITION FIX: زي التربيزات — سجّل وقت التعديل المحلي
+        // لهذا الجهاز عشان mergeRemoteDevices يتجاهل أي نسخة ريموت قديمة
+        // جاية له خلال ثواني قليلة (pushSingleDevice فعليًا بيبعت كل
+        // الأجهزة بـ set، فمعرض لنفس مشكلة overwrite لو جهاز تاني بعت
+        // نسخته القديمة في نفس التوقيت تقريبًا)
+        _localDeviceUpdateTs[deviceId] = DateTime.now().millisecondsSinceEpoch;
         // 🔥 pushSingleDevice في SyncService بيستخدم pushSingleDeviceState (بدون session_log)
         await _sync?.pushSingleDevice(idx, devices[idx].toJson());
       }
@@ -1397,6 +1434,11 @@ void _startClock() {
     bool drinkTablesChanged = false,
   }) async {
     if (shopId == null) return;
+    // 🔥 RACE CONDITION FIX: سجّل وقت التعديل المحلي للتربيزة دي عشان
+    // _mergeRemoteTables يتجاهل أي نسخة ريموت قديمة جاية ليها خلال ثواني قليلة
+    if (tableIndex != null) {
+      _localTableUpdateTs[tableIndex] = DateTime.now().millisecondsSinceEpoch;
+    }
     await SyncService.saveLocal(shopId!, _buildDataDict());
     final futures = <Future>[];
     if (tablesChanged) {
@@ -2177,7 +2219,7 @@ void _startClock() {
       AuditLogService.logTable(
           action: AuditAction.tablePause, tableName: t['name'] ?? '');
     }
-    _saveTables();
+    _saveTables(tableIndex: index);
     notifyListeners();
   }
 
@@ -2189,7 +2231,7 @@ void _startClock() {
     tables[index]['is_paused'] = false;
     tables[index]['pause_start_time'] = null;
     tables[index]['orders'] = <String, int>{};
-    _saveTables();
+    _saveTables(tableIndex: index);
     notifyListeners();
   }
 

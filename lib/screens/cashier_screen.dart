@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../services/app_state.dart';
 import '../services/firebase_service.dart';
 import '../services/notification_service.dart';
@@ -618,6 +619,9 @@ class _TableCard extends StatelessWidget {
     double buffetCost = 0;
     orders.forEach(
         (item, qty) => buffetCost += qty * (state.menu[item] ?? 0));
+    final whatsappNumber = t['whatsapp_number'] as String?;
+    final hasWhatsapp =
+        whatsappNumber != null && whatsappNumber.isNotEmpty;
 
     showDialog(
       context: context,
@@ -635,6 +639,16 @@ class _TableCard extends StatelessWidget {
           _BillRow('💰 الإجمالي',
               '${(timeCost + buffetCost).toStringAsFixed(1)} ج',
               green: true),
+          if (hasWhatsapp) ...[
+            const SizedBox(height: 8),
+            Row(children: [
+              const Icon(Icons.phone, color: Colors.green, size: 14),
+              const SizedBox(width: 4),
+              Text(whatsappNumber,
+                  style: const TextStyle(
+                      color: Colors.white38, fontSize: 12)),
+            ]),
+          ],
         ]),
         actions: [
           TextButton(
@@ -651,6 +665,32 @@ class _TableCard extends StatelessWidget {
                 foregroundColor: Colors.black),
             child: const Text('تأكيد'),
           ),
+          if (hasWhatsapp)
+            FilledButton.icon(
+              icon: const Icon(Icons.send, size: 16),
+              label: const Text('تأكيد وإرسال'),
+              onPressed: () async {
+                final tableName = t['name']?.toString() ?? 'تربيزة';
+                final shopName = state.shopName;
+                final menu = state.menu;
+                Navigator.pop(context);
+                state.stopTable(tableIndex);
+                await cashierTableLaunchWhatsapp(
+                  context: context,
+                  phone: whatsappNumber,
+                  shopName: shopName,
+                  tableName: tableName,
+                  elapsed: elapsed,
+                  timeCost: timeCost,
+                  buffetCost: buffetCost,
+                  orders: orders,
+                  menu: menu,
+                );
+              },
+              style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFF25D366),
+                  foregroundColor: Colors.white),
+            ),
         ],
       ),
     );
@@ -1131,6 +1171,61 @@ class _DrinkTableCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ─── WhatsApp Invoice (نفس منطق table_detail_screen._sendWhatsappInvoice) ────
+// عشان ديالوج إنهاء التربيزة في شاشة الكاشير يبقى فيه نفس خيار
+// "تأكيد وإرسال" الموجود في شاشة تفاصيل التربيزة.
+Future<void> cashierTableLaunchWhatsapp({
+  required BuildContext context,
+  required String phone,
+  required String shopName,
+  required String tableName,
+  required int elapsed,
+  required double timeCost,
+  required double buffetCost,
+  required Map<String, int> orders,
+  required Map<String, int> menu,
+}) async {
+  final h = elapsed ~/ 3600;
+  final m = (elapsed % 3600) ~/ 60;
+  final durationStr = h > 0 ? '${h}س ${m}د' : '${m}د';
+
+  final buf = StringBuffer();
+  buf.writeln('🎮 *$shopName*');
+  buf.writeln('─────────────────');
+  buf.writeln('📍 *$tableName*');
+  buf.writeln('');
+  buf.writeln('⏱ *مدة اللعب:* $durationStr');
+  buf.writeln('💵 *حساب الوقت:* ${timeCost.toStringAsFixed(1)} ج');
+
+  if (orders.isNotEmpty) {
+    buf.writeln('');
+    buf.writeln('🥤 *الأصناف والمشروبات:*');
+    orders.forEach((item, qty) {
+      final price = (menu[item] ?? 0) * qty;
+      buf.writeln('  • $item × $qty = ${price.toStringAsFixed(1)} ج');
+    });
+    buf.writeln('💵 *إجمالي المشروبات:* ${buffetCost.toStringAsFixed(1)} ج');
+  }
+
+  buf.writeln('');
+  buf.writeln('─────────────────');
+  buf.writeln('💰 *المطلوب: ${(timeCost + buffetCost).toStringAsFixed(1)} ج*');
+  buf.writeln('');
+  buf.writeln('🌟 نورتونا، يارب تعود تاني! 🌟');
+
+  final cleanPhone = phone.replaceAll(RegExp(r'[^0-9]'), '');
+  final intlPhone = cleanPhone.startsWith('0') ? '2$cleanPhone' : cleanPhone;
+  final encoded = Uri.encodeComponent(buf.toString());
+  final uri = Uri.parse('https://wa.me/$intlPhone?text=$encoded');
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('تعذر فتح واتساب'), backgroundColor: Colors.red),
     );
   }
 }

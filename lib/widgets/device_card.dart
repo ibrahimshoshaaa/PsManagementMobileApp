@@ -600,6 +600,9 @@ class _MixedButtons extends StatelessWidget {
 
   void _showStopDialog(BuildContext context, AppState state) {
     final buffetPrice = device.getBuffetPrice(state.menu);
+    final whatsappNumber = device.whatsappNumber;
+    final hasWhatsapp =
+        whatsappNumber != null && whatsappNumber.isNotEmpty;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -653,6 +656,33 @@ class _MixedButtons extends StatelessWidget {
             style: FilledButton.styleFrom(backgroundColor: Colors.red.shade700),
             child: const Text('تأكيد الإنهاء'),
           ),
+          if (hasWhatsapp)
+            FilledButton.icon(
+              icon: const Icon(Icons.send, size: 16),
+              label: const Text('تأكيد وإرسال'),
+              onPressed: () async {
+                final name = device.displayName;
+                final orders = Map<String, int>.from(device.orders);
+                final menu = state.menu;
+                final shopName = state.shopName;
+                state.stopDevice(device);
+                Navigator.pop(context);
+                await deviceCardLaunchWhatsapp(
+                  context: context,
+                  phone: whatsappNumber!,
+                  shopName: shopName,
+                  deviceName: name,
+                  elapsed: 0,
+                  timeCost: 0,
+                  buffetCost: buffetPrice,
+                  orders: orders,
+                  menu: menu,
+                );
+              },
+              style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFF25D366),
+                  foregroundColor: Colors.white),
+            ),
         ],
       ),
     );
@@ -726,6 +756,9 @@ class _ActiveButtons extends StatelessWidget {
   void _showStopDialog(BuildContext context, AppState state) {
     final timePrice = device.calculateTimePrice(state.prices);
     final buffetPrice = device.getBuffetPrice(state.menu);
+    final whatsappNumber = device.whatsappNumber;
+    final hasWhatsapp =
+        whatsappNumber != null && whatsappNumber.isNotEmpty;
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -776,6 +809,34 @@ class _ActiveButtons extends StatelessWidget {
                 backgroundColor: Colors.red.shade700),
             child: const Text('تأكيد الإنهاء'),
           ),
+          if (hasWhatsapp)
+            FilledButton.icon(
+              icon: const Icon(Icons.send, size: 16),
+              label: const Text('تأكيد وإرسال'),
+              onPressed: () async {
+                final name = device.displayName;
+                final elapsed = device.elapsedSeconds;
+                final orders = Map<String, int>.from(device.orders);
+                final menu = state.menu;
+                final shopName = state.shopName;
+                state.stopDevice(device);
+                Navigator.pop(context);
+                await deviceCardLaunchWhatsapp(
+                  context: context,
+                  phone: whatsappNumber!,
+                  shopName: shopName,
+                  deviceName: name,
+                  elapsed: elapsed,
+                  timeCost: timePrice,
+                  buffetCost: buffetPrice,
+                  orders: orders,
+                  menu: menu,
+                );
+              },
+              style: FilledButton.styleFrom(
+                  backgroundColor: const Color(0xFF25D366),
+                  foregroundColor: Colors.white),
+            ),
         ],
       ),
     );
@@ -1335,6 +1396,57 @@ class _ModeChip extends StatelessWidget {
                   fontSize: 10)),
         ]),
       ),
+    );
+  }
+}
+
+// ─── WhatsApp Invoice (نفس منطق device_detail_screen._launchWhatsapp) ────────
+// عشان ديالوج الإنهاء اللي جوه كارت الجهاز (في صفحة كل الأجهزة) يبقى فيه
+// نفس خيار "تأكيد وإرسال" الموجود في شاشة تفاصيل الجهاز.
+Future<void> deviceCardLaunchWhatsapp({
+  required BuildContext context,
+  required String phone,
+  required String shopName,
+  required String deviceName,
+  required int elapsed,
+  required double timeCost,
+  required double buffetCost,
+  required Map<String, int> orders,
+  required Map<String, int> menu,
+}) async {
+  final h = elapsed ~/ 3600;
+  final m = (elapsed % 3600) ~/ 60;
+  final durationStr = h > 0 ? '${h}س ${m}د' : '${m}د';
+  final buf = StringBuffer();
+  buf.writeln('🎮 *$shopName*');
+  buf.writeln('─────────────────');
+  buf.writeln('📍 *$deviceName*');
+  buf.writeln('');
+  buf.writeln('⏱ *مدة اللعب:* $durationStr');
+  buf.writeln('💵 *حساب الوقت:* ${timeCost.toStringAsFixed(1)} ج');
+  if (orders.isNotEmpty) {
+    buf.writeln('');
+    buf.writeln('🥤 *الأصناف والمشروبات:*');
+    orders.forEach((item, qty) {
+      final price = (menu[item] ?? 0) * qty;
+      buf.writeln('  • $item × $qty = ${price.toStringAsFixed(1)} ج');
+    });
+    buf.writeln('💵 *إجمالي المشروبات:* ${buffetCost.toStringAsFixed(1)} ج');
+  }
+  buf.writeln('');
+  buf.writeln('─────────────────');
+  buf.writeln('💰 *المطلوب: ${(timeCost + buffetCost).toStringAsFixed(1)} ج*');
+  buf.writeln('');
+  buf.writeln('🌟 نورتونا، يارب تعود تاني! 🌟');
+  final cleanPhone = phone.replaceAll(RegExp(r'[^0-9]'), '');
+  final intlPhone = cleanPhone.startsWith('0') ? '2$cleanPhone' : cleanPhone;
+  final encoded = Uri.encodeComponent(buf.toString());
+  final uri = Uri.parse('https://wa.me/$intlPhone?text=$encoded');
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else if (context.mounted) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('تعذر فتح واتساب'), backgroundColor: Colors.red),
     );
   }
 }
