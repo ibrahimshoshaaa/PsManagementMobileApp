@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/device.dart';
 import '../services/app_state.dart';
 import 'buffet_order_dialog.dart'; // ✅ إضافة الاستيراد
@@ -832,6 +833,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   String _timeMode = 'open';
   int? _selectedSeconds;
   final _customCtrl = TextEditingController();
+  final _whatsappCtrl = TextEditingController();
   bool _customMinutes = true;
 
   static const List<Map<String, dynamic>> _presets = [
@@ -845,6 +847,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   @override
   void dispose() {
     _customCtrl.dispose();
+    _whatsappCtrl.dispose();
     super.dispose();
   }
 
@@ -939,6 +942,30 @@ class _StartModeDialogState extends State<_StartModeDialog> {
             ),
           ),
         ]),
+        const SizedBox(height: 20),
+        const Text('رقم الواتساب (اختياري)',
+            style: TextStyle(color: Colors.white54, fontSize: 12, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF0b0e14),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.white12),
+          ),
+          child: TextField(
+            controller: _whatsappCtrl,
+            keyboardType: TextInputType.phone,
+            textDirection: TextDirection.ltr,
+            style: const TextStyle(color: Colors.white, fontSize: 15),
+            decoration: const InputDecoration(
+              hintText: '01xxxxxxxxx',
+              hintStyle: TextStyle(color: Colors.white24),
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+            ),
+          ),
+        ),
         const SizedBox(height: 20),
       ],
     );
@@ -1137,6 +1164,9 @@ class _StartModeDialogState extends State<_StartModeDialog> {
                     widget.device,
                     _playMode,
                     countdownSeconds: _timeMode == 'fixed' ? _selectedSeconds : null,
+                    whatsappNumber: _whatsappCtrl.text.trim().isEmpty
+                        ? null
+                        : _whatsappCtrl.text.trim(),
                   );
                 }
               }
