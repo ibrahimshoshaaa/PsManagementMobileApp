@@ -386,57 +386,64 @@ if (!isActive)
         ]),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('إلغاء', style: TextStyle(color: Colors.white54))),
-          FilledButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final record = state.stopTable(widget.tableIndex);
-              final shopName = state.shopName ?? '';
-              Navigator.pop(context);
-              if (record.isNotEmpty && context.mounted) {
-                await PrintInvoiceDialog.show(
-                  context,
-                  record: record,
-                  shopName: shopName,
-                );
-              }
-            },
-            style: FilledButton.styleFrom(backgroundColor: const Color(0xFF4ade80), foregroundColor: Colors.black),
-            child: const Text('تأكيد'),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 1️⃣ انهاء وحفظ
+              _TableStopBtn(
+                icon: Icons.save_alt, label: 'حفظ',
+                color: const Color(0xFF4ade80),
+                onTap: () {
+                  Navigator.pop(context);
+                  state.stopTable(widget.tableIndex);
+                  Navigator.pop(context);
+                },
+              ),
+              const SizedBox(width: 6),
+              // 2️⃣ انهاء وإرسال
+              if (hasWhatsapp)
+                _TableStopBtn(
+                  icon: Icons.send, label: 'إرسال 📞',
+                  color: const Color(0xFF25D366),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final shopName = state.shopName ?? '';
+                    final tableName = t['name']?.toString() ?? 'تربيزة';
+                    final menu = state.menu;
+                    state.stopTable(widget.tableIndex);
+                    Navigator.pop(context);
+                    await _sendWhatsappInvoice(
+                      context: context,
+                      phone: whatsappNumber!,
+                      shopName: shopName,
+                      tableName: tableName,
+                      elapsed: elapsed,
+                      timeCost: timeCost,
+                      buffetCost: buffetCost,
+                      orders: orders,
+                      menu: menu,
+                    );
+                  },
+                ),
+              if (hasWhatsapp) const SizedBox(width: 6),
+              // 3️⃣ انهاء وطباعة
+              if (state.printerEnabled)
+                _TableStopBtn(
+                  icon: Icons.print, label: 'طباعة',
+                  color: const Color(0xFF38bdf8),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    final record = state.stopTable(widget.tableIndex);
+                    final shopName = state.shopName ?? '';
+                    Navigator.pop(context);
+                    if (record.isNotEmpty && context.mounted) {
+                      await PrintInvoiceDialog.show(
+                        context, record: record, shopName: shopName);
+                    }
+                  },
+                ),
+            ],
           ),
-          if (hasWhatsapp)
-            FilledButton.icon(
-              icon: const Icon(Icons.send, size: 16),
-              label: const Text('تأكيد وإرسال'),
-              onPressed: () async {
-                Navigator.pop(context);
-                final shopName = state.shopName ?? '';
-                final tableName = t['name']?.toString() ?? 'تربيزة';
-                final menu = state.menu;
-                final record = state.stopTable(widget.tableIndex);
-                Navigator.pop(context);
-                if (record.isNotEmpty && context.mounted) {
-                  await PrintInvoiceDialog.show(
-                    context,
-                    record: record,
-                    shopName: shopName,
-                  );
-                }
-                await _sendWhatsappInvoice(
-                  context: context,
-                  phone: whatsappNumber!,
-                  shopName: shopName,
-                  tableName: tableName,
-                  elapsed: elapsed,
-                  timeCost: timeCost,
-                  buffetCost: buffetCost,
-                  orders: orders,
-                  menu: menu,
-                );
-              },
-              style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF25D366),
-                  foregroundColor: Colors.white),
-            ),
         ],
       ),
     );
@@ -693,6 +700,32 @@ class _InfoRow extends StatelessWidget {
         Text(label, style: const TextStyle(color: Colors.white70)),
         Text(value, style: TextStyle(color: green ? const Color(0xFF4ade80) : Colors.white, fontWeight: FontWeight.bold)),
       ]),
+    );
+  }
+}
+
+class _TableStopBtn extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+  const _TableStopBtn({required this.icon, required this.label, required this.color, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(12)),
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          Icon(icon, color: color == const Color(0xFF4ade80) ? Colors.black : Colors.white, size: 18),
+          const SizedBox(height: 2),
+          Text(label, style: TextStyle(
+            color: color == const Color(0xFF4ade80) ? Colors.black : Colors.white,
+            fontSize: 11, fontWeight: FontWeight.bold)),
+        ]),
+      ),
     );
   }
 }

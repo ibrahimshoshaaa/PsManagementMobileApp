@@ -22,6 +22,7 @@ class CustomersScreen extends StatefulWidget {
     }
     return showModalBottomSheet<Customer>(
       context: context,
+      useRootNavigator: true,
       backgroundColor: const Color(0xFF1c2128),
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

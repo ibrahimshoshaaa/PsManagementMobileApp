@@ -1158,68 +1158,81 @@ class _StopButton extends StatelessWidget {
                     onPressed: () => Navigator.pop(context),
                     child: const Text('إلغاء',
                         style: TextStyle(color: Colors.white54))),
-                FilledButton(
-                  onPressed: () async {
-                    final record = state.stopDevice(device);
-                    final shopName = state.shopName ?? '';
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    if (record.isNotEmpty && context.mounted) {
-                      await PrintInvoiceDialog.show(
-                        context,
-                        record: record,
-                        shopName: shopName,
-                      );
-                    }
-                  },
-                  style: FilledButton.styleFrom(
-                      backgroundColor: Colors.red.shade700),
-                  child: const Text('تأكيد'),
+                // ─── الأزرار الـ 3 جنب بعض ───────────────────────────────
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // 1️⃣ انهاء وحفظ
+                    _StopBtn(
+                      icon: Icons.save_alt,
+                      label: 'حفظ',
+                      color: Colors.red.shade700,
+                      onTap: () {
+                        state.stopDevice(device);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const SizedBox(width: 6),
+                    // 2️⃣ انهاء وإرسال (يظهر بس لو في رقم واتس)
+                    if (device.whatsappNumber != null &&
+                        device.whatsappNumber!.isNotEmpty)
+                      _StopBtn(
+                        icon: Icons.send,
+                        label: 'إرسال 📞',
+                        color: const Color(0xFF25D366),
+                        onTap: () async {
+                          final phone = device.whatsappNumber!;
+                          final name = device.displayName;
+                          final closedSecs = device.closedSegments.fold<int>(
+                              0,
+                              (sum, e) =>
+                                  sum + ((e['seconds'] as num?)?.toInt() ?? 0));
+                          final elapsed = closedSecs + device.elapsedSeconds;
+                          final orders = Map<String, int>.from(device.orders);
+                          final menu = state.menu;
+                          final shopName = state.shopName ?? '';
+                          state.stopDevice(device);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          await _launchWhatsapp(
+                            context: context,
+                            phone: phone,
+                            shopName: shopName,
+                            deviceName: name,
+                            elapsed: elapsed,
+                            timeCost: timePrice,
+                            buffetCost: buffetPrice,
+                            orders: orders,
+                            menu: menu,
+                          );
+                        },
+                      ),
+                    if (device.whatsappNumber != null &&
+                        device.whatsappNumber!.isNotEmpty)
+                      const SizedBox(width: 6),
+                    // 3️⃣ انهاء وطباعة (يظهر بس لو printerEnabled)
+                    if (state.printerEnabled)
+                      _StopBtn(
+                        icon: Icons.print,
+                        label: 'طباعة',
+                        color: const Color(0xFF38bdf8),
+                        onTap: () async {
+                          final record = state.stopDevice(device);
+                          final shopName = state.shopName ?? '';
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          if (record.isNotEmpty && context.mounted) {
+                            await PrintInvoiceDialog.show(
+                              context,
+                              record: record,
+                              shopName: shopName,
+                            );
+                          }
+                        },
+                      ),
+                  ],
                 ),
-                if (device.whatsappNumber != null &&
-                    device.whatsappNumber!.isNotEmpty)
-                  FilledButton.icon(
-                    icon: const Icon(Icons.send, size: 16),
-                    label: const Text('تأكيد وإرسال'),
-                    onPressed: () async {
-                      final phone = device.whatsappNumber!;
-                      final name = device.displayName;
-                      // ✅ إجمالي الوقت الحقيقي = الفترات المقفولة (لو حصل
-                      // تحويل حالة) + الفترة المفتوحة الحالية، مش بس الأخيرة
-                      final closedSecs = device.closedSegments.fold<int>(
-                          0,
-                          (sum, e) =>
-                              sum + ((e['seconds'] as num?)?.toInt() ?? 0));
-                      final elapsed = closedSecs + device.elapsedSeconds;
-                      final orders = Map<String, int>.from(device.orders);
-                      final menu = state.menu;
-                      final shopName = state.shopName ?? '';
-                      final record = state.stopDevice(device);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      if (record.isNotEmpty && context.mounted) {
-                        await PrintInvoiceDialog.show(
-                          context,
-                          record: record,
-                          shopName: shopName,
-                        );
-                      }
-                      await _launchWhatsapp(
-                        context: context,
-                        phone: phone,
-                        shopName: shopName,
-                        deviceName: name,
-                        elapsed: elapsed,
-                        timeCost: timePrice,
-                        buffetCost: buffetPrice,
-                        orders: orders,
-                        menu: menu,
-                      );
-                    },
-                    style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF25D366),
-                        foregroundColor: Colors.white),
-                  ),
               ],
             ),
           );
@@ -1237,10 +1250,66 @@ class _StopButton extends StatelessWidget {
 }
 
 void showWhatsappEditDialogForDevice(BuildContext context, AppState state, PSDevice device) {
-  final ctrl = TextEditingController(text: device.whatsappNumber ?? '');
   showDialog(
     context: context,
-    builder: (_) => AlertDialog(
+    builder: (_) => _WhatsappEditDialog(device: device, state: state),
+  );
+}
+
+class _WhatsappEditDialog extends StatefulWidget {
+  final PSDevice device;
+  final AppState state;
+  const _WhatsappEditDialog({required this.device, required this.state});
+
+  @override
+  State<_WhatsappEditDialog> createState() => _WhatsappEditDialogState();
+}
+
+class _WhatsappEditDialogState extends State<_WhatsappEditDialog> {
+  late final TextEditingController _ctrl;
+  List<Customer> _customers = [];
+  String? _customerName;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = TextEditingController(text: widget.device.whatsappNumber ?? '');
+    _ctrl.addListener(_lookup);
+    _loadCustomers();
+  }
+
+  Future<void> _loadCustomers() async {
+    final list = await CustomerService.fetchAll();
+    if (mounted) { setState(() => _customers = list); _lookup(); }
+  }
+
+  void _lookup() {
+    final phone = _ctrl.text.trim();
+    if (phone.length >= 8) {
+      final match = _customers.where((c) => c.phone == phone).firstOrNull;
+      if (mounted) setState(() => _customerName = match?.name);
+    } else {
+      if (mounted) setState(() => _customerName = null);
+    }
+  }
+
+  Future<void> _pick() async {
+    final picked = await CustomersScreen.pickCustomer(context);
+    if (picked != null && mounted) {
+      setState(() { _ctrl.text = picked.phone; _customerName = picked.name; });
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.removeListener(_lookup);
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
       backgroundColor: const Color(0xFF1c2128),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: const Row(children: [
@@ -1248,33 +1317,64 @@ void showWhatsappEditDialogForDevice(BuildContext context, AppState state, PSDev
         SizedBox(width: 8),
         Text('رقم الواتساب', style: TextStyle(color: Colors.white, fontSize: 16)),
       ]),
-      content: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-        decoration: BoxDecoration(
-          color: const Color(0xFF0b0e14),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white12),
-        ),
-        child: TextField(
-          controller: ctrl,
-          keyboardType: TextInputType.phone,
-          textDirection: TextDirection.ltr,
-          autofocus: true,
-          style: const TextStyle(color: Colors.white, fontSize: 15),
-          decoration: const InputDecoration(
-            hintText: '01xxxxxxxxx',
-            hintStyle: TextStyle(color: Colors.white24),
-            border: InputBorder.none,
-            prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
-          ),
-        ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(children: [
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0b0e14),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                      color: _customerName != null ? Colors.green : Colors.white12),
+                ),
+                child: TextField(
+                  controller: _ctrl,
+                  keyboardType: TextInputType.phone,
+                  textDirection: TextDirection.ltr,
+                  autofocus: true,
+                  style: const TextStyle(color: Colors.white, fontSize: 15),
+                  decoration: const InputDecoration(
+                    hintText: '01xxxxxxxxx',
+                    hintStyle: TextStyle(color: Colors.white24),
+                    border: InputBorder.none,
+                    prefixIcon: Icon(Icons.phone, color: Colors.green, size: 20),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              style: IconButton.styleFrom(
+                backgroundColor: const Color(0xFF0b0e14),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: const BorderSide(color: Colors.white12)),
+              ),
+              icon: const Icon(Icons.contacts, color: Colors.white54, size: 22),
+              onPressed: _pick,
+            ),
+          ]),
+          if (_customerName != null && _customerName!.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Row(children: [
+              const Icon(Icons.person_pin, color: Colors.green, size: 14),
+              const SizedBox(width: 4),
+              Text(_customerName!,
+                  style: const TextStyle(color: Colors.green, fontSize: 12)),
+            ]),
+          ],
+        ],
       ),
       actions: [
-        if (device.whatsappNumber != null && device.whatsappNumber!.isNotEmpty)
+        if (widget.device.whatsappNumber != null &&
+            widget.device.whatsappNumber!.isNotEmpty)
           TextButton(
             onPressed: () {
-              device.whatsappNumber = null;
-              state.notifyListeners();
+              widget.device.whatsappNumber = null;
+              widget.state.notifyListeners();
               Navigator.pop(context);
             },
             child: const Text('حذف الرقم', style: TextStyle(color: Colors.red)),
@@ -1285,16 +1385,17 @@ void showWhatsappEditDialogForDevice(BuildContext context, AppState state, PSDev
         ),
         FilledButton(
           onPressed: () {
-            device.whatsappNumber = ctrl.text.trim().isEmpty ? null : ctrl.text.trim();
-            state.notifyListeners();
+            widget.device.whatsappNumber =
+                _ctrl.text.trim().isEmpty ? null : _ctrl.text.trim();
+            widget.state.notifyListeners();
             Navigator.pop(context);
           },
           style: FilledButton.styleFrom(backgroundColor: Colors.green),
           child: const Text('حفظ'),
         ),
       ],
-    ),
-  );
+    );
+  }
 }
 
 Future<void> _launchWhatsapp({
@@ -2122,6 +2223,47 @@ class _ModeChip extends StatelessWidget {
                       : Colors.white24,
                   fontSize: 10)),
         ]),
+      ),
+    );
+  }
+}
+
+// ── زرار الإنهاء الصغير (مستخدم في الـ 3 أزرار جنب بعض) ─────────────────────
+class _StopBtn extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+  final VoidCallback onTap;
+
+  const _StopBtn({
+    required this.icon,
+    required this.label,
+    required this.color,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: Colors.white, size: 18),
+            const SizedBox(height: 2),
+            Text(label,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
     );
   }

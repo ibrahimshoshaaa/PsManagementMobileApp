@@ -460,24 +460,35 @@ class DrinkTableScreen extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
               child: const Text('إلغاء',
                   style: TextStyle(color: Colors.white54))),
-          FilledButton(
-            onPressed: () async {
-              final record = state.checkoutDrinkTable(tableIndex);
-              final shopName = state.shopName ?? '';
-              Navigator.pop(context);
-              Navigator.pop(context);
-              if (record.isNotEmpty && context.mounted) {
-                await PrintInvoiceDialog.show(
-                  context,
-                  record: record,
-                  shopName: shopName,
-                );
-              }
-            },
-            style: FilledButton.styleFrom(
-                backgroundColor: Colors.orange,
-                foregroundColor: Colors.black),
-            child: const Text('تأكيد'),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // 1️⃣ حفظ
+              GestureDetector(
+                onTap: () {
+                  state.checkoutDrinkTable(tableIndex);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: _drinkStopBtn(Icons.save_alt, 'حفظ', Colors.orange),
+              ),
+              const SizedBox(width: 6),
+              // 2️⃣ طباعة
+              if (state.printerEnabled)
+                GestureDetector(
+                  onTap: () async {
+                    final record = state.checkoutDrinkTable(tableIndex);
+                    final shopName = state.shopName ?? '';
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    if (record.isNotEmpty && context.mounted) {
+                      await PrintInvoiceDialog.show(
+                        context, record: record, shopName: shopName);
+                    }
+                  },
+                  child: _drinkStopBtn(Icons.print, 'طباعة', const Color(0xFF38bdf8)),
+                ),
+            ],
           ),
         ],
       ),
@@ -533,4 +544,16 @@ class _TransferTile extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _drinkStopBtn(IconData icon, String label, Color color) {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+    decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(12)),
+    child: Column(mainAxisSize: MainAxisSize.min, children: [
+      Icon(icon, color: Colors.white, size: 18),
+      const SizedBox(height: 2),
+      Text(label, style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+    ]),
+  );
 }

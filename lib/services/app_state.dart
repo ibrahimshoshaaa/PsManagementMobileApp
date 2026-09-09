@@ -72,6 +72,7 @@ class AppState extends ChangeNotifier {
   Map<String, int> dailyInventorySummary = {};
   Map<String, int> menuBuyPrices = {};
   bool rechargeEnabled = false;
+  bool printerEnabled = false;
   double rechargeBalance = 0.0;
   List<Map<String, dynamic>> rechargeCards = [];
   List<Map<String, dynamic>> rechargeTransactions = [];
@@ -799,6 +800,7 @@ void _startClock() {
               .map((d) => Map<String, dynamic>.from(d)));
     }
     if (s['recharge_enabled'] != null) rechargeEnabled = s['recharge_enabled'];
+    if (s['printer_enabled'] != null) printerEnabled = s['printer_enabled'];
     if (s['recharge_balance'] != null) {
       rechargeBalance = (s['recharge_balance'] as num).toDouble();
     }
@@ -1168,6 +1170,10 @@ void _startClock() {
     final rechargeEnabledRaw =
         data['recharge_enabled'] ?? data['static']?['recharge_enabled'];
     if (rechargeEnabledRaw != null) rechargeEnabled = rechargeEnabledRaw;
+
+    final printerEnabledRaw =
+        data['printer_enabled'] ?? data['static']?['printer_enabled'];
+    if (printerEnabledRaw != null) printerEnabled = printerEnabledRaw;
     final rechargeBalanceRaw =
         data['recharge_balance'] ?? data['static']?['recharge_balance'];
     if (rechargeBalanceRaw != null) {
@@ -1330,6 +1336,7 @@ void _startClock() {
       'drink_tables': drinkTables,
       'debts': debts,
       'recharge_enabled': rechargeEnabled,
+      'printer_enabled': printerEnabled,
       'recharge_balance': rechargeBalance,
       'recharge_cards': rechargeCards,
       'recharge_transactions': rechargeTransactions,
@@ -1378,6 +1385,7 @@ void _startClock() {
       },
       'debts': debts, // 🔥 debts في static — بيتحمل مع الـ static مرة واحدة
       'recharge_enabled': rechargeEnabled,
+      'printer_enabled': printerEnabled,
       'recharge_balance': rechargeBalance,
       'recharge_cards': rechargeCards,
       'recharge_transactions': rechargeTransactions,
@@ -3359,6 +3367,13 @@ void _startClock() {
     _pushStaticOnly();
     notifyListeners();
   }
+
+  void setPrinterEnabled(bool val) {
+    printerEnabled = val;
+    _pushStaticOnly();
+    notifyListeners();
+  }
+
 
   void addRechargeCard(String name, double value) {
     rechargeCards.add({'name': name, 'value': value});

@@ -178,6 +178,39 @@ class SettingsScreen extends StatelessWidget {
             
             const SizedBox(height: 20),
 
+            // ─── إعدادات الطابعة ───────────────────────────────────────────
+            _SectionHeader('🖨️ الطابعة الحرارية'),
+            const SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF1c2128),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: Colors.white10),
+              ),
+              child: SwitchListTile(
+                activeColor: const Color(0xFF38bdf8),
+                secondary: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF38bdf8).withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.print, color: Color(0xFF38bdf8)),
+                ),
+                title: const Text('طباعة الفواتير',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                subtitle: Text(
+                  state.printerEnabled
+                      ? 'مفعّل — زر الطباعة يظهر عند الإنهاء'
+                      : 'معطّل — لا يظهر زر الطباعة',
+                  style: const TextStyle(color: Colors.white54, fontSize: 12),
+                ),
+                value: state.printerEnabled,
+                onChanged: (v) => state.setPrinterEnabled(v),
+              ),
+            ),
+            const SizedBox(height: 16),
+
             // ─── إعدادات الشحن ─────────────────────────────────────────────
             _SectionHeader('📱 إعدادات الشحن'),
             const SizedBox(height: 8),
