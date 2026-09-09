@@ -8,6 +8,7 @@ import '../services/app_state.dart';
 import '../services/customer_service.dart';
 import '../widgets/device_card.dart';
 import '../widgets/buffet_order_dialog.dart';
+import '../widgets/print_invoice_dialog.dart';
 import 'customers_screen.dart';
 import 'qr_screen.dart';
 
@@ -1055,10 +1056,18 @@ class _StopButton extends StatelessWidget {
                     child: const Text('إلغاء',
                         style: TextStyle(color: Colors.white54))),
                 FilledButton(
-                  onPressed: () {
-                    state.stopDevice(device);
+                  onPressed: () async {
+                    final record = state.stopDevice(device);
+                    final shopName = state.shopName ?? '';
                     Navigator.pop(context);
                     Navigator.pop(context);
+                    if (record.isNotEmpty && context.mounted) {
+                      await PrintInvoiceDialog.show(
+                        context,
+                        record: record,
+                        shopName: shopName,
+                      );
+                    }
                   },
                   style: FilledButton.styleFrom(
                       backgroundColor: Colors.red.shade700),
@@ -1075,10 +1084,17 @@ class _StopButton extends StatelessWidget {
                       final elapsed = device.elapsedSeconds;
                       final orders = Map<String, int>.from(device.orders);
                       final menu = state.menu;
-                      final shopName = state.shopName;
-                      state.stopDevice(device);
+                      final shopName = state.shopName ?? '';
+                      final record = state.stopDevice(device);
                       Navigator.pop(context);
                       Navigator.pop(context);
+                      if (record.isNotEmpty && context.mounted) {
+                        await PrintInvoiceDialog.show(
+                          context,
+                          record: record,
+                          shopName: shopName,
+                        );
+                      }
                       await _launchWhatsapp(
                         context: context,
                         phone: phone,

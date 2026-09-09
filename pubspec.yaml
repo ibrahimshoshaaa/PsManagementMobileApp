@@ -17,7 +17,7 @@ dependencies:
   flutter_local_notifications: ^17.2.2
   qr_flutter: ^4.1.0
   url_launcher: ^6.3.0
-
+  flutter_bluetooth_serial: ^0.4.0
 
 flutter:
   uses-material-design: true

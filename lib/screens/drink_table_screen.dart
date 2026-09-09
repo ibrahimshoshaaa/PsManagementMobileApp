@@ -4,6 +4,7 @@ import '../services/app_state.dart';
 import '../models/device.dart';
 import 'qr_screen.dart';
 import '../widgets/buffet_order_dialog.dart';
+import '../widgets/print_invoice_dialog.dart';
 import 'device_detail_screen.dart';
 import '../widgets/device_transfer_start_dialog.dart';
 import '../widgets/table_transfer_start_dialog.dart';
@@ -460,10 +461,18 @@ class DrinkTableScreen extends StatelessWidget {
               child: const Text('إلغاء',
                   style: TextStyle(color: Colors.white54))),
           FilledButton(
-            onPressed: () {
-              state.checkoutDrinkTable(tableIndex);
+            onPressed: () async {
+              final record = state.checkoutDrinkTable(tableIndex);
+              final shopName = state.shopName ?? '';
               Navigator.pop(context);
               Navigator.pop(context);
+              if (record.isNotEmpty && context.mounted) {
+                await PrintInvoiceDialog.show(
+                  context,
+                  record: record,
+                  shopName: shopName,
+                );
+              }
             },
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.orange,

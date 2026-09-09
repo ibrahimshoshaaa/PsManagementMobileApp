@@ -6,6 +6,7 @@ import '../services/app_state.dart';
 import 'qr_screen.dart';
 import '../widgets/table_start_dialog.dart';
 import '../widgets/buffet_order_dialog.dart';
+import '../widgets/print_invoice_dialog.dart';
 import '../services/notification_service.dart';
 import '../services/customer_service.dart';
 
@@ -386,10 +387,18 @@ if (!isActive)
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: const Text('إلغاء', style: TextStyle(color: Colors.white54))),
           FilledButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
-              state.stopTable(widget.tableIndex);
+              final record = state.stopTable(widget.tableIndex);
+              final shopName = state.shopName ?? '';
               Navigator.pop(context);
+              if (record.isNotEmpty && context.mounted) {
+                await PrintInvoiceDialog.show(
+                  context,
+                  record: record,
+                  shopName: shopName,
+                );
+              }
             },
             style: FilledButton.styleFrom(backgroundColor: const Color(0xFF4ade80), foregroundColor: Colors.black),
             child: const Text('تأكيد'),
@@ -400,11 +409,18 @@ if (!isActive)
               label: const Text('تأكيد وإرسال'),
               onPressed: () async {
                 Navigator.pop(context);
-                final shopName = state.shopName;
+                final shopName = state.shopName ?? '';
                 final tableName = t['name']?.toString() ?? 'تربيزة';
                 final menu = state.menu;
-                state.stopTable(widget.tableIndex);
+                final record = state.stopTable(widget.tableIndex);
                 Navigator.pop(context);
+                if (record.isNotEmpty && context.mounted) {
+                  await PrintInvoiceDialog.show(
+                    context,
+                    record: record,
+                    shopName: shopName,
+                  );
+                }
                 await _sendWhatsappInvoice(
                   context: context,
                   phone: whatsappNumber!,

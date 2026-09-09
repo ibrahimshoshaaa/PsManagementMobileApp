@@ -1863,6 +1863,13 @@ void _startClock() {
     final h = elapsed ~/ 3600;
     final m = (elapsed % 3600) ~/ 60;
 
+    final endTime = DateTime.now();
+    final startDt = d.startTime != null
+        ? DateTime.fromMillisecondsSinceEpoch(d.startTime! * 1000)
+        : null;
+    final rateKey = '${d.deviceType}_${d.mode}';
+    final hourlyRate = prices[rateKey] ?? (d.deviceType == 'ps5' ? 35 : 25);
+
     record = {
       'id': d.id,
       'name': d.displayName,
@@ -1874,7 +1881,13 @@ void _startClock() {
       'buffet_cost': buffetPrice,
       'total': timePrice + buffetPrice,
       'orders': Map<String, int>.from(d.orders),
-      'date': DateTime.now().toString(),
+      'date': endTime.toString(),
+      'start_time_display': startDt != null
+          ? '${startDt.hour.toString().padLeft(2,'0')}:${startDt.minute.toString().padLeft(2,'0')}'
+          : null,
+      'end_time_display':
+          '${endTime.hour.toString().padLeft(2,'0')}:${endTime.minute.toString().padLeft(2,'0')}',
+      'hourly_rate': hourlyRate,
       // 🔥 session_log يتحفظ هنا فقط (مرة واحدة) في السجل التاريخي
       // مش بيتحمل على الـ realtime node أبداً
       'session_log': List<Map<String, dynamic>>.from(d.sessionLog),
@@ -2267,6 +2280,9 @@ void _startClock() {
     final h = elapsed ~/ 3600;
     final m = (elapsed % 3600) ~/ 60;
 
+    final tableEndTime = DateTime.now();
+    final tableStartDt = DateTime.fromMillisecondsSinceEpoch(startTime * 1000);
+
     final record = {
       'id': index,
       'name': t['name'],
@@ -2279,7 +2295,12 @@ void _startClock() {
       'total': timeCost + buffetCost,
       'orders': orders,
       'rate': rate,
-      'date': DateTime.now().toString(),
+      'hourly_rate': rate,
+      'date': tableEndTime.toString(),
+      'start_time_display':
+          '${tableStartDt.hour.toString().padLeft(2,'0')}:${tableStartDt.minute.toString().padLeft(2,'0')}',
+      'end_time_display':
+          '${tableEndTime.hour.toString().padLeft(2,'0')}:${tableEndTime.minute.toString().padLeft(2,'0')}',
       'cashier': currentCashierName ?? (isAdmin ? 'أدمن' : 'كاشير'),
       'whatsapp_number': t['whatsapp_number'],
     };
