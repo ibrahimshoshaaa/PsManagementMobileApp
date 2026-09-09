@@ -1108,6 +1108,27 @@ class _StopButton extends StatelessWidget {
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // ✅ لو حصل تحويل حالة (عادي↔مالتي) وسط الجلسة، بنوضح
+                  // تكلفة كل فترة لوحدها قبل الإجمالي — عشان العميل يشوف
+                  // بالظبط بيدفع إيه على كل نوع.
+                  if (device.isActive && device.closedSegments.isNotEmpty) ...[
+                    const Align(
+                      alignment: Alignment.centerRight,
+                      child: Text('🎮 تفاصيل اللعب',
+                          style: TextStyle(
+                              color: Colors.white54, fontSize: 12)),
+                    ),
+                    ...device.closedSegments.map((seg) => _Row(
+                          '  • ${seg['mode'] == 'multi' ? '👥 مالتي' : '👤 عادي'} (${_fmtSegDuration(seg['seconds'] as int)})',
+                          '${(seg['cost'] as double).toStringAsFixed(1)} ج',
+                          small: true,
+                        )),
+                    _Row(
+                      '  • ${device.mode == 'multi' ? '👥 مالتي' : '👤 عادي'} (${_fmtSegDuration(device.elapsedSeconds)})',
+                      '${device.calculateTimePrice(state.prices).toStringAsFixed(1)} ج',
+                      small: true,
+                    ),
+                  ],
                   if (device.isActive)
                     _Row('🎮 اللعب', '${timePrice.toStringAsFixed(1)} ج'),
                   if (device.orders.isNotEmpty) ...[
@@ -1322,6 +1343,13 @@ Future<void> _launchWhatsapp({
       const SnackBar(content: Text('تعذر فتح واتساب'), backgroundColor: Colors.red),
     );
   }
+}
+
+/// يحوّل عدد الثواني لصيغة "1س 5د" أو "5د" لعرضها في تفاصيل فترات اللعب.
+String _fmtSegDuration(int seconds) {
+  final h = seconds ~/ 3600;
+  final m = (seconds % 3600) ~/ 60;
+  return h > 0 ? '${h}س ${m}د' : '${m}د';
 }
 
 class _Row extends StatelessWidget {

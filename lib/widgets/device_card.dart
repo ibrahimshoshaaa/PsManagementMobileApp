@@ -7,6 +7,7 @@ import '../services/app_state.dart';
 import '../services/customer_service.dart';
 import '../screens/customers_screen.dart';
 import 'buffet_order_dialog.dart'; // ✅ إضافة الاستيراد
+import 'print_invoice_dialog.dart'; // ✅ لازم عشان دايلوج الطباعة يظهر عند الإنهاء من هنا
 
 class DeviceCard extends StatelessWidget {
   final PSDevice device;
@@ -651,9 +652,14 @@ class _MixedButtons extends StatelessWidget {
               child: const Text('إلغاء',
                   style: TextStyle(color: Colors.white54))),
           FilledButton(
-            onPressed: () {
-              state.stopDevice(device);
+            onPressed: () async {
+              final shopName = state.shopName;
+              final record = state.stopDevice(device);
               Navigator.pop(context);
+              if (record.isNotEmpty && context.mounted) {
+                await PrintInvoiceDialog.show(context,
+                    record: record, shopName: shopName ?? '');
+              }
             },
             style: FilledButton.styleFrom(backgroundColor: Colors.red.shade700),
             child: const Text('تأكيد الإنهاء'),
@@ -667,19 +673,25 @@ class _MixedButtons extends StatelessWidget {
                 final orders = Map<String, int>.from(device.orders);
                 final menu = state.menu;
                 final shopName = state.shopName;
-                state.stopDevice(device);
+                final record = state.stopDevice(device);
                 Navigator.pop(context);
-                await deviceCardLaunchWhatsapp(
-                  context: context,
-                  phone: whatsappNumber!,
-                  shopName: shopName,
-                  deviceName: name,
-                  elapsed: 0,
-                  timeCost: 0,
-                  buffetCost: buffetPrice,
-                  orders: orders,
-                  menu: menu,
-                );
+                if (record.isNotEmpty && context.mounted) {
+                  await PrintInvoiceDialog.show(context,
+                      record: record, shopName: shopName ?? '');
+                }
+                if (context.mounted) {
+                  await deviceCardLaunchWhatsapp(
+                    context: context,
+                    phone: whatsappNumber!,
+                    shopName: shopName,
+                    deviceName: name,
+                    elapsed: 0,
+                    timeCost: 0,
+                    buffetCost: buffetPrice,
+                    orders: orders,
+                    menu: menu,
+                  );
+                }
               },
               style: FilledButton.styleFrom(
                   backgroundColor: const Color(0xFF25D366),
@@ -773,6 +785,25 @@ class _ActiveButtons extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // ✅ لو حصل تحويل حالة (عادي↔مالتي) وسط الجلسة، بنوضح تكلفة
+            // كل فترة لوحدها قبل الإجمالي.
+            if (device.closedSegments.isNotEmpty) ...[
+              const Align(
+                alignment: Alignment.centerRight,
+                child: Text('🎮 تفاصيل اللعب',
+                    style: TextStyle(color: Colors.white54, fontSize: 12)),
+              ),
+              ...device.closedSegments.map((seg) => _InfoRow(
+                    '  • ${seg['mode'] == 'multi' ? '👥 مالتي' : '👤 عادي'} (${_fmtCardSegDuration(seg['seconds'] as int)})',
+                    '${(seg['cost'] as double).toStringAsFixed(1)} ج',
+                    small: true,
+                  )),
+              _InfoRow(
+                '  • ${device.mode == 'multi' ? '👥 مالتي' : '👤 عادي'} (${_fmtCardSegDuration(device.elapsedSeconds)})',
+                '${device.calculateTimePrice(state.prices).toStringAsFixed(1)} ج',
+                small: true,
+              ),
+            ],
             _InfoRow(
                 '🎮 اللعب', '${timePrice.toStringAsFixed(1)} ج'),
             if (device.orders.isNotEmpty) ...[
@@ -804,9 +835,14 @@ class _ActiveButtons extends StatelessWidget {
               child: const Text('إلغاء',
                   style: TextStyle(color: Colors.white54))),
           FilledButton(
-            onPressed: () {
-              state.stopDevice(device);
+            onPressed: () async {
+              final shopName = state.shopName;
+              final record = state.stopDevice(device);
               Navigator.pop(context);
+              if (record.isNotEmpty && context.mounted) {
+                await PrintInvoiceDialog.show(context,
+                    record: record, shopName: shopName ?? '');
+              }
             },
             style: FilledButton.styleFrom(
                 backgroundColor: Colors.red.shade700),
@@ -822,19 +858,25 @@ class _ActiveButtons extends StatelessWidget {
                 final orders = Map<String, int>.from(device.orders);
                 final menu = state.menu;
                 final shopName = state.shopName;
-                state.stopDevice(device);
+                final record = state.stopDevice(device);
                 Navigator.pop(context);
-                await deviceCardLaunchWhatsapp(
-                  context: context,
-                  phone: whatsappNumber!,
-                  shopName: shopName,
-                  deviceName: name,
-                  elapsed: elapsed,
-                  timeCost: timePrice,
-                  buffetCost: buffetPrice,
-                  orders: orders,
-                  menu: menu,
-                );
+                if (record.isNotEmpty && context.mounted) {
+                  await PrintInvoiceDialog.show(context,
+                      record: record, shopName: shopName ?? '');
+                }
+                if (context.mounted) {
+                  await deviceCardLaunchWhatsapp(
+                    context: context,
+                    phone: whatsappNumber!,
+                    shopName: shopName,
+                    deviceName: name,
+                    elapsed: elapsed,
+                    timeCost: timePrice,
+                    buffetCost: buffetPrice,
+                    orders: orders,
+                    menu: menu,
+                  );
+                }
               },
               style: FilledButton.styleFrom(
                   backgroundColor: const Color(0xFF25D366),
@@ -844,6 +886,13 @@ class _ActiveButtons extends StatelessWidget {
       ),
     );
   }
+}
+
+/// يحوّل عدد الثواني لصيغة "1س 5د" أو "5د" لعرضها في تفاصيل فترات اللعب.
+String _fmtCardSegDuration(int seconds) {
+  final h = seconds ~/ 3600;
+  final m = (seconds % 3600) ~/ 60;
+  return h > 0 ? '${h}س ${m}د' : '${m}د';
 }
 
 class _InfoRow extends StatelessWidget {
