@@ -19,7 +19,9 @@ class DeviceDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
-    final timePrice = device.calculateTimePrice(state.prices);
+    // ✅ الإجمالي المعروض = تكلفة الفترات المقفولة (من تحويل الحالة) + الفترة المفتوحة الحالية
+    final timePrice =
+        device.closedSegmentsCost + device.calculateTimePrice(state.prices);
     final buffetPrice = device.getBuffetPrice(state.menu);
 
     return Scaffold(
@@ -257,7 +259,20 @@ class _TimerCard extends StatelessWidget {
 
                 _VertDivider(),
 
-                // 3. نقل الجلسة
+                // 3. تحويل الحالة (سنجل ⇆ مالتي) — Session Splitting
+                _ActionBtn(
+                  icon: Icons.compare_arrows,
+                  label: device.mode == 'multi' ? 'لعادي' : 'لمالتي',
+                  color: Colors.purpleAccent,
+                  onTap: device.isPaused
+                      ? null
+                      : () => _showSwitchModeDialog(context, state),
+                  disabled: device.isPaused,
+                ),
+
+                _VertDivider(),
+
+                // 4. نقل الجلسة
                 _ActionBtn(
                   icon: Icons.swap_horiz,
                   label: 'نقل',
@@ -265,7 +280,7 @@ class _TimerCard extends StatelessWidget {
                   onTap: () => _showTransferDialog(context, state),
                 ),
 
-                // 4. إلغاء (للأدمن فقط)
+                // 5. إلغاء (للأدمن فقط)
                 if (state.isAdmin) ...[
                   _VertDivider(),
                   _ActionBtn(
@@ -414,6 +429,72 @@ class _TimerCard extends StatelessWidget {
             },
             style: FilledButton.styleFrom(backgroundColor: Colors.red),
             child: const Text('إلغاء الجهاز'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSwitchModeDialog(BuildContext context, AppState state) {
+    final newMode = device.mode == 'multi' ? 'normal' : 'multi';
+    final oldLabel = device.mode == 'multi' ? 'مالتي' : 'عادي';
+    final newLabel = newMode == 'multi' ? 'مالتي' : 'عادي';
+    final segmentCost = device.calculateTimePrice(state.prices);
+    final mins = device.elapsedSeconds ~/ 60;
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF1c2128),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Row(children: [
+          Icon(Icons.compare_arrows, color: Colors.purpleAccent),
+          SizedBox(width: 8),
+          Text('تحويل الحالة',
+              style: TextStyle(
+                  color: Colors.purpleAccent, fontWeight: FontWeight.bold)),
+        ]),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'هيتم تحويل ${device.displayName} من "$oldLabel" لـ "$newLabel".',
+              style: const TextStyle(color: Colors.white70),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.purpleAccent.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                    color: Colors.purpleAccent.withOpacity(0.3)),
+              ),
+              child: Text(
+                'هيتم تسجيل $mins دقيقة "$oldLabel" في الفاتورة بتكلفة '
+                '${segmentCost.toStringAsFixed(1)} ج، وهيبدأ عداد جديد بسعر "$newLabel".',
+                style: const TextStyle(color: Colors.white70, fontSize: 13),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child:
+                  const Text('إلغاء', style: TextStyle(color: Colors.white54))),
+          FilledButton.icon(
+            onPressed: () {
+              state.switchDeviceMode(device, newMode);
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.check, size: 16),
+            label: const Text('تأكيد التحويل'),
+            style: FilledButton.styleFrom(
+                backgroundColor: Colors.purpleAccent,
+                foregroundColor: Colors.black),
           ),
         ],
       ),
@@ -1006,7 +1087,8 @@ class _StopButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.read<AppState>();
-    final timePrice = device.calculateTimePrice(state.prices);
+    final timePrice =
+        device.closedSegmentsCost + device.calculateTimePrice(state.prices);
     final buffetPrice = device.getBuffetPrice(state.menu);
 
     return SizedBox(
@@ -1081,7 +1163,13 @@ class _StopButton extends StatelessWidget {
                     onPressed: () async {
                       final phone = device.whatsappNumber!;
                       final name = device.displayName;
-                      final elapsed = device.elapsedSeconds;
+                      // ✅ إجمالي الوقت الحقيقي = الفترات المقفولة (لو حصل
+                      // تحويل حالة) + الفترة المفتوحة الحالية، مش بس الأخيرة
+                      final closedSecs = device.closedSegments.fold<int>(
+                          0,
+                          (sum, e) =>
+                              sum + ((e['seconds'] as num?)?.toInt() ?? 0));
+                      final elapsed = closedSecs + device.elapsedSeconds;
                       final orders = Map<String, int>.from(device.orders);
                       final menu = state.menu;
                       final shopName = state.shopName ?? '';
@@ -1350,6 +1438,10 @@ class _LogEventTile extends StatelessWidget {
         final minutes = event['minutes'] as int? ?? 0;
         icon = minutes > 0 ? Icons.add_circle : Icons.remove_circle;
         color = minutes > 0 ? const Color(0xFF4ade80) : Colors.redAccent;
+        break;
+      case 'mode_switch':
+        icon = Icons.compare_arrows;
+        color = Colors.purpleAccent;
         break;
       case 'stop':
         icon = Icons.stop_circle_outlined;

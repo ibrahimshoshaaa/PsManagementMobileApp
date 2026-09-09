@@ -1548,7 +1548,8 @@ void _startClock() {
 
   // 🔥 BANDWIDTH FIX #2: _logEvent — يضيف للـ local session_log فقط
   // لا يتحمل على Firebase — session_log بيتحمل مرة واحدة فقط في stopDevice
-  void _logEvent(PSDevice d, String type, {String? note, int? minutes}) {
+  void _logEvent(PSDevice d, String type,
+      {String? note, int? minutes, double? cost, String? mode, int? seconds}) {
     final now = DateTime.now();
     final timeStr =
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
@@ -1560,6 +1561,10 @@ void _startClock() {
       'role': role,
       if (note != null) 'note': note,
       if (minutes != null) 'minutes': minutes,
+      // ✅ Session Splitting: تكلفة/حالة/مدة الفترة اللي اتقفلت بالتحويل
+      if (cost != null) 'cost': cost,
+      if (mode != null) 'mode': mode,
+      if (seconds != null) 'seconds': seconds,
     });
     // 🔥 لا pushDevicesState هنا — session_log محلي بس
   }
@@ -1651,6 +1656,63 @@ void _startClock() {
           deviceName: d.displayName,
           deviceType: d.deviceType);
     }
+    _saveDevices(deviceId: d.id);
+    notifyListeners();
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // ✅ SESSION SPLITTING — تحويل حالة الجهاز (سنجل ⇆ مالتي) أثناء اللعب
+  //
+  // بدل ما يكون للجهاز عداد وسعر واحد من أول ما يشتغل لحد ما يخلص، بنقسم
+  // وقت اللعب لفترات فرعية كل ما الكاشير يحوّل الحالة:
+  //   1. بنوقف حساب الفترة الحالية ونحسب تكلفتها بسعر الحالة القديمة.
+  //   2. بنسجّلها كحدث 'mode_switch' في sessionLog (وقت/مدة/تكلفة/حالة).
+  //   3. بنبدّل mode الجهاز ونصفّر startTime/addedSeconds — عداد جديد من الصفر.
+  // عند stopDevice، بنجمع تكلفة كل الفترات المقفولة + الفترة المفتوحة الأخيرة،
+  // وبيتحطوا في الفاتورة كعناصر منفصلة (شوف time_segments في stopDevice).
+  // ══════════════════════════════════════════════════════════════════════════
+  void switchDeviceMode(PSDevice d, String newMode) {
+    if (!d.isActive) return; // الجهاز لازم يكون شغال
+    if (d.isPaused) return; // ما تحولش وهو موقوف مؤقتاً
+    if (d.mode == newMode) return; // نفس الحالة — مفيش داعي
+    if (d.isCountdown) return; // مش مدعوم مع العد التنازلي (وقت محدد مسبقاً)
+
+    final elapsed = d.elapsedSeconds;
+    if (elapsed <= 0) {
+      // مفيش وقت اتحسب لسه — بدّل الحالة من غير ما نسجّل فترة فاضية
+      d.mode = newMode;
+      notifyListeners();
+      return;
+    }
+    final segmentCost = d.calculateTimePrice(prices); // بسعر الحالة القديمة
+    final oldModeLabel = d.mode == 'multi' ? 'مالتي' : 'عادي';
+    final newModeLabel = newMode == 'multi' ? 'مالتي' : 'عادي';
+    final mins = elapsed ~/ 60;
+
+    // 1+2. قفل الفترة الحالية وتسجيلها بتكلفتها
+    _logEvent(
+      d,
+      'mode_switch',
+      note:
+          'تحويل من $oldModeLabel لـ $newModeLabel — $mins دقيقة (${segmentCost.toStringAsFixed(1)} ج)',
+      minutes: mins,
+      cost: segmentCost,
+      mode: d.mode,
+      seconds: elapsed,
+    );
+
+    AuditLogService.logDevice(
+      action: AuditAction.deviceModeChange,
+      deviceName: d.displayName,
+      deviceType: d.deviceType,
+      extra: '$oldModeLabel ← $newModeLabel ($mins د، ${segmentCost.toStringAsFixed(1)} ج)',
+    );
+
+    // 3. بدء عداد جديد بسعر الحالة الجديدة
+    d.mode = newMode;
+    d.startTime = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    d.addedSeconds = 0;
+
     _saveDevices(deviceId: d.id);
     notifyListeners();
   }
@@ -1848,8 +1910,22 @@ void _startClock() {
     late Map<String, dynamic> record;
     try {
     _logEvent(d, 'stop', note: 'انتهت الجلسة');
-    final timePrice = d.isActive ? d.calculateTimePrice(prices) : 0.0;
+
+    // ✅ Session Splitting: تكلفة كل الفترات المقفولة (من تحويل الحالة)
+    // + تكلفة الفترة المفتوحة الأخيرة (بالحالة الحالية)
+    final closedSegments = d.closedSegments;
+    final closedCost = d.closedSegmentsCost;
+    final openSeconds = d.isActive ? d.elapsedSeconds : 0;
+    final openCost = d.isActive ? d.calculateTimePrice(prices) : 0.0;
+    final timePrice = closedCost + openCost;
     final buffetPrice = d.getBuffetPrice(menu);
+
+    // قائمة الفترات كعناصر جاهزة للفاتورة/الطباعة — فترة واحدة لو محصلش تحويل
+    final timeSegments = <Map<String, dynamic>>[
+      ...closedSegments,
+      if (openSeconds > 0)
+        {'mode': d.mode, 'seconds': openSeconds, 'cost': openCost},
+    ];
 
     AuditLogService.logDevice(
       action: AuditAction.deviceStop,
@@ -1859,7 +1935,13 @@ void _startClock() {
           'لعب: ${timePrice.toStringAsFixed(1)} ج | بوفيه: ${buffetPrice.toStringAsFixed(1)} ج | إجمالي: ${(timePrice + buffetPrice).toStringAsFixed(1)} ج',
     );
 
-    final elapsed = d.elapsedSeconds;
+    // ✅ الميّة الحقيقية للجلسة = مجموع كل الفترات (مش بس الفترة المفتوحة
+    // الأخيرة) — startTime بيتصفّر مع كل تحويل حالة، فـ d.elapsedSeconds
+    // لوحدها بتبقى غلط بعد أول تحويل. history/shift/daily_report كلهم
+    // بيعتمدوا على elapsed_seconds ده في التجميع، فلازم يكون الإجمالي الصح.
+    final closedSeconds = closedSegments.fold<int>(
+        0, (sum, e) => sum + ((e['seconds'] as num?)?.toInt() ?? 0));
+    final elapsed = closedSeconds + openSeconds;
     final h = elapsed ~/ 3600;
     final m = (elapsed % 3600) ~/ 60;
 
@@ -1881,6 +1963,8 @@ void _startClock() {
       'buffet_cost': buffetPrice,
       'total': timePrice + buffetPrice,
       'orders': Map<String, int>.from(d.orders),
+      // ✅ Session Splitting: فترات اللعب منفصلة (سنجل/مالتي) بمدتها وتكلفتها
+      'time_segments': timeSegments,
       'date': endTime.toString(),
       'start_time_display': startDt != null
           ? '${startDt.hour.toString().padLeft(2,'0')}:${startDt.minute.toString().padLeft(2,'0')}'

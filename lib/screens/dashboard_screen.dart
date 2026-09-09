@@ -48,7 +48,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     double liveRevenue = 0;
     for (final d in activeDevices) {
-      liveRevenue += d.calculateTimePrice(state.prices);
+      // ✅ يشمل تكلفة الفترات المقفولة (تحويل سنجل/مالتي) مش بس الفترة المفتوحة
+      liveRevenue += d.closedSegmentsCost + d.calculateTimePrice(state.prices);
       liveRevenue += d.getBuffetPrice(state.menu);
     }
     for (int i = 0; i < state.tables.length; i++) {

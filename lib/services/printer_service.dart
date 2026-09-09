@@ -94,6 +94,11 @@ class PrinterService {
     final startTimeDisplay = record['start_time_display']?.toString();
     final endTimeDisplay = record['end_time_display']?.toString();
     final hourlyRate = (record['hourly_rate'] as num?)?.toDouble();
+    // ✅ Session Splitting: فترات اللعب المنفصلة (سنجل/مالتي)
+    final timeSegments = ((record['time_segments'] as List?) ?? [])
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList();
+    final hasMultipleSegments = timeSegments.length > 1;
 
     // ── ESC/POS commands ───
     // Initialize printer
@@ -151,10 +156,24 @@ class PrinterService {
         buf.add(_row('انتهاء', endTimeDisplay));
       }
       buf.add(_row('المدة', duration));
-      if (hourlyRate != null) {
+      if (hourlyRate != null && !hasMultipleSegments) {
         buf.add(_row('سعر الساعة', '${hourlyRate.toStringAsFixed(0)} ج/س'));
       }
-      buf.add(_row('تكلفة اللعب', '${timeCost.toStringAsFixed(1)} ج'));
+      if (hasMultipleSegments) {
+        buf.add(_latin('  [فترات اللعب]'));
+        buf.add(_lf());
+        for (final seg in timeSegments) {
+          final segMode = seg['mode']?.toString() ?? '';
+          final segLabel = segMode == 'multi' ? 'مالتي' : 'عادي';
+          final segMins = ((seg['seconds'] as num?)?.toInt() ?? 0) ~/ 60;
+          final segCost = (seg['cost'] as num?)?.toDouble() ?? 0;
+          buf.add(_row('لعب $segLabel ($segMins د)',
+              '${segCost.toStringAsFixed(1)} ج'));
+        }
+        buf.add(_row('مجموع اللعب', '${timeCost.toStringAsFixed(1)} ج'));
+      } else {
+        buf.add(_row('تكلفة اللعب', '${timeCost.toStringAsFixed(1)} ج'));
+      }
     }
 
     // المشروبات/البوفيه

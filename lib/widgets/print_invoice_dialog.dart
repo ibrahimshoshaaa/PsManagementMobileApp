@@ -105,6 +105,11 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
     final startT = r['start_time_display']?.toString();
     final endT = r['end_time_display']?.toString();
     final hourlyRate = (r['hourly_rate'] as num?)?.toDouble();
+    // ✅ Session Splitting: فترات اللعب المنفصلة (سنجل/مالتي) لو الجهاز اتحوّل
+    final timeSegments = ((r['time_segments'] as List?) ?? [])
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList();
+    final hasMultipleSegments = timeSegments.length > 1;
     final now = DateTime.now();
     final isDrink = deviceType == 'drink_table';
 
@@ -202,7 +207,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                             ],
                           ),
                         ],
-                        if (hourlyRate != null) ...[
+                        if (hourlyRate != null && !hasMultipleSegments) ...[
                           const SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -226,8 +231,36 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
 
                 const Divider(color: Colors.white24, height: 8),
 
-                // تكلفة اللعب
-                if (!isDrink && timeCost > 0)
+                // تكلفة اللعب — مقسّمة لو حصل تحويل حالة (سنجل/مالتي)
+                if (!isDrink && hasMultipleSegments) ...[
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('💻 فترات اللعب',
+                        style: TextStyle(color: Colors.white60, fontSize: 12)),
+                  ),
+                  ...timeSegments.map((seg) {
+                    final segMode = seg['mode']?.toString() ?? '';
+                    final segLabel = segMode == 'multi' ? 'مالتي' : 'عادي';
+                    final segSeconds = (seg['seconds'] as num?)?.toInt() ?? 0;
+                    final segMins = segSeconds ~/ 60;
+                    final segCost = (seg['cost'] as num?)?.toDouble() ?? 0;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12, bottom: 2),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('لعب $segLabel — $segMins دقيقة',
+                              style: const TextStyle(
+                                  color: Colors.white70, fontSize: 12)),
+                          Text('${segCost.toStringAsFixed(1)} ج',
+                              style: const TextStyle(
+                                  color: Colors.white70, fontSize: 12)),
+                        ],
+                      ),
+                    );
+                  }),
+                  _previewRow('  مجموع اللعب', '${timeCost.toStringAsFixed(1)} ج'),
+                ] else if (!isDrink && timeCost > 0)
                   _previewRow('💻 تكلفة اللعب', '${timeCost.toStringAsFixed(1)} ج'),
 
                 // البوفيه

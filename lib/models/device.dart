@@ -60,6 +60,23 @@ class PSDevice {
   bool get countdownFinished =>
       isCountdown && countdownTotalSeconds != null && elapsedSeconds >= countdownTotalSeconds!;
 
+  /// ✅ Session Splitting: تكلفة كل الفترات (الحالات) اللي اتقفلت
+  /// بسبب "تحويل الحالة" (سنجل/مالتي) قبل الفترة المفتوحة حالياً.
+  /// كل فترة بتتسجل كحدث 'mode_switch' في sessionLog وقت التحويل.
+  double get closedSegmentsCost => sessionLog
+      .where((e) => e['type'] == 'mode_switch')
+      .fold(0.0, (sum, e) => sum + ((e['cost'] as num?)?.toDouble() ?? 0));
+
+  /// نفس الفترات المقفولة لكن كعناصر جاهزة للفاتورة/الطباعة
+  List<Map<String, dynamic>> get closedSegments => sessionLog
+      .where((e) => e['type'] == 'mode_switch')
+      .map<Map<String, dynamic>>((e) => {
+            'mode': e['mode']?.toString() ?? mode,
+            'seconds': (e['seconds'] as num?)?.toInt() ?? 0,
+            'cost': (e['cost'] as num?)?.toDouble() ?? 0.0,
+          })
+      .toList();
+
   double calculateTimePrice(Map<String, int> prices) {
     if (startTime == null) return 0;
     final key = '${deviceType}_$mode';

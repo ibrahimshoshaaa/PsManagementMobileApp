@@ -196,6 +196,8 @@ class AuditLogService {
         return 'عدّل وقت الجهاز "$name"${extra != null ? ": $extra" : ""}';
       case AuditAction.deviceTransfer:
         return 'نقل جلسة الجهاز "$name"${extra != null ? " → $extra" : ""}';
+      case AuditAction.deviceModeChange:
+        return 'غيّر حالة الجهاز "$name"${extra != null ? ": $extra" : ""}';
       case AuditAction.buffetItemAdded:
         return 'أضاف "${extra ?? "صنف"}" لبوفيه "$name"';
       case AuditAction.buffetItemRemoved:

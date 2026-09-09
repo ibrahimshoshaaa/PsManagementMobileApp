@@ -17,7 +17,9 @@ class DeviceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
-    final timePrice = device.calculateTimePrice(state.prices);
+    // ✅ يشمل تكلفة الفترات المقفولة (لو الجهاز اتحوّل سنجل/مالتي) مش بس الفترة المفتوحة
+    final timePrice =
+        device.closedSegmentsCost + device.calculateTimePrice(state.prices);
     final buffetPrice = device.getBuffetPrice(state.menu);
     final total = timePrice + buffetPrice;
     final isPs5 = device.deviceType == 'ps5';
@@ -754,7 +756,8 @@ class _ActiveButtons extends StatelessWidget {
   }
 
   void _showStopDialog(BuildContext context, AppState state) {
-    final timePrice = device.calculateTimePrice(state.prices);
+    final timePrice =
+        device.closedSegmentsCost + device.calculateTimePrice(state.prices);
     final buffetPrice = device.getBuffetPrice(state.menu);
     final whatsappNumber = device.whatsappNumber;
     final hasWhatsapp =
