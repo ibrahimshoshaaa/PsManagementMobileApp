@@ -36,7 +36,7 @@ class MatchPriceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     final isPs5  = deviceType == 'ps5';
-    final color  = isPs5 ? Colors.purple : const Color(0xFF38bdf8);
+    final color  = isPs5 ? Colors.purple : const Color(0xFF22D3C9);
     final label  = isPs5 ? 'PS5' : 'PS4';
 
     final normalPrice = state.prices['match_${deviceType}_normal'] ?? (isPs5 ? 15 : 10);
@@ -67,7 +67,7 @@ class MatchPriceCard extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           const Icon(Icons.sports_soccer,
-              color: Color(0xFF4ade80), size: 18),
+              color: Color(0xFF3CCB7F), size: 18),
           const SizedBox(width: 4),
           const Text('أسعار الماتش',
               style: TextStyle(

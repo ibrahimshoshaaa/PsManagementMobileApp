@@ -36,12 +36,12 @@ class DeviceDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: device.deviceType == 'ps5'
                     ? Colors.purple.withOpacity(0.2)
-                    : const Color(0xFF38bdf8).withOpacity(0.2),
+                    : const Color(0xFF22D3C9).withOpacity(0.2),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                     color: device.deviceType == 'ps5'
                         ? Colors.purple
-                        : const Color(0xFF38bdf8)),
+                        : const Color(0xFF22D3C9)),
               ),
               child: Text(
                 device.deviceType.toUpperCase(),
@@ -49,14 +49,14 @@ class DeviceDetailScreen extends StatelessWidget {
                     fontSize: 11,
                     color: device.deviceType == 'ps5'
                         ? Colors.purple
-                        : const Color(0xFF38bdf8),
+                        : const Color(0xFF22D3C9),
                     fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(width: 8),
             Text(device.displayName,
                 style: const TextStyle(
-                    color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                    color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
           ],
         ),
         leading: const BackButton(color: Colors.white),
@@ -85,7 +85,7 @@ class DeviceDetailScreen extends StatelessWidget {
             IconButton(
               icon: Icon(
                 device.isPaused ? Icons.play_circle_fill : Icons.pause_circle_filled,
-                color: device.isPaused ? Colors.amber : const Color(0xFF38bdf8),
+                color: device.isPaused ? Colors.amber : const Color(0xFF22D3C9),
                 size: 30,
               ),
               onPressed: () => state.togglePause(device),
@@ -136,7 +136,7 @@ class _TimerCard extends StatelessWidget {
     final state = context.read<AppState>();
     final isPaused = device.isPaused;
     final isActive = device.isActive;
-    final accentColor = isPaused ? Colors.amber : const Color(0xFF38bdf8);
+    final accentColor = isPaused ? Colors.amber : const Color(0xFF22D3C9);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
@@ -148,7 +148,7 @@ class _TimerCard extends StatelessWidget {
             color: isPaused
                 ? Colors.amber
                 : isActive
-                    ? const Color(0xFF38bdf8)
+                    ? const Color(0xFF22D3C9)
                     : Colors.white12,
             width: 1.5),
         boxShadow: isActive
@@ -365,19 +365,19 @@ class _TimerCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: d.deviceType == 'ps5'
                           ? Colors.purple.withOpacity(0.2)
-                          : const Color(0xFF38bdf8).withOpacity(0.2),
+                          : const Color(0xFF22D3C9).withOpacity(0.2),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                           color: d.deviceType == 'ps5'
                               ? Colors.purple
-                              : const Color(0xFF38bdf8)),
+                              : const Color(0xFF22D3C9)),
                     ),
                     child: Text(d.deviceType.toUpperCase(),
                         style: TextStyle(
                             fontSize: 10,
                             color: d.deviceType == 'ps5'
                                 ? Colors.purple
-                                : const Color(0xFF38bdf8),
+                                : const Color(0xFF22D3C9),
                             fontWeight: FontWeight.bold)),
                   ),
                   title: Text(d.displayName,
@@ -592,11 +592,11 @@ class _TimerCard extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Row(children: [
-          Icon(Icons.edit, color: Color(0xFF38bdf8)),
+          Icon(Icons.edit, color: Color(0xFF22D3C9)),
           SizedBox(width: 8),
           Text('إضافة / خصم وقت',
               style: TextStyle(
-                  color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                  color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
         ]),
         content: TextField(
           controller: ctrl,
@@ -621,7 +621,7 @@ class _TimerCard extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide:
-                    const BorderSide(color: Color(0xFF38bdf8), width: 2)),
+                    const BorderSide(color: Color(0xFF22D3C9), width: 2)),
           ),
         ),
         actions: [
@@ -653,7 +653,7 @@ class _TimerCard extends StatelessWidget {
             icon: const Icon(Icons.add, size: 16),
             label: const Text('إضافة'),
             style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF4ade80),
+                backgroundColor: const Color(0xFF3CCB7F),
                 foregroundColor: Colors.black),
           ),
         ],
@@ -743,7 +743,7 @@ class _PriceTile extends StatelessWidget {
                 fontWeight:
                     highlight ? FontWeight.bold : FontWeight.normal,
                 color:
-                    highlight ? const Color(0xFF4ade80) : Colors.white)),
+                    highlight ? const Color(0xFF3CCB7F) : Colors.white)),
       ],
     );
   }
@@ -806,12 +806,12 @@ class _ModeBtn extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: selected
-                ? const Color(0xFF38bdf8).withOpacity(0.15)
+                ? const Color(0xFF22D3C9).withOpacity(0.15)
                 : const Color(0xFF1c2128),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
                 color: selected
-                    ? const Color(0xFF38bdf8)
+                    ? const Color(0xFF22D3C9)
                     : Colors.white12,
                 width: selected ? 2 : 1),
           ),
@@ -819,14 +819,14 @@ class _ModeBtn extends StatelessWidget {
             children: [
               Icon(icon,
                   color: selected
-                      ? const Color(0xFF38bdf8)
+                      ? const Color(0xFF22D3C9)
                       : Colors.white54),
               const SizedBox(height: 8),
               Text(label,
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: selected
-                          ? const Color(0xFF38bdf8)
+                          ? const Color(0xFF22D3C9)
                           : Colors.white)),
               Text('$price ج/س',
                   style: const TextStyle(
@@ -857,15 +857,15 @@ class _StartButtons extends StatelessWidget {
           child: OutlinedButton.icon(
             onPressed: () => _showMatchModeDialog(context, state),
             icon: const Icon(Icons.sports_soccer,
-                color: Color(0xFF4ade80)),
+                color: Color(0xFF3CCB7F)),
             label: Text('+ ماتش  ($matchPrice ج)',
                 style: const TextStyle(
-                    color: Color(0xFF4ade80),
+                    color: Color(0xFF3CCB7F),
                     fontWeight: FontWeight.bold,
                     fontSize: 15)),
             style: OutlinedButton.styleFrom(
               side: const BorderSide(
-                  color: Color(0xFF4ade80), width: 1.5),
+                  color: Color(0xFF3CCB7F), width: 1.5),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
             ),
@@ -896,15 +896,15 @@ class _StartButtons extends StatelessWidget {
       backgroundColor: const Color(0xFF1c2128),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       title: const Row(children: [
-        Icon(Icons.sports_soccer, color: Color(0xFF4ade80)),
+        Icon(Icons.sports_soccer, color: Color(0xFF3CCB7F)),
         SizedBox(width: 8),
-        Text('نوع الماتش', style: TextStyle(color: Color(0xFF4ade80), fontWeight: FontWeight.bold)),
+        Text('نوع الماتش', style: TextStyle(color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold)),
       ]),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         _MatchModeBtn(
           label: 'فردي (Normal)',
           icon: Icons.person,
-          color: const Color(0xFF38bdf8),
+          color: const Color(0xFF22D3C9),
           onTap: () {
             Navigator.pop(context);
             device.mode = 'normal';
@@ -982,7 +982,7 @@ class _BuffetSection extends StatelessWidget {
                 Text(
                   '${buffetTotal.toStringAsFixed(1)} ج',
                   style: const TextStyle(
-                      color: Color(0xFF4ade80),
+                      color: Color(0xFF3CCB7F),
                       fontWeight: FontWeight.bold,
                       fontSize: 15),
                 ),
@@ -1075,7 +1075,7 @@ class _BuffetSection extends StatelessWidget {
       onOrderChanged: (item, diff) => state.addOrder(device, item, diff),
       accentColor: device.deviceType == 'ps5'
           ? Colors.purple
-          : const Color(0xFF38bdf8),
+          : const Color(0xFF22D3C9),
     );
   }
 }
@@ -1104,7 +1104,7 @@ class _StopButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20)),
               title: Text('إنهاء ${device.displayName}',
                   style:
-                      const TextStyle(color: Color(0xFF38bdf8))),
+                      const TextStyle(color: Color(0xFF22D3C9))),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -1216,7 +1216,7 @@ class _StopButton extends StatelessWidget {
                       _StopBtn(
                         icon: Icons.print,
                         label: 'طباعة',
-                        color: const Color(0xFF38bdf8),
+                        color: const Color(0xFF22D3C9),
                         onTap: () async {
                           final record = state.stopDevice(device);
                           final shopName = state.shopName ?? '';
@@ -1477,7 +1477,7 @@ class _Row extends StatelessWidget {
                       bold ? FontWeight.bold : FontWeight.normal,
                   fontSize: bold ? 18 : (small ? 12 : 14),
                   color: bold
-                      ? const Color(0xFF4ade80)
+                      ? const Color(0xFF3CCB7F)
                       : (small ? Colors.white54 : Colors.white))),
         ],
       ),
@@ -1561,12 +1561,12 @@ class _LogEventTile extends StatelessWidget {
         break;
       case 'resume':
         icon = Icons.play_circle_fill;
-        color = const Color(0xFF38bdf8);
+        color = const Color(0xFF22D3C9);
         break;
       case 'add_time':
         final minutes = event['minutes'] as int? ?? 0;
         icon = minutes > 0 ? Icons.add_circle : Icons.remove_circle;
-        color = minutes > 0 ? const Color(0xFF4ade80) : Colors.redAccent;
+        color = minutes > 0 ? const Color(0xFF3CCB7F) : Colors.redAccent;
         break;
       case 'mode_switch':
         icon = Icons.compare_arrows;
@@ -1703,7 +1703,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   Widget build(BuildContext context) {
     final state = context.read<AppState>();
     final isPs5 = widget.device.deviceType == 'ps5';
-    final accentColor = isPs5 ? Colors.purple : const Color(0xFF38bdf8);
+    final accentColor = isPs5 ? Colors.purple : const Color(0xFF22D3C9);
 
     return AlertDialog(
       backgroundColor: const Color(0xFF1c2128),
@@ -1870,7 +1870,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
               label: 'لعب مفتوح',
               sub: 'عداد تصاعدي',
               selected: _timeMode == 'open',
-              color: const Color(0xFF4ade80),
+              color: const Color(0xFF3CCB7F),
               onTap: () => setState(() {
                 _timeMode = 'open';
                 _selectedSeconds = null;

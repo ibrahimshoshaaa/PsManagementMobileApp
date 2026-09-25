@@ -24,7 +24,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     if (state.isLoadingHistory && state.history.isEmpty) {
       return const Scaffold(
         backgroundColor: Color(0xFF0b0e14),
-        body: Center(child: CircularProgressIndicator(color: Color(0xFF38bdf8))),
+        body: Center(child: CircularProgressIndicator(color: Color(0xFF22D3C9))),
       );
     }
     final history = state.history.reversed.toList();
@@ -39,12 +39,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
         backgroundColor: const Color(0xFF0b0e14),
         title: const Text('سجلات اليوم',
             style: TextStyle(
-                color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
         leading: const BackButton(color: Colors.white),
         actions: [
           // زرار تحديث السجل
           IconButton(
-            icon: const Icon(Icons.refresh_rounded, color: Color(0xFF38bdf8)),
+            icon: const Icon(Icons.refresh_rounded, color: Color(0xFF22D3C9)),
             tooltip: 'تحديث السجل',
             onPressed: () => context.read<AppState>().fetchHistoryOnDemand(limit: 300),
           ),
@@ -80,12 +80,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _SummaryItem('🎮 اللعب', totalTime, const Color(0xFF38bdf8)),
+                _SummaryItem('🎮 اللعب', totalTime, const Color(0xFF22D3C9)),
                 Container(width: 1, height: 30, color: Colors.white12),
                 _SummaryItem('🥤 البوفيه', totalBuffet, Colors.orange),
                 Container(width: 1, height: 30, color: Colors.white12),
                 _SummaryItem('💰 الإجمالي', totalTime + totalBuffet,
-                    const Color(0xFF4ade80)),
+                    const Color(0xFF3CCB7F)),
               ],
             ),
           ),
@@ -137,7 +137,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF4ade80),
+                    backgroundColor: const Color(0xFF3CCB7F),
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),
@@ -165,11 +165,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Row(children: [
-          Icon(Icons.archive_outlined, color: Color(0xFF4ade80)),
+          Icon(Icons.archive_outlined, color: Color(0xFF3CCB7F)),
           SizedBox(width: 8),
           Text('حفظ في الأرشيف؟',
               style: TextStyle(
-                  color: Color(0xFF4ade80), fontWeight: FontWeight.bold)),
+                  color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold)),
         ]),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -179,10 +179,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFF4ade80).withOpacity(0.06),
+                color: const Color(0xFF3CCB7F).withOpacity(0.06),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                    color: const Color(0xFF4ade80).withOpacity(0.25)),
+                    color: const Color(0xFF3CCB7F).withOpacity(0.25)),
               ),
               child: Column(children: [
                 _ArchiveRow('📋 عدد الجلسات', '${history.length} جلسة'),
@@ -251,7 +251,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 style:
                     TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF4ade80),
+              backgroundColor: const Color(0xFF3CCB7F),
               foregroundColor: Colors.black,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12)),
@@ -281,7 +281,7 @@ class _ArchiveRow extends StatelessWidget {
         Text(value,
             style: TextStyle(
                 color: highlight
-                    ? const Color(0xFF4ade80)
+                    ? const Color(0xFF3CCB7F)
                     : Colors.white,
                 fontWeight: highlight
                     ? FontWeight.bold
@@ -335,7 +335,7 @@ class _HistoryItem extends StatelessWidget {
     final isMatch = record['is_match'] == true;
     final isGame = record['is_game'] == true;
 
-    Color typeColor = const Color(0xFF38bdf8);
+    Color typeColor = const Color(0xFF22D3C9);
     IconData icon = Icons.sports_esports;
 
     if (isTable) {
@@ -383,7 +383,7 @@ class _HistoryItem extends StatelessWidget {
         trailing: Text(
             '${(record['total'] ?? 0).toStringAsFixed(1)} ج',
             style: const TextStyle(
-                color: Color(0xFF4ade80),
+                color: Color(0xFF3CCB7F),
                 fontWeight: FontWeight.bold,
                 fontSize: 15)),
         children: [
@@ -476,11 +476,11 @@ class _LogEntryRow extends StatelessWidget {
         c = Colors.amber;
         break;
       case 'resume':
-        c = const Color(0xFF38bdf8);
+        c = const Color(0xFF22D3C9);
         break;
       case 'add_time':
         final m = event['minutes'] as int? ?? 0;
-        c = m > 0 ? const Color(0xFF4ade80) : Colors.redAccent;
+        c = m > 0 ? const Color(0xFF3CCB7F) : Colors.redAccent;
         break;
       case 'stop':
         c = Colors.red;

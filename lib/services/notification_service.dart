@@ -80,7 +80,7 @@ class NotificationService {
       playSound: true,
       enableVibration: true,
       icon: '@mipmap/ic_launcher',
-      color: Color(0xFF38bdf8),
+      color: Color(0xFF22D3C9),
     );
 
     const NotificationDetails details =

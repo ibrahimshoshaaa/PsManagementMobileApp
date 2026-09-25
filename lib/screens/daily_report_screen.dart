@@ -49,7 +49,7 @@ class _DailyReportScreenState extends State<DailyReportScreen>
             const Text(
               'تقرير اليوم المفصل',
               style: TextStyle(
-                  color: Color(0xFF38bdf8),
+                  color: Color(0xFF22D3C9),
                   fontWeight: FontWeight.bold,
                   fontSize: 16),
             ),
@@ -63,8 +63,8 @@ class _DailyReportScreenState extends State<DailyReportScreen>
           controller: _tabController,
           isScrollable: true,
           tabAlignment: TabAlignment.start,
-          indicatorColor: const Color(0xFF38bdf8),
-          labelColor: const Color(0xFF38bdf8),
+          indicatorColor: const Color(0xFF22D3C9),
+          labelColor: const Color(0xFF22D3C9),
           unselectedLabelColor: Colors.white38,
           labelStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
           tabs: const [
@@ -157,7 +157,7 @@ class _SummaryTab extends StatelessWidget {
             icon: Icons.receipt_long,
             label: 'عدد الجلسات',
             value: '$totalSessions',
-            color: const Color(0xFF38bdf8),
+            color: const Color(0xFF22D3C9),
           )),
           const SizedBox(width: 10),
           Expanded(child: _StatCard(
@@ -176,12 +176,12 @@ class _SummaryTab extends StatelessWidget {
           spacing: 10,
           runSpacing: 10,
           children: [
-            if (ps4Count > 0)    _TypeChip('PS4',       ps4Count,   Icons.sports_esports,   const Color(0xFF38bdf8)),
+            if (ps4Count > 0)    _TypeChip('PS4',       ps4Count,   Icons.sports_esports,   const Color(0xFF22D3C9)),
             if (ps5Count > 0)    _TypeChip('PS5',       ps5Count,   Icons.sports_esports,   const Color(0xFF818cf8)),
             if (matchCount > 0)  _TypeChip('ماتش',      matchCount, Icons.sports_soccer,    Colors.greenAccent),
             if (tableCount > 0)  _TypeChip('طاولة',     tableCount, Icons.table_restaurant, Colors.purpleAccent),
             if (drinkCount > 0)  _TypeChip('مشروبات',   drinkCount, Icons.local_cafe,       Colors.orange),
-            if (rechargeCount > 0) _TypeChip('شحن', rechargeCount, Icons.phone_android, const Color(0xFF38bdf8)),
+            if (rechargeCount > 0) _TypeChip('شحن', rechargeCount, Icons.phone_android, const Color(0xFF22D3C9)),
           ],
         ),
         const SizedBox(height: 14),
@@ -268,7 +268,7 @@ class _DeviceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isPs5  = stats.deviceType == 'ps5';
-    final color  = isPs5 ? Colors.purple : const Color(0xFF38bdf8);
+    final color  = isPs5 ? Colors.purple : const Color(0xFF22D3C9);
     final h = stats.elapsedSeconds ~/ 3600;
     final m = (stats.elapsedSeconds % 3600) ~/ 60;
 
@@ -553,7 +553,7 @@ class _DrinkTableSection extends StatelessWidget {
           style: const TextStyle(color: Colors.white54, fontSize: 11),
         ),
         trailing: Text('${stats.totalRevenue.toStringAsFixed(1)} ج',
-            style: const TextStyle(color: Color(0xFF4ade80), fontWeight: FontWeight.bold)),
+            style: const TextStyle(color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold)),
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
@@ -619,7 +619,7 @@ class _DrinkBillRow extends StatelessWidget {
             Text(cashier, style: const TextStyle(color: Colors.white38, fontSize: 10)),
           const SizedBox(width: 8),
           Text('${total.toStringAsFixed(1)} ج',
-              style: const TextStyle(color: Color(0xFF4ade80), fontWeight: FontWeight.bold, fontSize: 13)),
+              style: const TextStyle(color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold, fontSize: 13)),
         ]),
         if (orders.isNotEmpty) ...[
           const SizedBox(height: 6),
@@ -721,7 +721,7 @@ class _BuffetTab extends StatelessWidget {
                   icon: Icons.shopping_bag,
                   label: 'إجمالي قطع مباعة',
                   value: '$totalQty قطعة',
-                  color: const Color(0xFF38bdf8),
+                  color: const Color(0xFF22D3C9),
                 ),
                 Container(width: 1, height: 40, color: Colors.white12),
                 _BigStatChip(
@@ -852,7 +852,7 @@ class _BuffetTab extends StatelessWidget {
 
               // ← التعديل: صف الأسعار (إيراد + سعر البيع + سعر الشراء)
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                _MiniInfo('💰 إيراد', '$revenue ج', const Color(0xFF4ade80)),
+                _MiniInfo('💰 إيراد', '$revenue ج', const Color(0xFF3CCB7F)),
                 _MiniInfo('💵 سعر البيع', '$price ج', Colors.white38),
                 if (buyPrice > 0)
                   _MiniInfo('🛒 سعر الشراء', '$buyPrice ج', Colors.redAccent)
@@ -974,7 +974,7 @@ class _CashierTab extends StatelessWidget {
             const Text('الإجمالي الكلي',
                 style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold)),
             Text('${totalRevenue.toStringAsFixed(1)} ج',
-                style: const TextStyle(color: Color(0xFF4ade80),
+                style: const TextStyle(color: Color(0xFF3CCB7F),
                     fontWeight: FontWeight.bold, fontSize: 16)),
           ]),
         ),
@@ -1026,7 +1026,7 @@ class _CashierTab extends StatelessWidget {
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   Text('${stats.revenue.toStringAsFixed(1)} ج',
                       style: const TextStyle(
-                          color: Color(0xFF4ade80), fontWeight: FontWeight.bold, fontSize: 18)),
+                          color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold, fontSize: 18)),
                   Text('${(pct * 100).toStringAsFixed(0)}٪ من الإجمالي',
                       style: const TextStyle(color: Colors.white38, fontSize: 11)),
                 ]),
@@ -1038,12 +1038,12 @@ class _CashierTab extends StatelessWidget {
                   value: pct,
                   minHeight: 6,
                   backgroundColor: Colors.white12,
-                  valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF4ade80)),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF3CCB7F)),
                 ),
               ),
               const SizedBox(height: 10),
               Row(children: [
-                Expanded(child: _MiniStatBox('🎮 لعب',   '${stats.timeRevenue.toStringAsFixed(1)} ج',   const Color(0xFF38bdf8))),
+                Expanded(child: _MiniStatBox('🎮 لعب',   '${stats.timeRevenue.toStringAsFixed(1)} ج',   const Color(0xFF22D3C9))),
                 const SizedBox(width: 8),
                 Expanded(child: _MiniStatBox('🥤 بوفيه', '${stats.buffetRevenue.toStringAsFixed(1)} ج', Colors.orange)),
               ]),
@@ -1084,7 +1084,7 @@ class _BigCard extends StatelessWidget {
           colors: [Color(0xFF1e3a4f), Color(0xFF0f2030)],
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFF38bdf8).withOpacity(0.3)),
+        border: Border.all(color: const Color(0xFF22D3C9).withOpacity(0.3)),
       ),
       child: Column(children: [
         const Text('إجمالي إيرادات اليوم',
@@ -1092,11 +1092,11 @@ class _BigCard extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           '${totalRevenue.toStringAsFixed(1)} ج',
-          style: const TextStyle(color: Color(0xFF4ade80), fontSize: 42, fontWeight: FontWeight.bold),
+          style: const TextStyle(color: Color(0xFF3CCB7F), fontSize: 42, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
         Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          _RevItem('🎮 اللعب', totalTime, const Color(0xFF38bdf8)),
+          _RevItem('🎮 اللعب', totalTime, const Color(0xFF22D3C9)),
           Container(width: 1, height: 30, color: Colors.white12),
           _RevItem('🥤 البوفيه', totalBuffet, Colors.orange),
         ]),
@@ -1198,7 +1198,7 @@ class _MiniSessionRow extends StatelessWidget {
     final cashier = record['cashier']?.toString() ?? '—';
     final type    = record['device_type']?.toString() ?? '';
 
-    Color color = const Color(0xFF38bdf8);
+    Color color = const Color(0xFF22D3C9);
     if (type == 'table')       color = const Color(0xFF34d399);
     if (type == 'drink_table') color = Colors.orange;
     if (record['is_match'] == true) color = Colors.greenAccent;
@@ -1232,7 +1232,7 @@ class _MiniSessionRow extends StatelessWidget {
 class _SessionRow extends StatelessWidget {
   final Map<String, dynamic> record;
   final Color color;
-  const _SessionRow({required this.record, this.color = const Color(0xFF38bdf8)});
+  const _SessionRow({required this.record, this.color = const Color(0xFF22D3C9)});
 
   @override
   Widget build(BuildContext context) {
@@ -1368,7 +1368,7 @@ class _NetProfitCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isPos
-              ? const Color(0xFF4ade80).withOpacity(0.3)
+              ? const Color(0xFF3CCB7F).withOpacity(0.3)
               : Colors.redAccent.withOpacity(0.3),
         ),
       ),
@@ -1380,7 +1380,7 @@ class _NetProfitCard extends StatelessWidget {
             _ProfitChip(
               label: '💰 الإيرادات',
               value: '${totalRevenue.toStringAsFixed(1)} ج',
-              color: const Color(0xFF4ade80),
+              color: const Color(0xFF3CCB7F),
             ),
             const Text('−',
                 style: TextStyle(
@@ -1401,7 +1401,7 @@ class _NetProfitCard extends StatelessWidget {
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Icon(
             isPos ? Icons.trending_up : Icons.trending_down,
-            color: isPos ? const Color(0xFF4ade80) : Colors.redAccent,
+            color: isPos ? const Color(0xFF3CCB7F) : Colors.redAccent,
             size: 20,
           ),
           const SizedBox(width: 8),
@@ -1413,7 +1413,7 @@ class _NetProfitCard extends StatelessWidget {
             '${netProfit.toStringAsFixed(1)} ج',
             style: TextStyle(
               color:
-                  isPos ? const Color(0xFF4ade80) : Colors.redAccent,
+                  isPos ? const Color(0xFF3CCB7F) : Colors.redAccent,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

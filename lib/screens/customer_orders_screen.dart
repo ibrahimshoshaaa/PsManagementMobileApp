@@ -194,7 +194,7 @@ class _CustomerOrdersScreenState extends State<CustomerOrdersScreen> {
         title: Row(children: [
           const Text('🛎️ طلبات العملاء',
               style: TextStyle(
-                  color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                  color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
           if (pending.isNotEmpty) ...[
             const SizedBox(width: 8),
             Container(
@@ -227,7 +227,7 @@ class _CustomerOrdersScreenState extends State<CustomerOrdersScreen> {
       ),
       body: _loading
           ? const Center(
-              child: CircularProgressIndicator(color: Color(0xFF38bdf8)))
+              child: CircularProgressIndicator(color: Color(0xFF22D3C9)))
           : _orders.isEmpty
               ? const Center(
                   child: Column(
@@ -311,14 +311,14 @@ class _OrderTile extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
-              color: const Color(0xFF38bdf8).withOpacity(0.15),
+              color: const Color(0xFF22D3C9).withOpacity(0.15),
               borderRadius: BorderRadius.circular(8),
               border: Border.all(
-                  color: const Color(0xFF38bdf8).withOpacity(0.4)),
+                  color: const Color(0xFF22D3C9).withOpacity(0.4)),
             ),
             child: Text(order.deviceName,
                 style: const TextStyle(
-                    color: Color(0xFF38bdf8),
+                    color: Color(0xFF22D3C9),
                     fontSize: 12,
                     fontWeight: FontWeight.bold)),
           ),
@@ -334,14 +334,14 @@ class _OrderTile extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4ade80).withOpacity(0.15),
+                  color: const Color(0xFF3CCB7F).withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                      color: const Color(0xFF4ade80).withOpacity(0.5)),
+                      color: const Color(0xFF3CCB7F).withOpacity(0.5)),
                 ),
                 child: const Text('✅ تم',
                     style: TextStyle(
-                        color: Color(0xFF4ade80),
+                        color: Color(0xFF3CCB7F),
                         fontSize: 12,
                         fontWeight: FontWeight.bold)),
               ),

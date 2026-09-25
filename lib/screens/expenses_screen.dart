@@ -35,7 +35,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     'إيجار':  Color(0xFF818cf8),
     'كهرباء': Color(0xFFfbbf24),
     'رواتب':  Color(0xFF34d399),
-    'صيانة':  Color(0xFF38bdf8),
+    'صيانة':  Color(0xFF22D3C9),
     'أخرى':   Colors.white54,
   };
 
@@ -369,11 +369,11 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.edit, color: Color(0xFF38bdf8)),
+            Icon(Icons.edit, color: Color(0xFF22D3C9)),
             SizedBox(width: 8),
             Text('تعديل مصروف',
                 style: TextStyle(
-                    color: Color(0xFF38bdf8),
+                    color: Color(0xFF22D3C9),
                     fontWeight: FontWeight.bold)),
           ]),
           content: SingleChildScrollView(
@@ -419,12 +419,12 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                           horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
                         color: sel
-                            ? const Color(0xFF38bdf8).withOpacity(0.2)
+                            ? const Color(0xFF22D3C9).withOpacity(0.2)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: sel
-                              ? const Color(0xFF38bdf8)
+                              ? const Color(0xFF22D3C9)
                               : Colors.white24,
                           width: sel ? 2 : 1,
                         ),
@@ -432,7 +432,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                       child: Text(cat,
                           style: TextStyle(
                             color: sel
-                                ? const Color(0xFF38bdf8)
+                                ? const Color(0xFF22D3C9)
                                 : Colors.white54,
                             fontSize: 12,
                             fontWeight: sel
@@ -474,7 +474,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                 Navigator.pop(ctx);
               },
               style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF38bdf8),
+                  backgroundColor: const Color(0xFF22D3C9),
                   foregroundColor: Colors.black),
               child: const Text('حفظ'),
             ),
@@ -568,7 +568,7 @@ class _SummaryCard extends StatelessWidget {
                   ? Icons.trending_up
                   : Icons.trending_down,
               color: isPositive
-                  ? const Color(0xFF4ade80)
+                  ? const Color(0xFF3CCB7F)
                   : Colors.redAccent,
               size: 18,
             ),
@@ -582,7 +582,7 @@ class _SummaryCard extends StatelessWidget {
               '${netProfit.toStringAsFixed(1)} ج',
               style: TextStyle(
                 color: isPositive
-                    ? const Color(0xFF4ade80)
+                    ? const Color(0xFF3CCB7F)
                     : Colors.redAccent,
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -738,13 +738,13 @@ class _ExpenseTile extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF38bdf8).withOpacity(0.1),
+                  color: const Color(0xFF22D3C9).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                      color: const Color(0xFF38bdf8).withOpacity(0.3)),
+                      color: const Color(0xFF22D3C9).withOpacity(0.3)),
                 ),
                 child: const Icon(Icons.edit,
-                    color: Color(0xFF38bdf8), size: 15),
+                    color: Color(0xFF22D3C9), size: 15),
               ),
             ),
             const SizedBox(height: 6),

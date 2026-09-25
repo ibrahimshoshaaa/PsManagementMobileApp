@@ -216,14 +216,14 @@ if (mounted) Navigator.pop(context);
             ),
             child: Column(children: [
               Row(children: [
-                const Icon(Icons.payments_outlined, color: Color(0xFF4ade80), size: 20),
+                const Icon(Icons.payments_outlined, color: Color(0xFF3CCB7F), size: 20),
                 const SizedBox(width: 10),
                 const Expanded(child: Text('بطولة مدفوعة؟',
                     style: TextStyle(fontWeight: FontWeight.bold))),
                 Switch(
                   value: _hasFee,
                   onChanged: (v) => setState(() => _hasFee = v),
-                  activeColor: const Color(0xFF4ade80),
+                  activeColor: const Color(0xFF3CCB7F),
                 ),
               ]),
               if (_hasFee) ...[
@@ -341,9 +341,9 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
           backgroundColor: const Color(0xFF1c2128),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.person_add, color: Color(0xFF4ade80)),
+            Icon(Icons.person_add, color: Color(0xFF3CCB7F)),
             SizedBox(width: 8),
-            Text('إضافة لاعب', style: TextStyle(color: Color(0xFF4ade80), fontWeight: FontWeight.bold)),
+            Text('إضافة لاعب', style: TextStyle(color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold)),
           ]),
           content: SingleChildScrollView(child: Column(mainAxisSize: MainAxisSize.min, children: [
             if (_hasFee)
@@ -366,13 +366,13 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
               decoration: InputDecoration(
                 labelText: 'اسم اللاعب',
                 labelStyle: const TextStyle(color: Colors.white54),
-                prefixIcon: const Icon(Icons.person, color: Color(0xFF4ade80)),
+                prefixIcon: const Icon(Icons.person, color: Color(0xFF3CCB7F)),
                 filled: true, fillColor: const Color(0xFF0b0e14),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: Colors.white12)),
                 focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF4ade80), width: 2)),
+                    borderSide: const BorderSide(color: Color(0xFF3CCB7F), width: 2)),
               ),
             ),
             const SizedBox(height: 12),
@@ -382,13 +382,13 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
               decoration: InputDecoration(
                 labelText: 'الفريق',
                 labelStyle: const TextStyle(color: Colors.white54),
-                prefixIcon: const Icon(Icons.sports_soccer, color: Color(0xFF38bdf8)),
+                prefixIcon: const Icon(Icons.sports_soccer, color: Color(0xFF22D3C9)),
                 filled: true, fillColor: const Color(0xFF0b0e14),
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: Colors.white12)),
                 focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF38bdf8), width: 2)),
+                    borderSide: const BorderSide(color: Color(0xFF22D3C9), width: 2)),
               ),
             ),
           ])),
@@ -433,7 +433,7 @@ class _TournamentDetailScreenState extends State<TournamentDetailScreen>
                 Navigator.pop(ctx);
                 _load();
               },
-              style: FilledButton.styleFrom(backgroundColor: const Color(0xFF4ade80),
+              style: FilledButton.styleFrom(backgroundColor: const Color(0xFF3CCB7F),
                   foregroundColor: Colors.black),
               child: const Text('إضافة'),
             ),
@@ -868,7 +868,7 @@ class _StatusBanner extends StatelessWidget {
     Color col; String label; IconData icon;
     switch (status) {
       case 'ongoing':   col = Colors.blue;   label = '🔴 جارية'; icon = Icons.play_circle; break;
-      case 'finished':  col = const Color(0xFF4ade80); label = '✅ منتهية'; icon = Icons.check_circle; break;
+      case 'finished':  col = const Color(0xFF3CCB7F); label = '✅ منتهية'; icon = Icons.check_circle; break;
       default:          col = Colors.orange; label = '📝 تسجيل'; icon = Icons.how_to_reg;
     }
     return Container(
@@ -901,7 +901,7 @@ class _StatusBanner extends StatelessWidget {
           _StatChip(Icons.people, '$playersCount / $maxPlayers لاعب', Colors.white70),
           if (hasFee) ...[
             Container(width: 1, height: 30, color: Colors.white12),
-            _StatChip(Icons.payments, '${totalRevenue.toStringAsFixed(0)} ج', const Color(0xFF4ade80)),
+            _StatChip(Icons.payments, '${totalRevenue.toStringAsFixed(0)} ج', const Color(0xFF3CCB7F)),
           ],
         ]),
       ]),
@@ -936,10 +936,10 @@ class _AdminActions extends StatelessWidget {
           Expanded(child: SizedBox(height: 38,
             child: OutlinedButton.icon(
               onPressed: onAddPlayer,
-              icon: const Icon(Icons.person_add, size: 16, color: Color(0xFF4ade80)),
-              label: const Text('إضافة لاعب', style: TextStyle(color: Color(0xFF4ade80), fontSize: 12)),
+              icon: const Icon(Icons.person_add, size: 16, color: Color(0xFF3CCB7F)),
+              label: const Text('إضافة لاعب', style: TextStyle(color: Color(0xFF3CCB7F), fontSize: 12)),
               style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFF4ade80)),
+                side: const BorderSide(color: Color(0xFF3CCB7F)),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
             ),
@@ -1001,7 +1001,7 @@ class _PlayersTab extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: eliminated ? Colors.red.withOpacity(0.3)
-                  : const Color(0xFF4ade80).withOpacity(0.3),
+                  : const Color(0xFF3CCB7F).withOpacity(0.3),
               width: eliminated ? 1 : 1.5,
             ),
           ),
@@ -1011,13 +1011,13 @@ class _PlayersTab extends StatelessWidget {
               decoration: BoxDecoration(
                 color: eliminated
                     ? Colors.red.withOpacity(0.15)
-                    : const Color(0xFF4ade80).withOpacity(0.15),
+                    : const Color(0xFF3CCB7F).withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
               child: Center(child: Text('${i + 1}',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: eliminated ? Colors.red : const Color(0xFF4ade80)))),
+                      color: eliminated ? Colors.red : const Color(0xFF3CCB7F)))),
             ),
             const SizedBox(width: 12),
             Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -1047,18 +1047,18 @@ class _PlayersTab extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
                       color: feePaid
-                          ? const Color(0xFF4ade80).withOpacity(0.15)
+                          ? const Color(0xFF3CCB7F).withOpacity(0.15)
                           : Colors.red.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                           color: feePaid
-                              ? const Color(0xFF4ade80).withOpacity(0.5)
+                              ? const Color(0xFF3CCB7F).withOpacity(0.5)
                               : Colors.red.withOpacity(0.5)),
                     ),
                     child: Text(feePaid ? '✅ دفع' : '⏳ لم يدفع',
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.bold,
-                            color: feePaid ? const Color(0xFF4ade80) : Colors.red)),
+                            color: feePaid ? const Color(0xFF3CCB7F) : Colors.red)),
                   ),
                 ),
               ],
@@ -1158,7 +1158,7 @@ class _MatchCard extends StatelessWidget {
     final p1Id      = match['player1_id']?.toString();
 
     Color borderCol = finished
-        ? const Color(0xFF4ade80).withOpacity(0.3) : Colors.white12;
+        ? const Color(0xFF3CCB7F).withOpacity(0.3) : Colors.white12;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -1186,7 +1186,7 @@ class _MatchCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Text(isBye ? 'BYE' : 'VS',
                     style: TextStyle(
-                        color: finished ? const Color(0xFF4ade80) : Colors.white38,
+                        color: finished ? const Color(0xFF3CCB7F) : Colors.white38,
                         fontSize: 11, fontWeight: FontWeight.bold)),
               ),
               const Expanded(child: Divider(color: Colors.white12)),
@@ -1219,10 +1219,10 @@ class _MatchCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                const Icon(Icons.check_circle, color: Color(0xFF4ade80), size: 14),
+                const Icon(Icons.check_circle, color: Color(0xFF3CCB7F), size: 14),
                 const SizedBox(width: 4),
                 Text('الفائز: ${match['winner_name']}',
-                    style: const TextStyle(color: Color(0xFF4ade80),
+                    style: const TextStyle(color: Color(0xFF3CCB7F),
                         fontSize: 12, fontWeight: FontWeight.bold)),
               ]),
             ),
@@ -1240,7 +1240,7 @@ class _PlayerRow extends StatelessWidget {
     this.score, this.isWinner = false, this.isLoser = false});
   @override
   Widget build(BuildContext context) {
-    final color = isWinner ? const Color(0xFF4ade80) : isLoser ? Colors.white38 : Colors.white;
+    final color = isWinner ? const Color(0xFF3CCB7F) : isLoser ? Colors.white38 : Colors.white;
     return Row(children: [
       if (isWinner) const Icon(Icons.emoji_events, color: Color(0xFFfbbf24), size: 16),
       if (!isWinner) const SizedBox(width: 16),
@@ -1254,14 +1254,14 @@ class _PlayerRow extends StatelessWidget {
         Container(
           width: 32, height: 32,
           decoration: BoxDecoration(
-            color: isWinner ? const Color(0xFF4ade80).withOpacity(0.2) : Colors.white10,
+            color: isWinner ? const Color(0xFF3CCB7F).withOpacity(0.2) : Colors.white10,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-                color: isWinner ? const Color(0xFF4ade80) : Colors.white12),
+                color: isWinner ? const Color(0xFF3CCB7F) : Colors.white12),
           ),
           child: Center(child: Text('$score',
               style: TextStyle(fontWeight: FontWeight.bold,
-                  color: isWinner ? const Color(0xFF4ade80) : Colors.white54,
+                  color: isWinner ? const Color(0xFF3CCB7F) : Colors.white54,
                   fontSize: 14))),
         ),
     ]);
@@ -1338,7 +1338,7 @@ class _StandingsTab extends StatelessWidget {
                   style: const TextStyle(color: Colors.white38, fontSize: 12)),
             ])),
             Row(children: [
-              _StatBadge('$wins', 'فوز', const Color(0xFF4ade80)),
+              _StatBadge('$wins', 'فوز', const Color(0xFF3CCB7F)),
               const SizedBox(width: 6),
               _StatBadge('$losses', 'خسارة', Colors.red),
               if (eliminated) ...[
@@ -1392,7 +1392,7 @@ class _TournamentCard extends StatelessWidget {
     Color col; String statusLabel;
     switch (status) {
       case 'ongoing':  col = Colors.blue;   statusLabel = '🔴 جارية'; break;
-      case 'finished': col = const Color(0xFF4ade80); statusLabel = '✅ منتهية'; break;
+      case 'finished': col = const Color(0xFF3CCB7F); statusLabel = '✅ منتهية'; break;
       default:         col = Colors.orange; statusLabel = '📝 تسجيل';
     }
 
@@ -1440,7 +1440,7 @@ class _TournamentCard extends StatelessWidget {
             _InfoPill(Icons.people, '${players.length}/$maxP لاعب', Colors.white54),
             const SizedBox(width: 8),
             if (tournament['has_fee'] == true)
-              _InfoPill(Icons.payments, '${(tournament['entry_fee'] as num?)?.toInt() ?? 0} ج', const Color(0xFF4ade80)),
+              _InfoPill(Icons.payments, '${(tournament['entry_fee'] as num?)?.toInt() ?? 0} ج', const Color(0xFF3CCB7F)),
             if (winner != null) ...[
               const SizedBox(width: 8),
               _InfoPill(Icons.emoji_events, winner['name']?.toString() ?? '', const Color(0xFFfbbf24)),

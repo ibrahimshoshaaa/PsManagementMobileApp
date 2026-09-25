@@ -57,7 +57,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF0b0e14),
         title: const Text('الأرشيف الشهري',
-            style: TextStyle(color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+            style: TextStyle(color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
         leading: const BackButton(color: Colors.white),
         actions: [
           IconButton(
@@ -72,7 +72,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         ],
       ),
       body: _loading
-          ? const Center(child: CircularProgressIndicator(color: Color(0xFF38bdf8)))
+          ? const Center(child: CircularProgressIndicator(color: Color(0xFF22D3C9)))
           : Column(
               children: [
                 Container(
@@ -81,7 +81,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF1c2128),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFF38bdf8).withOpacity(0.4)),
+                    border: Border.all(color: const Color(0xFF22D3C9).withOpacity(0.4)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,7 +133,7 @@ class _ArchiveScreenState extends State<ArchiveScreen> {
         backgroundColor: const Color(0xFF1c2128),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('حفظ في الأرشيف السنوي؟',
-            style: TextStyle(color: Color(0xFF38bdf8))),
+            style: TextStyle(color: Color(0xFF22D3C9))),
         content: Text(
             'هيتحفظ إجمالي ${total.toStringAsFixed(1)} ج في الأرشيف السنوي وبعدين يتمسح الأرشيف الشامل',
             style: const TextStyle(color: Colors.white70)),
@@ -288,7 +288,7 @@ class _YearlyArchiveScreenState extends State<YearlyArchiveScreen> {
                                     '${a['sessions_count'] ?? 0} وردية | ${a['archived_on']?.toString().substring(0, 10) ?? ''}',
                                     style: const TextStyle(color: Colors.white54, fontSize: 12)),
                                 trailing: Text('${(a['total_overall'] ?? 0).toStringAsFixed(1)} ج',
-                                    style: const TextStyle(color: Color(0xFF4ade80), fontWeight: FontWeight.bold)),
+                                    style: const TextStyle(color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold)),
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -370,7 +370,7 @@ class _ArchiveTile extends StatelessWidget {
         title: Text('وردية: ${archive['date']?.toString().substring(0, 10) ?? ''}',
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
         trailing: Text('${(archive['total_overall'] ?? 0).toStringAsFixed(1)} ج',
-            style: const TextStyle(color: Color(0xFF4ade80), fontWeight: FontWeight.bold)),
+            style: const TextStyle(color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold)),
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -400,7 +400,7 @@ class _SumTile extends StatelessWidget {
         Text('${value.toStringAsFixed(1)} ج',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: green ? const Color(0xFF4ade80) : Colors.white)),
+                color: green ? const Color(0xFF3CCB7F) : Colors.white)),
       ],
     );
   }

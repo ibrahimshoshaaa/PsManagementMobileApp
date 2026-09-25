@@ -54,7 +54,7 @@ static String buildDrinkTableUrl(String shopId, int drinkTableIndex) {
       final isPs5 = device!.deviceType == 'ps5';
       name      = device!.displayName;
       url       = buildDeviceUrl(shopId, device!.id);
-      color     = isPs5 ? Colors.purple : const Color(0xFF38bdf8);
+      color     = isPs5 ? Colors.purple : const Color(0xFF22D3C9);
       typeLabel = isPs5 ? 'PS5' : 'PS4';
       icon      = Icons.sports_esports;
 
@@ -85,7 +85,7 @@ static String buildDrinkTableUrl(String shopId, int drinkTableIndex) {
         title: Text(
           'QR - $name',
           style: const TextStyle(
-              color: Color(0xFF38bdf8), fontWeight: FontWeight.bold),
+              color: Color(0xFF22D3C9), fontWeight: FontWeight.bold),
         ),
         leading: const BackButton(color: Colors.white),
       ),

@@ -82,11 +82,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.dashboard_rounded, color: Color(0xFF38bdf8), size: 18),
+            Icon(Icons.dashboard_rounded, color: Color(0xFF22D3C9), size: 18),
             SizedBox(width: 6),
             Text('الداشبورد',
                 style: TextStyle(
-                    color: Color(0xFF38bdf8),
+                    color: Color(0xFF22D3C9),
                     fontWeight: FontWeight.bold,
                     fontSize: 16)),
           ],
@@ -163,13 +163,13 @@ Row(
         onPressed: () => Navigator.push(context,
             MaterialPageRoute(builder: (_) => const AuditLogsScreen())),
         icon: const Icon(Icons.history_edu,
-            color: Color(0xFF38bdf8), size: 16),
+            color: Color(0xFF22D3C9), size: 16),
         label: const Text(
           'سجل الأحداث',
-          style: TextStyle(color: Color(0xFF38bdf8), fontSize: 12),
+          style: TextStyle(color: Color(0xFF22D3C9), fontSize: 12),
         ),
         style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFF38bdf8)),
+          side: const BorderSide(color: Color(0xFF22D3C9)),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           padding: const EdgeInsets.symmetric(vertical: 12),
         ),
@@ -202,7 +202,7 @@ const SizedBox(height: 8),
             _SectionHeader(
               icon: Icons.sports_esports,
               title: 'الأجهزة',
-              color: const Color(0xFF38bdf8),
+              color: const Color(0xFF22D3C9),
               trailing:
                   '${activeDevices.length}/${state.devices.length} شغال',
             ),
@@ -310,13 +310,13 @@ class _CompactRevenueCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF1c2128),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF38bdf8).withOpacity(0.2)),
+        border: Border.all(color: const Color(0xFF22D3C9).withOpacity(0.2)),
       ),
       child: Row(children: [
-        Expanded(child: _RevCol('💰 الإجمالي', todayTotal, const Color(0xFF4ade80),
+        Expanded(child: _RevCol('💰 الإجمالي', todayTotal, const Color(0xFF3CCB7F),
             live: liveRevenue > 0 ? '+${liveRevenue.toStringAsFixed(0)}' : null)),
         Container(width: 1, height: 32, color: Colors.white12),
-        Expanded(child: _RevCol('🎮 لعب', todayTime, const Color(0xFF38bdf8))),
+        Expanded(child: _RevCol('🎮 لعب', todayTime, const Color(0xFF22D3C9))),
         Container(width: 1, height: 32, color: Colors.white12),
         Expanded(child: _RevCol('🥤 بوفيه', todayBuffet, Colors.orange)),
       ]),
@@ -339,7 +339,7 @@ class _RevCol extends StatelessWidget {
       Text('${value.toStringAsFixed(0)} ج',
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13)),
       if (live != null)
-        Text(live!, style: const TextStyle(color: Color(0xFF4ade80), fontSize: 8)),
+        Text(live!, style: const TextStyle(color: Color(0xFF3CCB7F), fontSize: 8)),
     ]);
   }
 }
@@ -371,7 +371,7 @@ class _TinyDevicesGrid extends StatelessWidget {
         final color = d.isPaused
             ? Colors.amber
             : d.isActive
-                ? (isPs5 ? Colors.purple : const Color(0xFF38bdf8))
+                ? (isPs5 ? Colors.purple : const Color(0xFF22D3C9))
                 : Colors.white24;
         final statusLabel = d.isPaused ? 'وقف' : d.isActive ? 'شغال' : 'فاضي';
 
@@ -574,10 +574,10 @@ class _InventoryAlerts extends StatelessWidget {
           border: Border.all(color: Colors.white10),
         ),
         child: const Row(children: [
-          Icon(Icons.check_circle_outline, color: Color(0xFF4ade80), size: 14),
+          Icon(Icons.check_circle_outline, color: Color(0xFF3CCB7F), size: 14),
           SizedBox(width: 6),
           Text('المخزون كويس ✅',
-              style: TextStyle(color: Color(0xFF4ade80), fontSize: 12)),
+              style: TextStyle(color: Color(0xFF3CCB7F), fontSize: 12)),
         ]),
       );
     }

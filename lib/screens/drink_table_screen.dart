@@ -92,7 +92,7 @@ class DrinkTableScreen extends StatelessWidget {
                         fontSize: 16)),
                 Text('${total.toStringAsFixed(1)} ج',
                     style: const TextStyle(
-                        color: Color(0xFF4ade80),
+                        color: Color(0xFF3CCB7F),
                         fontWeight: FontWeight.bold,
                         fontSize: 22)),
               ],
@@ -295,7 +295,7 @@ class DrinkTableScreen extends StatelessWidget {
                 if (state.devices.isNotEmpty) ...[
                   const Text('🎮 الأجهزة',
                       style: TextStyle(
-                          color: Color(0xFF38bdf8),
+                          color: Color(0xFF22D3C9),
                           fontWeight: FontWeight.bold,
                           fontSize: 13)),
                   const SizedBox(height: 6),
@@ -303,8 +303,8 @@ class DrinkTableScreen extends StatelessWidget {
                         label: d.displayName,
                         sub: d.isActive ? 'شغال - ${d.timerText}' : 'متاح',
                         color: d.isActive
-                            ? const Color(0xFF38bdf8)
-                            : const Color(0xFF4ade80),
+                            ? const Color(0xFF22D3C9)
+                            : const Color(0xFF3CCB7F),
                         icon: Icons.sports_esports,
                        onTap: () {
   if (d.isActive) {
@@ -448,7 +448,7 @@ class DrinkTableScreen extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Text('${total.toStringAsFixed(1)} ج',
                     style: const TextStyle(
-                        color: Color(0xFF4ade80),
+                        color: Color(0xFF3CCB7F),
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
               ],
@@ -486,7 +486,7 @@ class DrinkTableScreen extends StatelessWidget {
                         context, record: record, shopName: shopName);
                     }
                   },
-                  child: _drinkStopBtn(Icons.print, 'طباعة', const Color(0xFF38bdf8)),
+                  child: _drinkStopBtn(Icons.print, 'طباعة', const Color(0xFF22D3C9)),
                 ),
             ],
           ),

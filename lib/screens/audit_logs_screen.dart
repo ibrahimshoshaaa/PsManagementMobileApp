@@ -175,13 +175,13 @@ class _AuditLogsScreenState extends State<AuditLogsScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF0b0e14),
         title: Row(children: [
-          const Icon(Icons.history_edu, color: Color(0xFF38bdf8), size: 20),
+          const Icon(Icons.history_edu, color: Color(0xFF22D3C9), size: 20),
           const SizedBox(width: 8),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Text(
               'سجل الأحداث',
               style: TextStyle(
-                  color: Color(0xFF38bdf8),
+                  color: Color(0xFF22D3C9),
                   fontWeight: FontWeight.bold,
                   fontSize: 16),
             ),
@@ -268,12 +268,12 @@ class _AuditLogsScreenState extends State<AuditLogsScreen> {
                         horizontal: 14, vertical: 6),
                     decoration: BoxDecoration(
                       color: selected
-                          ? const Color(0xFF38bdf8).withOpacity(0.2)
+                          ? const Color(0xFF22D3C9).withOpacity(0.2)
                           : const Color(0xFF1c2128),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: selected
-                            ? const Color(0xFF38bdf8)
+                            ? const Color(0xFF22D3C9)
                             : Colors.white12,
                         width: selected ? 1.5 : 1,
                       ),
@@ -282,7 +282,7 @@ class _AuditLogsScreenState extends State<AuditLogsScreen> {
                       f,
                       style: TextStyle(
                         color: selected
-                            ? const Color(0xFF38bdf8)
+                            ? const Color(0xFF22D3C9)
                             : Colors.white54,
                         fontSize: 12,
                         fontWeight: selected
@@ -302,7 +302,7 @@ class _AuditLogsScreenState extends State<AuditLogsScreen> {
             child: _loading
                 ? const Center(
                     child: CircularProgressIndicator(
-                        color: Color(0xFF38bdf8)))
+                        color: Color(0xFF22D3C9)))
                 : _filtered.isEmpty
                     ? Center(
                         child: Column(
@@ -404,7 +404,7 @@ if (tsMs != null) {
                 decoration: BoxDecoration(
                   color: (role == 'admin'
                           ? Colors.amber
-                          : const Color(0xFF38bdf8))
+                          : const Color(0xFF22D3C9))
                       .withOpacity(0.12),
                   borderRadius: BorderRadius.circular(6),
                 ),
@@ -413,7 +413,7 @@ if (tsMs != null) {
                   style: TextStyle(
                     color: role == 'admin'
                         ? Colors.amber
-                        : const Color(0xFF38bdf8),
+                        : const Color(0xFF22D3C9),
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                   ),
@@ -435,7 +435,7 @@ if (tsMs != null) {
 
   Color _colorForAction(String action) {
     if (action.startsWith('device') || action == 'matchRecorded') {
-      return const Color(0xFF38bdf8);
+      return const Color(0xFF22D3C9);
     }
     if (action.startsWith('expense')) return Colors.redAccent;
     if (action.startsWith('table') || action.startsWith('drinkTable')) {

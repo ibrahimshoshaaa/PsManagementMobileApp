@@ -643,16 +643,16 @@ class _ItemsInCategory extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: outOfStock
                         ? Colors.white.withOpacity(0.04)
-                        : const Color(0xFF4ade80).withOpacity(0.12),
+                        : const Color(0xFF3CCB7F).withOpacity(0.12),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: outOfStock
                           ? Colors.white12
-                          : const Color(0xFF4ade80).withOpacity(0.4),
+                          : const Color(0xFF3CCB7F).withOpacity(0.4),
                     ),
                   ),
                   child: Icon(Icons.add, size: 18,
-                      color: outOfStock ? Colors.white24 : const Color(0xFF4ade80)),
+                      color: outOfStock ? Colors.white24 : const Color(0xFF3CCB7F)),
                 ),
               ),
             ]),
@@ -788,7 +788,7 @@ class _FlatOrderDialog extends StatelessWidget {
             style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold, fontSize: 15))),
         if (tempTotal > 0)
           Text('${tempTotal.toStringAsFixed(1)} ج',
-              style: const TextStyle(color: Color(0xFF4ade80), fontWeight: FontWeight.bold, fontSize: 14)),
+              style: const TextStyle(color: Color(0xFF3CCB7F), fontWeight: FontWeight.bold, fontSize: 14)),
       ]),
       content: SizedBox(
         width: double.maxFinite,
@@ -837,11 +837,11 @@ class _FlatOrderDialog extends StatelessWidget {
                   child: Container(
                     width: 30, height: 30,
                     decoration: BoxDecoration(
-                      color: outOfStock ? Colors.white.withOpacity(0.04) : const Color(0xFF4ade80).withOpacity(0.12),
+                      color: outOfStock ? Colors.white.withOpacity(0.04) : const Color(0xFF3CCB7F).withOpacity(0.12),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: outOfStock ? Colors.white12 : const Color(0xFF4ade80).withOpacity(0.4)),
+                      border: Border.all(color: outOfStock ? Colors.white12 : const Color(0xFF3CCB7F).withOpacity(0.4)),
                     ),
-                    child: Icon(Icons.add, size: 16, color: outOfStock ? Colors.white24 : const Color(0xFF4ade80)),
+                    child: Icon(Icons.add, size: 16, color: outOfStock ? Colors.white24 : const Color(0xFF3CCB7F)),
                   ),
                 ),
               ]),

@@ -145,14 +145,14 @@ class _SelectionScreen extends StatelessWidget {
                   color: const Color(0xFF1c2128),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF38bdf8).withOpacity(0.25),
+                      color: const Color(0xFF22D3C9).withOpacity(0.25),
                       blurRadius: 30,
                       spreadRadius: 5,
                     ),
                   ],
                 ),
                 child: const Icon(Icons.sports_esports,
-                    size: 56, color: Color(0xFF38bdf8)),
+                    size: 56, color: Color(0xFF22D3C9)),
               ),
               const SizedBox(height: 16),
               Text(
@@ -161,7 +161,7 @@ class _SelectionScreen extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF38bdf8),
+                  color: Color(0xFF22D3C9),
                 ),
               ),
               const SizedBox(height: 6),
@@ -260,8 +260,8 @@ class _ProfileCard extends StatelessWidget {
   Color get _avatarColor {
     if (isAdmin) return Colors.amber;
     const colors = [
-      Color(0xFF38bdf8),
-      Color(0xFF4ade80),
+      Color(0xFF22D3C9),
+      Color(0xFF3CCB7F),
       Colors.purple,
       Colors.orange,
       Colors.pinkAccent,
@@ -427,7 +427,7 @@ class _PasswordScreen extends StatelessWidget {
     required this.onBack,
   });
 
-  Color get _color => isAdmin ? Colors.amber : const Color(0xFF38bdf8);
+  Color get _color => isAdmin ? Colors.amber : const Color(0xFF22D3C9);
 
   String get _initials {
     if (name.isEmpty) return 'K';

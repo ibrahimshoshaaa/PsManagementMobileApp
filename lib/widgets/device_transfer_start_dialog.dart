@@ -39,7 +39,7 @@ class _DeviceTransferStartDialogState extends State<DeviceTransferStartDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = widget.isPs5 ? Colors.purple : const Color(0xFF38bdf8);
+    final accentColor = widget.isPs5 ? Colors.purple : const Color(0xFF22D3C9);
 
     return AlertDialog(
       backgroundColor: const Color(0xFF1c2128),

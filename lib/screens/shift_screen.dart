@@ -43,13 +43,13 @@ class ShiftStartScreen extends StatelessWidget {
                 height: 90,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: const Color(0xFF38bdf8).withOpacity(0.15),
+                  color: const Color(0xFF22D3C9).withOpacity(0.15),
                   border: Border.all(
-                      color: const Color(0xFF38bdf8).withOpacity(0.5),
+                      color: const Color(0xFF22D3C9).withOpacity(0.5),
                       width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF38bdf8).withOpacity(0.2),
+                      color: const Color(0xFF22D3C9).withOpacity(0.2),
                       blurRadius: 30,
                       spreadRadius: 5,
                     ),
@@ -60,7 +60,7 @@ class ShiftStartScreen extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 38,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF38bdf8),
+                        color: Color(0xFF22D3C9),
                       )),
                 ),
               ),
@@ -82,11 +82,11 @@ class ShiftStartScreen extends StatelessWidget {
                   color: const Color(0xFF1c2128),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                      color: const Color(0xFF38bdf8).withOpacity(0.2)),
+                      color: const Color(0xFF22D3C9).withOpacity(0.2)),
                 ),
                 child: const Column(children: [
                   Icon(Icons.access_time_filled,
-                      color: Color(0xFF38bdf8), size: 32),
+                      color: Color(0xFF22D3C9), size: 32),
                   SizedBox(height: 12),
                   Text('جاهز تبدأ شيفتك؟',
                       style: TextStyle(
@@ -114,7 +114,7 @@ class ShiftStartScreen extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 18, fontWeight: FontWeight.bold)),
                   style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF38bdf8),
+                    backgroundColor: const Color(0xFF22D3C9),
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16)),
@@ -265,7 +265,7 @@ class _ShiftReportDialogState extends State<ShiftReportDialog>
           color: const Color(0xFF0b0e14),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-              color: const Color(0xFF38bdf8).withOpacity(0.3), width: 1.5),
+              color: const Color(0xFF22D3C9).withOpacity(0.3), width: 1.5),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -291,27 +291,27 @@ class _ShiftReportDialogState extends State<ShiftReportDialog>
                         ]),
                   ),
                   const Icon(Icons.receipt_long,
-                      color: Color(0xFF38bdf8), size: 22),
+                      color: Color(0xFF22D3C9), size: 22),
                 ]),
                 const SizedBox(height: 12),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4ade80).withOpacity(0.08),
+                    color: const Color(0xFF3CCB7F).withOpacity(0.08),
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                        color: const Color(0xFF4ade80).withOpacity(0.3)),
+                        color: const Color(0xFF3CCB7F).withOpacity(0.3)),
                   ),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _QuickStat('💰 الإجمالي',
                             '${shift.totalRevenue.toStringAsFixed(1)} ج',
-                            const Color(0xFF4ade80)),
+                            const Color(0xFF3CCB7F)),
                         Container(width: 1, height: 32, color: Colors.white12),
                         _QuickStat('🎮 لعب',
                             '${shift.totalTime.toStringAsFixed(1)} ج',
-                            const Color(0xFF38bdf8)),
+                            const Color(0xFF22D3C9)),
                         Container(width: 1, height: 32, color: Colors.white12),
                         _QuickStat('🥤 بوفيه',
                             '${shift.totalBuffet.toStringAsFixed(1)} ج',
@@ -324,8 +324,8 @@ class _ShiftReportDialogState extends State<ShiftReportDialog>
                 const SizedBox(height: 8),
                 TabBar(
                   controller: _tabs,
-                  indicatorColor: const Color(0xFF38bdf8),
-                  labelColor: const Color(0xFF38bdf8),
+                  indicatorColor: const Color(0xFF22D3C9),
+                  labelColor: const Color(0xFF22D3C9),
                   unselectedLabelColor: Colors.white38,
                   labelStyle: const TextStyle(
                       fontSize: 11, fontWeight: FontWeight.bold),
@@ -361,7 +361,7 @@ class _ShiftReportDialogState extends State<ShiftReportDialog>
                   label: const Text('تسجيل الخروج',
                       style: TextStyle(fontSize: 15)),
                   style: FilledButton.styleFrom(
-                    backgroundColor: const Color(0xFF38bdf8),
+                    backgroundColor: const Color(0xFF22D3C9),
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14)),
@@ -405,7 +405,7 @@ class _DeviceBreakdownTab extends StatelessWidget {
                   icon: Icons.sports_soccer,
                   label: 'ماتشات سريعة',
                   value: '$matches',
-                  color: const Color(0xFF4ade80),
+                  color: const Color(0xFF3CCB7F),
                 ),
               ),
             if (matches > 0 && games > 0) const SizedBox(width: 8),
@@ -476,7 +476,7 @@ class _DeviceSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final type = stats['device_type']?.toString() ?? '';
     final isPs5 = type == 'ps5';
-    final color = isPs5 ? Colors.purple : const Color(0xFF38bdf8);
+    final color = isPs5 ? Colors.purple : const Color(0xFF22D3C9);
 
     final timeCost = stats['time_cost'] as double;
     final buffetCost = stats['buffet_cost'] as double;
@@ -727,7 +727,7 @@ class _SessionDetailCard extends StatelessWidget {
                   _InfoChip(
                     icon: Icons.person_outline,
                     label: cashier,
-                    color: const Color(0xFF38bdf8),
+                    color: const Color(0xFF22D3C9),
                   ),
                   const SizedBox(width: 6),
                   // وضع اللعب
@@ -769,7 +769,7 @@ class _SessionDetailCard extends StatelessWidget {
                     child: _PriceBox(
                       label: '💰 إجمالي',
                       value: '${total.toStringAsFixed(1)} ج',
-                      color: const Color(0xFF4ade80),
+                      color: const Color(0xFF3CCB7F),
                       highlight: true,
                     ),
                   ),
@@ -904,12 +904,12 @@ class _SessionLogMiniState extends State<_SessionLogMini> {
                       icon = Icons.pause_rounded;
                       break;
                     case 'resume':
-                      c = const Color(0xFF38bdf8);
+                      c = const Color(0xFF22D3C9);
                       icon = Icons.play_circle_fill;
                       break;
                     case 'add_time':
                       final mins = ev['minutes'] as int? ?? 0;
-                      c = mins > 0 ? const Color(0xFF4ade80) : Colors.redAccent;
+                      c = mins > 0 ? const Color(0xFF3CCB7F) : Colors.redAccent;
                       icon = mins > 0 ? Icons.add_circle : Icons.remove_circle;
                       break;
                     case 'stop':
@@ -1113,7 +1113,7 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen> {
     if (state.isLoadingShifts && state.shiftsHistory.isEmpty) {
       return const Scaffold(
         backgroundColor: Color(0xFF0b0e14),
-        body: Center(child: CircularProgressIndicator(color: Color(0xFF38bdf8))),
+        body: Center(child: CircularProgressIndicator(color: Color(0xFF22D3C9))),
       );
     }
     final shifts = state.shiftsHistory.reversed.toList();
@@ -1128,7 +1128,7 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen> {
           children: [
             const Text('تقارير الشيفتات',
                 style: TextStyle(
-                    color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                    color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
             if (shifts.isNotEmpty)
               Text('${shifts.length} شيفت مسجل',
                   style: const TextStyle(
@@ -1224,10 +1224,10 @@ class _ShiftHistoryScreenState extends State<ShiftHistoryScreen> {
         content: Column(mainAxisSize: MainAxisSize.min, children: [
           _SummaryRow('💰 إجمالي الإيرادات',
               '${totalRev.toStringAsFixed(1)} ج',
-              const Color(0xFF4ade80)),
+              const Color(0xFF3CCB7F)),
           _SummaryRow('🎮 إيرادات اللعب',
               '${totalTime.toStringAsFixed(1)} ج',
-              const Color(0xFF38bdf8)),
+              const Color(0xFF22D3C9)),
           _SummaryRow('🥤 إيرادات البوفيه',
               '${totalBuffet.toStringAsFixed(1)} ج', Colors.orange),
           _SummaryRow('📋 إجمالي الجلسات', '$totalSessions', Colors.white70),
@@ -1429,7 +1429,7 @@ class _ShiftCard extends StatelessWidget {
           children: [
             Text('${shift.totalRevenue.toStringAsFixed(1)} ج',
                 style: const TextStyle(
-                    color: Color(0xFF4ade80),
+                    color: Color(0xFF3CCB7F),
                     fontWeight: FontWeight.bold,
                     fontSize: 14)),
             Text('${shift.sessionCount} جلسة',
@@ -1467,7 +1467,7 @@ class _ShiftCard extends StatelessWidget {
                     if (shift.totalMatches > 0)
                       _TagChip(
                           '⚽ ${shift.totalMatches} ماتش سريع',
-                          const Color(0xFF4ade80)),
+                          const Color(0xFF3CCB7F)),
                     if (shift.totalGames > 0) ...[
                       const SizedBox(width: 6),
                       _TagChip(
@@ -1501,7 +1501,7 @@ class _ShiftCard extends StatelessWidget {
                 if (deviceBreakdown.isNotEmpty) ...[
                   _SectionTitle(
                       '🎮 تفاصيل الأجهزة مع كل جلسة',
-                      const Color(0xFF38bdf8)),
+                      const Color(0xFF22D3C9)),
                   const SizedBox(height: 8),
                   ...(() {
                     final sortedDevices = deviceBreakdown.entries.toList()
@@ -1517,7 +1517,7 @@ class _ShiftCard extends StatelessWidget {
                           data['device_type']?.toString() == 'ps5';
                       final col = isPs5
                           ? Colors.purple
-                          : const Color(0xFF38bdf8);
+                          : const Color(0xFF22D3C9);
 
                       final devRevenue = data['revenue'] as double;
                       final devTime = data['time_cost'] as double;
@@ -1583,7 +1583,7 @@ class _ShiftCard extends StatelessWidget {
                 ],
 
                 // ── خط زمني ─────────────────────────────────────────
-                _SectionTitle('📋 الخط الزمني الكامل', const Color(0xFF4ade80)),
+                _SectionTitle('📋 الخط الزمني الكامل', const Color(0xFF3CCB7F)),
                 const Divider(color: Colors.white12, height: 12),
                 ...shift.transactions.reversed
                     .map((t) => _TransactionRow(transaction: t)),
@@ -1728,7 +1728,7 @@ class _DeviceCardExpandedState extends State<_DeviceCardExpanded> {
                     Text(
                         'صافي: ${widget.devRevenue.toStringAsFixed(0)}ج',
                         style: const TextStyle(
-                            color: Color(0xFF4ade80),
+                            color: Color(0xFF3CCB7F),
                             fontSize: 11,
                             fontWeight: FontWeight.bold)),
                   ],
@@ -1855,7 +1855,7 @@ class ActiveShiftBanner extends StatelessWidget {
                 width: 10,
                 height: 10,
                 decoration: const BoxDecoration(
-                    color: Color(0xFF4ade80), shape: BoxShape.circle)),
+                    color: Color(0xFF3CCB7F), shape: BoxShape.circle)),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -1873,14 +1873,14 @@ class ActiveShiftBanner extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
-                color: const Color(0xFF4ade80).withOpacity(0.12),
+                color: const Color(0xFF3CCB7F).withOpacity(0.12),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                    color: const Color(0xFF4ade80).withOpacity(0.4)),
+                    color: const Color(0xFF3CCB7F).withOpacity(0.4)),
               ),
               child: Text('${shift.sessionCount} جلسة',
                   style: const TextStyle(
-                      color: Color(0xFF4ade80),
+                      color: Color(0xFF3CCB7F),
                       fontSize: 11,
                       fontWeight: FontWeight.bold)),
             ),
@@ -1967,14 +1967,14 @@ class _CashierAvatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: const Color(0xFF38bdf8).withOpacity(0.12),
+        color: const Color(0xFF22D3C9).withOpacity(0.12),
         border:
-            Border.all(color: const Color(0xFF38bdf8).withOpacity(0.4)),
+            Border.all(color: const Color(0xFF22D3C9).withOpacity(0.4)),
       ),
       child: Center(
         child: Text(initial,
             style: TextStyle(
-                color: const Color(0xFF38bdf8),
+                color: const Color(0xFF22D3C9),
                 fontWeight: FontWeight.bold,
                 fontSize: size * 0.4)),
       ),
@@ -2252,13 +2252,13 @@ class _TransactionRow extends StatelessWidget {
       color = Colors.orange;
     } else if (isMatch) {
       icon = Icons.sports_soccer;
-      color = const Color(0xFF4ade80);
+      color = const Color(0xFF3CCB7F);
     } else if (isGame) {
       icon = Icons.sports_golf;
       color = Colors.purple;
     } else {
       icon = Icons.sports_esports;
-      color = const Color(0xFF38bdf8);
+      color = const Color(0xFF22D3C9);
     }
 
     return IntrinsicHeight(

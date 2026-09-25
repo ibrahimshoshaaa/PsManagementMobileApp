@@ -330,7 +330,7 @@ class _TableStartDialogState extends State<TableStartDialog> {
               label: 'مفتوح',
               sub: 'عداد تصاعدي',
               selected: _timeMode == 'open',
-              color: const Color(0xFF4ade80),
+              color: const Color(0xFF3CCB7F),
               onTap: () => setState(() {
                 _timeMode = 'open';
                 _selectedSeconds = null;

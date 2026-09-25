@@ -582,7 +582,7 @@ class _DebtTile extends StatelessWidget {
                   const SizedBox(height: 6),
                   ...history.map((h) {
                     final isAdd = h['type'] == 'add';
-                    final color = isAdd ? Colors.orange : const Color(0xFF4ade80);
+                    final color = isAdd ? Colors.orange : const Color(0xFF3CCB7F);
                     final icon = isAdd ? Icons.add_circle_outline : Icons.remove_circle_outline;
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 4),

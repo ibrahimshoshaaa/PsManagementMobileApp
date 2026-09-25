@@ -304,7 +304,7 @@ extension PrintResultX on PrintResult {
   Color get color {
     switch (this) {
       case PrintResult.success:
-        return const Color(0xFF4ade80);
+        return const Color(0xFF3CCB7F);
       default:
         return Colors.orange;
     }

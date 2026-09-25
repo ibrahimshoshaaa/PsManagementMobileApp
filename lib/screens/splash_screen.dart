@@ -106,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen>
                     shape: BoxShape.circle,
                     color: const Color(0xFF1c2128),
                     border: Border.all(
-                      color: const Color(0xFF38bdf8),
+                      color: const Color(0xFF22D3C9),
                       width: 2.5,
                     ),
                   ),
@@ -116,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen>
                       style: TextStyle(
                         fontSize: 38,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF38bdf8),
+                        color: Color(0xFF22D3C9),
                         letterSpacing: 2,
                       ),
                     ),

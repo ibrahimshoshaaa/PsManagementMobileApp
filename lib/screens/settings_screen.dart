@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF0b0e14),
         title: const Text('الإعدادات',
             style: TextStyle(
-                color: Color(0xFF38bdf8),
+                color: Color(0xFF22D3C9),
                 fontWeight: FontWeight.bold)),
         leading: const BackButton(color: Colors.white),
       ),
@@ -47,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
               icon: Icons.storefront,
               title: 'اسم المحل',
               subtitle: state.shopName,
-              color: const Color(0xFF38bdf8),
+              color: const Color(0xFF22D3C9),
               onTap: () => _showShopNameDialog(context),
             ),
             const SizedBox(height: 20),
@@ -171,7 +171,7 @@ class SettingsScreen extends StatelessWidget {
               icon: Icons.people,
               title: 'الكاشيرين',
               subtitle: '${state.cashiers.length} كاشير | أضف، عدّل، احذف',
-              color: const Color(0xFF38bdf8),
+              color: const Color(0xFF22D3C9),
               onTap: () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const CashiersScreen())),
             ),
@@ -188,14 +188,14 @@ class SettingsScreen extends StatelessWidget {
                 border: Border.all(color: Colors.white10),
               ),
               child: SwitchListTile(
-                activeColor: const Color(0xFF38bdf8),
+                activeColor: const Color(0xFF22D3C9),
                 secondary: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF38bdf8).withOpacity(0.15),
+                    color: const Color(0xFF22D3C9).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.print, color: Color(0xFF38bdf8)),
+                  child: const Icon(Icons.print, color: Color(0xFF22D3C9)),
                 ),
                 title: const Text('طباعة الفواتير',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
@@ -218,7 +218,7 @@ class SettingsScreen extends StatelessWidget {
               icon: Icons.phone_android,
               title: 'شحن الرصيد',
               subtitle: state.rechargeEnabled ? 'مفعّل — اضغط لإدارة الفئات' : 'معطّل',
-              color: const Color(0xFF38bdf8),
+              color: const Color(0xFF22D3C9),
               onTap: () => Navigator.push(context,
                   MaterialPageRoute(builder: (_) => const _RechargeSettingsScreen())),
             ),
@@ -269,7 +269,7 @@ class SettingsScreen extends StatelessWidget {
                 _TypeChip(
                   label: 'PS4',
                   selected: selectedType == 'ps4',
-                  color: const Color(0xFF38bdf8),
+                  color: const Color(0xFF22D3C9),
                   onTap: () => setState(() => selectedType = 'ps4'),
                 ),
                 const SizedBox(width: 8),
@@ -315,7 +315,7 @@ class SettingsScreen extends StatelessWidget {
       builder: (_) => _Dialog(
         title: 'اسم المحل',
         icon: Icons.storefront,
-        color: const Color(0xFF38bdf8),
+        color: const Color(0xFF22D3C9),
         child:
             TextField(controller: ctrl, decoration: _inputDeco('اسم المحل')),
         onSave: () {
@@ -336,7 +336,7 @@ class SettingsScreen extends StatelessWidget {
       builder: (_) => _Dialog(
         title: 'سعر الماتش',
         icon: Icons.sports_soccer,
-        color: const Color(0xFF4ade80),
+        color: const Color(0xFF3CCB7F),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           TextField(
               controller: ctrl,
@@ -364,7 +364,7 @@ class SettingsScreen extends StatelessWidget {
     final state = context.read<AppState>();
     final label = type == 'ps5' ? 'PS5' : 'PS4';
     final color =
-        type == 'ps5' ? Colors.purple : const Color(0xFF38bdf8);
+        type == 'ps5' ? Colors.purple : const Color(0xFF22D3C9);
     final normalCtrl = TextEditingController(
         text:
             '${state.prices['${type}_normal'] ?? (type == 'ps5' ? 40 : 25)}');
@@ -413,7 +413,7 @@ class SettingsScreen extends StatelessWidget {
     String? error;
     final label = isAdmin ? 'الأدمن' : 'الكاشير';
     final color =
-        isAdmin ? Colors.redAccent : const Color(0xFF38bdf8);
+        isAdmin ? Colors.redAccent : const Color(0xFF22D3C9);
 
     showDialog(
       context: context,
@@ -481,11 +481,11 @@ class SettingsScreen extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.history_edu, color: Color(0xFF4ade80)),
+            Icon(Icons.history_edu, color: Color(0xFF3CCB7F)),
             SizedBox(width: 8),
             Text('باسورد السجلات',
                 style: TextStyle(
-                    color: Color(0xFF4ade80),
+                    color: Color(0xFF3CCB7F),
                     fontWeight: FontWeight.bold)),
           ]),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -537,7 +537,7 @@ class SettingsScreen extends StatelessWidget {
                 );
               },
               style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF4ade80),
+                  backgroundColor: const Color(0xFF3CCB7F),
                   foregroundColor: Colors.black),
               child: const Text('حفظ'),
             ),
@@ -678,7 +678,7 @@ class _DeviceSettingsScreen extends StatelessWidget {
             title: 'أسعار PS4',
             subtitle:
                 'عادي: ${state.prices['ps4_normal'] ?? 25} ج/س | مالتي: ${state.prices['ps4_multi'] ?? 35} ج/س',
-            color: const Color(0xFF38bdf8),
+            color: const Color(0xFF22D3C9),
             onTap: () => _showPricesDialog(context, 'ps4'),
           ),
           const SizedBox(height: 8),
@@ -711,7 +711,7 @@ class _DeviceSettingsScreen extends StatelessWidget {
             ),
             child: Row(children: [
               const Icon(Icons.sports_soccer,
-                  color: Color(0xFF4ade80), size: 22),
+                  color: Color(0xFF3CCB7F), size: 22),
               const SizedBox(width: 12),
               const Expanded(
                 child: Column(
@@ -728,7 +728,7 @@ class _DeviceSettingsScreen extends StatelessWidget {
               Switch(
                 value: state.matchEnabled,
                 onChanged: (v) => state.setMatchEnabled(v),
-                activeColor: const Color(0xFF4ade80),
+                activeColor: const Color(0xFF3CCB7F),
               ),
             ]),
           ),
@@ -742,7 +742,7 @@ class _DeviceSettingsScreen extends StatelessWidget {
   void _showPricesDialog(BuildContext context, String type) {
     final state = context.read<AppState>();
     final label = type == 'ps5' ? 'PS5' : 'PS4';
-    final color = type == 'ps5' ? Colors.purple : const Color(0xFF38bdf8);
+    final color = type == 'ps5' ? Colors.purple : const Color(0xFF22D3C9);
     final normalCtrl = TextEditingController(
         text: '${state.prices['${type}_normal'] ?? (type == 'ps5' ? 40 : 25)}');
     final multiCtrl = TextEditingController(
@@ -787,7 +787,7 @@ class _DeviceSettingsScreen extends StatelessWidget {
       builder: (_) => _Dialog(
         title: 'سعر الماتش',
         icon: Icons.sports_soccer,
-        color: const Color(0xFF4ade80),
+        color: const Color(0xFF3CCB7F),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           TextField(
               controller: ctrl,
@@ -905,7 +905,7 @@ class _DeviceNamesScreenState extends State<_DeviceNamesScreen> {
                         _TypeChip(
                           label: 'PS4',
                           selected: _types[i] == 'ps4',
-                          color: const Color(0xFF38bdf8),
+                          color: const Color(0xFF22D3C9),
                           onTap: () =>
                               setState(() => _types[i] = 'ps4'),
                         ),
@@ -984,7 +984,7 @@ class _DeviceNamesScreenState extends State<_DeviceNamesScreen> {
             Row(children: [
               const Text('النوع:', style: TextStyle(color: Colors.white54, fontSize: 13)),
               const SizedBox(width: 12),
-              _TypeChip(label: 'PS4', selected: selectedType == 'ps4', color: const Color(0xFF38bdf8), onTap: () => setS(() => selectedType = 'ps4')),
+              _TypeChip(label: 'PS4', selected: selectedType == 'ps4', color: const Color(0xFF22D3C9), onTap: () => setS(() => selectedType = 'ps4')),
               const SizedBox(width: 8),
               _TypeChip(label: 'PS5', selected: selectedType == 'ps5', color: Colors.purple, onTap: () => setS(() => selectedType = 'ps5')),
             ]),
@@ -1289,7 +1289,7 @@ class _MenuProductsTab extends StatelessWidget {
       builder: (_) => _Dialog(
         title: 'تعديل منتج',
         icon: Icons.edit,
-        color: const Color(0xFF38bdf8),
+        color: const Color(0xFF22D3C9),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           TextField(
               controller: nameCtrl,
@@ -1410,14 +1410,14 @@ class _MenuDailySummaryTab extends StatelessWidget {
                 icon: Icons.shopping_bag,
                 label: 'إجمالي قطع',
                 value: '$totalQty',
-                color: const Color(0xFF38bdf8),
+                color: const Color(0xFF22D3C9),
               ),
               Container(width: 1, height: 36, color: Colors.white12),
               _SummaryChip(
                 icon: Icons.payments_outlined,
                 label: 'إيرادات البوفيه',
                 value: '${totalRevenue.toStringAsFixed(0)} ج',
-                color: const Color(0xFF4ade80),
+                color: const Color(0xFF3CCB7F),
               ),
             ],
           ),
@@ -1511,7 +1511,7 @@ class _MenuDailySummaryTab extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _MiniSummaryInfo('💰 إيراد', '$revenue ج',
-                            const Color(0xFF4ade80)),
+                            const Color(0xFF3CCB7F)),
                         _MiniSummaryInfo(
                             '📦 متبقي',
                             '$remaining قطعة',
@@ -1659,7 +1659,7 @@ class _MenuItemTile extends StatelessWidget {
       qtyColor = Colors.orange;
       qtyLabel = '$qty قطعة';
     } else {
-      qtyColor = const Color(0xFF4ade80);
+      qtyColor = const Color(0xFF3CCB7F);
       qtyLabel = '$qty قطعة';
     }
 
@@ -1689,7 +1689,7 @@ class _MenuItemTile extends StatelessWidget {
                 Row(children: [
                   Text('$price ج',
                       style: const TextStyle(
-                          color: Color(0xFF4ade80), fontSize: 13)),
+                          color: Color(0xFF3CCB7F), fontSize: 13)),
                   const SizedBox(width: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -1708,7 +1708,7 @@ class _MenuItemTile extends StatelessWidget {
         ),
         IconButton(
             icon: const Icon(Icons.edit,
-                color: Color(0xFF38bdf8), size: 20),
+                color: Color(0xFF22D3C9), size: 20),
             onPressed: onEdit),
         IconButton(
             icon: const Icon(Icons.delete_outline,
@@ -1808,13 +1808,13 @@ class _TablesManagementScreen extends StatelessWidget {
                             Text(
                               '${t['table_type'] == 'billiard' ? '🎱 بلياردو' : '🏓 بينج'} | ${t['rate']} ج/س${(t['game_price'] ?? 0) > 0 ? ' | جيم: ${t['game_price']} ج' : ''}',
                               style: const TextStyle(
-                                    color: Color(0xFF4ade80),
+                                    color: Color(0xFF3CCB7F),
                                     fontSize: 13)),
                           ]),
                     ),
                     IconButton(
                         icon: const Icon(Icons.edit,
-                            color: Color(0xFF38bdf8), size: 20),
+                            color: Color(0xFF22D3C9), size: 20),
                         onPressed: () =>
                             _showEditDialog(context, state, i)),
                     IconButton(
@@ -2005,9 +2005,9 @@ class _TablesManagementScreen extends StatelessWidget {
           backgroundColor: const Color(0xFF1c2128),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.edit, color: Color(0xFF38bdf8)),
+            Icon(Icons.edit, color: Color(0xFF22D3C9)),
             SizedBox(width: 8),
-            Text('تعديل تربيزة', style: TextStyle(color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+            Text('تعديل تربيزة', style: TextStyle(color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
           ]),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
             TextField(controller: nameCtrl, decoration: _inputDeco('اسم التربيزة')),
@@ -2035,7 +2035,7 @@ class _TablesManagementScreen extends StatelessWidget {
                 state.updateTableSettings(index, name, rate, tableType: selectedType, gamePrice: gamePrice);
                 Navigator.pop(ctx);
               },
-              style: FilledButton.styleFrom(backgroundColor: const Color(0xFF38bdf8), foregroundColor: Colors.black),
+              style: FilledButton.styleFrom(backgroundColor: const Color(0xFF22D3C9), foregroundColor: Colors.black),
               child: const Text('حفظ'),
             ),
           ],
@@ -2152,7 +2152,7 @@ class _DrinkTablesManagementScreen extends StatelessWidget {
                     ),
                     IconButton(
                         icon: const Icon(Icons.edit,
-                            color: Color(0xFF38bdf8), size: 20),
+                            color: Color(0xFF22D3C9), size: 20),
                         onPressed: () =>
                             _showEditDialog(context, state, i)),
                     IconButton(
@@ -2497,7 +2497,7 @@ class _SubscriptionBannerState extends State<_SubscriptionBanner> {
         ? Colors.red
         : days <= 7
             ? Colors.orange
-            : const Color(0xFF4ade80);
+            : const Color(0xFF3CCB7F);
 
     final icon = isExpired
         ? Icons.cancel_outlined
@@ -2636,7 +2636,7 @@ class _HistoryPasswordCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: enabled
-              ? const Color(0xFF4ade80).withOpacity(0.4)
+              ? const Color(0xFF3CCB7F).withOpacity(0.4)
               : Colors.white12,
         ),
       ),
@@ -2648,11 +2648,11 @@ class _HistoryPasswordCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: const Color(0xFF4ade80).withOpacity(0.12),
+                color: const Color(0xFF3CCB7F).withOpacity(0.12),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(Icons.history_edu,
-                  color: Color(0xFF4ade80), size: 20),
+                  color: Color(0xFF3CCB7F), size: 20),
             ),
             const SizedBox(width: 12),
             const Expanded(
@@ -2673,7 +2673,7 @@ class _HistoryPasswordCard extends StatelessWidget {
               onChanged: (v) {
                 context.read<AppState>().setHistoryPasswordEnabled(v);
               },
-              activeColor: const Color(0xFF4ade80),
+              activeColor: const Color(0xFF3CCB7F),
             ),
           ]),
 
@@ -2688,7 +2688,7 @@ class _HistoryPasswordCard extends StatelessWidget {
                     horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: enabled
-                      ? const Color(0xFF4ade80).withOpacity(0.12)
+                      ? const Color(0xFF3CCB7F).withOpacity(0.12)
                       : Colors.white10,
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -2696,7 +2696,7 @@ class _HistoryPasswordCard extends StatelessWidget {
                   Icon(Icons.lock_outline,
                       size: 13,
                       color: enabled
-                          ? const Color(0xFF4ade80)
+                          ? const Color(0xFF3CCB7F)
                           : Colors.white38),
                   const SizedBox(width: 4),
                   Text(
@@ -2705,7 +2705,7 @@ class _HistoryPasswordCard extends StatelessWidget {
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
                         color: enabled
-                            ? const Color(0xFF4ade80)
+                            ? const Color(0xFF3CCB7F)
                             : Colors.white38),
                   ),
                 ]),
@@ -2717,21 +2717,21 @@ class _HistoryPasswordCard extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4ade80).withOpacity(0.12),
+                    color: const Color(0xFF3CCB7F).withOpacity(0.12),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                         color:
-                            const Color(0xFF4ade80).withOpacity(0.4)),
+                            const Color(0xFF3CCB7F).withOpacity(0.4)),
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.edit,
-                          size: 14, color: Color(0xFF4ade80)),
+                          size: 14, color: Color(0xFF3CCB7F)),
                       SizedBox(width: 6),
                       Text('تغيير الباسورد',
                           style: TextStyle(
-                              color: Color(0xFF4ade80),
+                              color: Color(0xFF3CCB7F),
                               fontSize: 12,
                               fontWeight: FontWeight.bold)),
                     ],
@@ -2777,11 +2777,11 @@ class _HistoryPasswordCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.lock_reset, color: Color(0xFF4ade80)),
+            Icon(Icons.lock_reset, color: Color(0xFF3CCB7F)),
             SizedBox(width: 8),
             Text('تغيير باسورد السجلات',
                 style: TextStyle(
-                    color: Color(0xFF4ade80),
+                    color: Color(0xFF3CCB7F),
                     fontWeight: FontWeight.bold)),
           ]),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -2835,7 +2835,7 @@ class _HistoryPasswordCard extends StatelessWidget {
                 );
               },
               style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF4ade80),
+                  backgroundColor: const Color(0xFF3CCB7F),
                   foregroundColor: Colors.black),
               child: const Text('حفظ'),
             ),
@@ -2859,12 +2859,12 @@ class _RechargeSettingsScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF0b0e14),
         title: const Text('إعدادات الشحن',
             style: TextStyle(
-                color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
         leading: const BackButton(color: Colors.white),
         actions: [
           IconButton(
             icon: const Icon(Icons.add_circle,
-                color: Color(0xFF38bdf8), size: 28),
+                color: Color(0xFF22D3C9), size: 28),
             tooltip: 'إضافة فئة كارت',
             onPressed: () => _showAddCardDialog(context, state),
           ),
@@ -2882,13 +2882,13 @@ class _RechargeSettingsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: state.rechargeEnabled
-                    ? const Color(0xFF38bdf8).withOpacity(0.4)
+                    ? const Color(0xFF22D3C9).withOpacity(0.4)
                     : Colors.white10,
               ),
             ),
             child: Row(children: [
               const Icon(Icons.phone_android,
-                  color: Color(0xFF38bdf8), size: 22),
+                  color: Color(0xFF22D3C9), size: 22),
               const SizedBox(width: 12),
               const Expanded(
                 child: Column(
@@ -2906,7 +2906,7 @@ class _RechargeSettingsScreen extends StatelessWidget {
               Switch(
                 value: state.rechargeEnabled,
                 onChanged: (v) => state.setRechargeEnabled(v),
-                activeColor: const Color(0xFF38bdf8),
+                activeColor: const Color(0xFF22D3C9),
               ),
             ]),
           ),
@@ -2954,7 +2954,7 @@ class _RechargeSettingsScreen extends StatelessWidget {
                 ),
                 child: Row(children: [
                   const Icon(Icons.sim_card,
-                      color: Color(0xFF38bdf8), size: 20),
+                      color: Color(0xFF22D3C9), size: 20),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
@@ -2967,7 +2967,7 @@ class _RechargeSettingsScreen extends StatelessWidget {
                           Text(
                               '${(card['value'] as num?)?.toStringAsFixed(1) ?? 0} ج',
                               style: const TextStyle(
-                                  color: Color(0xFF4ade80),
+                                  color: Color(0xFF3CCB7F),
                                   fontSize: 13)),
                         ]),
                   ),
@@ -2994,11 +2994,11 @@ class _RechargeSettingsScreen extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)),
         title: const Row(children: [
-          Icon(Icons.sim_card, color: Color(0xFF38bdf8)),
+          Icon(Icons.sim_card, color: Color(0xFF22D3C9)),
           SizedBox(width: 8),
           Text('إضافة فئة كارت',
               style: TextStyle(
-                  color: Color(0xFF38bdf8),
+                  color: Color(0xFF22D3C9),
                   fontWeight: FontWeight.bold)),
         ]),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -3030,7 +3030,7 @@ class _RechargeSettingsScreen extends StatelessWidget {
               Navigator.pop(context);
             },
             style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF38bdf8),
+                backgroundColor: const Color(0xFF22D3C9),
                 foregroundColor: Colors.black),
             child: const Text('إضافة'),
           ),
@@ -3235,5 +3235,5 @@ InputDecoration _inputDeco(String label) => InputDecoration(
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(
-              color: Color(0xFF38bdf8), width: 2)),
+              color: Color(0xFF22D3C9), width: 2)),
     );

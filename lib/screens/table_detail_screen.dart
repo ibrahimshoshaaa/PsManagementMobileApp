@@ -136,7 +136,7 @@ class _TableDetailScreenState extends State<TableDetailScreen> {
             ),
             IconButton(
               icon: Icon(isPaused ? Icons.play_circle_fill : Icons.pause_circle_filled,
-                  color: isPaused ? Colors.amber : const Color(0xFF38bdf8), size: 30),
+                  color: isPaused ? Colors.amber : const Color(0xFF22D3C9), size: 30),
               onPressed: () => state.toggleTablePause(widget.tableIndex),
             ),
             if (state.isAdmin)
@@ -182,7 +182,7 @@ class _TableDetailScreenState extends State<TableDetailScreen> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 _CostChip('⏱ الوقت', '${timeCost.toStringAsFixed(1)} ج', const Color(0xFF34d399)),
                 _CostChip('🥤 البوفيه', '${buffetCost.toStringAsFixed(1)} ج', Colors.orange),
-                _CostChip('💰 الإجمالي', '${(timeCost + buffetCost).toStringAsFixed(1)} ج', const Color(0xFF4ade80)),
+                _CostChip('💰 الإجمالي', '${(timeCost + buffetCost).toStringAsFixed(1)} ج', const Color(0xFF3CCB7F)),
               ]),
               const SizedBox(height: 4),
              Text(
@@ -252,7 +252,7 @@ if (!isActive)
                 icon: const Icon(Icons.stop_circle_outlined, size: 24),
                 label: const Text('إيقاف وحساب', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF4ade80),
+                  backgroundColor: const Color(0xFF3CCB7F),
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
@@ -392,7 +392,7 @@ if (!isActive)
               // 1️⃣ انهاء وحفظ
               _TableStopBtn(
                 icon: Icons.save_alt, label: 'حفظ',
-                color: const Color(0xFF4ade80),
+                color: const Color(0xFF3CCB7F),
                 onTap: () {
                   Navigator.pop(context);
                   state.stopTable(widget.tableIndex);
@@ -430,7 +430,7 @@ if (!isActive)
               if (state.printerEnabled)
                 _TableStopBtn(
                   icon: Icons.print, label: 'طباعة',
-                  color: const Color(0xFF38bdf8),
+                  color: const Color(0xFF22D3C9),
                   onTap: () async {
                     Navigator.pop(context);
                     final record = state.stopTable(widget.tableIndex);
@@ -564,7 +564,7 @@ class _BuffetSection extends StatelessWidget {
                 Text(
                   '${buffetTotal.toStringAsFixed(1)} ج',
                   style: const TextStyle(
-                      color: Color(0xFF4ade80),
+                      color: Color(0xFF3CCB7F),
                       fontWeight: FontWeight.bold,
                       fontSize: 15),
                 ),
@@ -698,7 +698,7 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         Text(label, style: const TextStyle(color: Colors.white70)),
-        Text(value, style: TextStyle(color: green ? const Color(0xFF4ade80) : Colors.white, fontWeight: FontWeight.bold)),
+        Text(value, style: TextStyle(color: green ? const Color(0xFF3CCB7F) : Colors.white, fontWeight: FontWeight.bold)),
       ]),
     );
   }
@@ -719,10 +719,10 @@ class _TableStopBtn extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(12)),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Icon(icon, color: color == const Color(0xFF4ade80) ? Colors.black : Colors.white, size: 18),
+          Icon(icon, color: color == const Color(0xFF3CCB7F) ? Colors.black : Colors.white, size: 18),
           const SizedBox(height: 2),
           Text(label, style: TextStyle(
-            color: color == const Color(0xFF4ade80) ? Colors.black : Colors.white,
+            color: color == const Color(0xFF3CCB7F) ? Colors.black : Colors.white,
             fontSize: 11, fontWeight: FontWeight.bold)),
         ]),
       ),

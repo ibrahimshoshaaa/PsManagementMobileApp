@@ -9,6 +9,17 @@ import '../screens/customers_screen.dart';
 import 'buffet_order_dialog.dart'; // ✅ إضافة الاستيراد
 import 'print_invoice_dialog.dart'; // ✅ لازم عشان دايلوج الطباعة يظهر عند الإنهاء من هنا
 
+// ─── ألوان التصميم الجديد (نظام موحد بدل الألوان المتفرقة) ──────────────────
+class DCColors {
+  static const accent = Color(0xFF22D3C9); // اللون الأساسي (بدل الأزرق/البنفسجي)
+  static const accentOn = Color(0xFF06201F); // نص فوق accent
+  static const success = Color(0xFF3CCB7F); // للفلوس بس
+  static const danger = Color(0xFFF1554C); // للإنهاء بس
+  static const warning = Color(0xFFF5A623); // للحالة "متوقف" بس
+  static const neutralIcon = Colors.white70; // أيقونات محايدة (بوفيه، إلخ)
+  static const neutralBorder = Colors.white24;
+}
+
 class DeviceCard extends StatelessWidget {
   final PSDevice device;
   final VoidCallback onTap;
@@ -27,9 +38,9 @@ class DeviceCard extends StatelessWidget {
 
     Color borderColor;
     if (device.isPaused) {
-      borderColor = Colors.amber;
+      borderColor = DCColors.warning;
     } else if (device.isActive) {
-      borderColor = const Color(0xFF38bdf8);
+      borderColor = DCColors.accent;
     } else {
       borderColor = Colors.white.withOpacity(0.1);
     }
@@ -39,25 +50,25 @@ class DeviceCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         decoration: BoxDecoration(
-          color: const Color(0xFF1c2128),
-          borderRadius: BorderRadius.circular(16),
-          border:
-              Border.all(color: borderColor, width: device.isActive ? 1.5 : 1),
+          color: const Color(0xFF1B242D),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: borderColor, width: 1),
           boxShadow: device.isActive
               ? [
                   BoxShadow(
                       color: (device.isPaused
-                              ? Colors.amber
-                              : const Color(0xFF38bdf8))
-                          .withOpacity(0.2),
-                      blurRadius: 12,
-                      spreadRadius: 1)
+                              ? DCColors.warning
+                              : DCColors.accent)
+                          .withOpacity(0.18),
+                      blurRadius: 14,
+                      spreadRadius: 0)
                 ]
               : [],
         ),
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             // ─── صف العنوان ───────────────────────────────────────────
             Row(
@@ -70,78 +81,61 @@ class DeviceCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis)),
                 // PS4/PS5 badge
                 if (device.isActive) ...[
-  Container(
-    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-    decoration: BoxDecoration(
-      color: device.mode == 'multi'
-          ? Colors.orange.withOpacity(0.2)
-          : const Color(0xFF4ade80).withOpacity(0.15),
-      borderRadius: BorderRadius.circular(8),
-      border: Border.all(
-        color: device.mode == 'multi'
-            ? Colors.orange
-            : const Color(0xFF4ade80),
-      ),
-    ),
-    child: Text(
-      device.mode == 'multi' ? '👥 مالتي' : '👤 عادي',
-      style: TextStyle(
-        fontSize: 10,
-        fontWeight: FontWeight.bold,
-        color: device.mode == 'multi'
-            ? Colors.orange
-            : const Color(0xFF4ade80),
-      ),
-    ),
-  ),
-  const SizedBox(width: 4),
-],
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                          device.mode == 'multi'
+                              ? Icons.groups_rounded
+                              : Icons.person_rounded,
+                          size: 12,
+                          color: Colors.white.withOpacity(0.5)),
+                      const SizedBox(width: 3),
+                      Text(
+                        device.mode == 'multi' ? 'مالتي' : 'عادي',
+                        style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.white.withOpacity(0.5)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 6),
+                ],
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
+                      horizontal: 9, vertical: 3),
                   decoration: BoxDecoration(
-                    color: isPs5
-                        ? Colors.purple.withOpacity(0.2)
-                        : const Color(0xFF38bdf8).withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                        color: isPs5
-                            ? Colors.purple.withOpacity(0.8)
-                            : const Color(0xFF38bdf8).withOpacity(0.8),
-                        width: 1.5),
+                    color: DCColors.accent.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
                     isPs5 ? 'PS5' : 'PS4',
-                    style: TextStyle(
-                        fontSize: 13,
+                    style: const TextStyle(
+                        fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: isPs5
-                            ? Colors.purple
-                            : const Color(0xFF38bdf8)),
+                        color: DCColors.accent),
                   ),
                 ),
               ],
             ),
+            const SizedBox(height: 8),
 
             // ─── تايمر عداد ──────────────────────────────────────────
             _PulsingTimer(device: device),
+            const SizedBox(height: 6),
 
             // ─── أسعار ───────────────────────────────────────────────
-            Column(
-              children: [
-                Text(
-                    'لعب: ${timePrice.toStringAsFixed(1)} | بوفيه: ${buffetPrice.toStringAsFixed(1)}',
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.white.withOpacity(0.6))),
-                const SizedBox(height: 2),
-                Text('${total.toStringAsFixed(1)} ج.م',
-                    style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF4ade80))),
-              ],
-            ),
+            Text(
+                'لعب: ${timePrice.toStringAsFixed(1)} | بوفيه: ${buffetPrice.toStringAsFixed(1)}',
+                style:
+                    TextStyle(fontSize: 10, color: Colors.white.withOpacity(0.5))),
+            const SizedBox(height: 2),
+            Text('${total.toStringAsFixed(1)} ج.م',
+                style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: DCColors.success)),
+            const SizedBox(height: 12),
 
             // ─── أزرار ───────────────────────────────────────────────
            if (device.status == 'متاح' && device.orders.isEmpty)
@@ -197,21 +191,20 @@ class _PulsingTimerState extends State<_PulsingTimer>
           scale: isActive && !isPaused ? _anim.value : 1.0,
           child: child),
       child: Container(
-        padding:
-            const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        padding: EdgeInsets.zero,
         child: Text(
           widget.device.timerText,
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             fontFeatures: const [FontFeature.tabularFigures()],
-            color: isPaused ? Colors.amber : Colors.white,
+            color: isPaused ? DCColors.warning : Colors.white,
             shadows: isActive
                 ? [
                     Shadow(
                         color: (isPaused
-                                ? Colors.amber
-                                : const Color(0xFF38bdf8))
+                                ? DCColors.warning
+                                : DCColors.accent)
                             .withOpacity(0.5),
                         blurRadius: 8)
                   ]
@@ -293,18 +286,18 @@ class QuickTimeButtons extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF38bdf8).withOpacity(0.1),
+                  color: const Color(0xFF22D3C9).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                      color: const Color(0xFF38bdf8).withOpacity(0.4)),
+                      color: const Color(0xFF22D3C9).withOpacity(0.4)),
                 ),
                 child: Column(children: [
                   const Icon(Icons.sports_soccer,
-                      size: 14, color: Color(0xFF38bdf8)),
+                      size: 14, color: Color(0xFF22D3C9)),
                   Text('$matchPrice ج/ماتش',
                       style: const TextStyle(
                           fontSize: 9,
-                          color: Color(0xFF38bdf8),
+                          color: Color(0xFF22D3C9),
                           fontWeight: FontWeight.bold)),
                 ]),
               ),
@@ -319,17 +312,17 @@ class QuickTimeButtons extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4ade80).withOpacity(0.12),
+                  color: const Color(0xFF3CCB7F).withOpacity(0.12),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                      color: const Color(0xFF4ade80).withOpacity(0.4)),
+                      color: const Color(0xFF3CCB7F).withOpacity(0.4)),
                 ),
                 child: Column(children: [
                   const Text('+ماتش',
                       style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF4ade80))),
+                          color: Color(0xFF3CCB7F))),
                   Text('$matchPrice ج',
                       style: const TextStyle(
                           fontSize: 9, color: Colors.white38)),
@@ -352,11 +345,11 @@ class QuickTimeButtons extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Row(children: [
-          Icon(Icons.sports_soccer, color: Color(0xFF38bdf8)),
+          Icon(Icons.sports_soccer, color: Color(0xFF22D3C9)),
           SizedBox(width: 8),
           Text('إضافة / خصم ماتشات',
               style: TextStyle(
-                  color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                  color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
         ]),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
           Text('سعر الماتش: $matchPrice ج  |  مدة الماتش: $matchMinutes د',
@@ -384,7 +377,7 @@ class QuickTimeButtons extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                      color: Color(0xFF38bdf8), width: 2)),
+                      color: Color(0xFF22D3C9), width: 2)),
             ),
           ),
         ]),
@@ -417,7 +410,7 @@ class QuickTimeButtons extends StatelessWidget {
             icon: const Icon(Icons.add, size: 16),
             label: const Text('إضافة'),
             style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF4ade80),
+                backgroundColor: const Color(0xFF3CCB7F),
                 foregroundColor: Colors.black),
           ),
         ],
@@ -480,8 +473,8 @@ class _StartButton extends StatelessWidget {
             icon: const Icon(Icons.play_arrow, size: 18),
             label: const Text('بدء اللعب', style: TextStyle(fontSize: 13)),
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.green.shade700,
-              foregroundColor: Colors.white,
+              backgroundColor: DCColors.accent,
+              foregroundColor: DCColors.accentOn,
               padding: const EdgeInsets.symmetric(vertical: 8),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -496,11 +489,12 @@ class _StartButton extends StatelessWidget {
             onPressed: () => _showOrderDialog(context),
             style: OutlinedButton.styleFrom(
               padding: EdgeInsets.zero,
-              side: BorderSide(color: Colors.orange.withOpacity(0.6)),
+              side: const BorderSide(color: DCColors.neutralBorder),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
             ),
-            child: const Icon(Icons.fastfood, color: Colors.orange, size: 18),
+            child: const Icon(Icons.fastfood,
+                color: DCColors.neutralIcon, size: 18),
           ),
         ),
       ],
@@ -521,9 +515,7 @@ class _StartButton extends StatelessWidget {
       title: device.displayName,
       getCurrentOrders: () => Map<String, int>.from(device.orders),
       onOrderChanged: (item, diff) => state.addOrder(device, item, diff),
-      accentColor: device.deviceType == 'ps5'
-          ? Colors.purple
-          : const Color(0xFF38bdf8),
+      accentColor: DCColors.accent,
     );
   }
 }
@@ -548,8 +540,8 @@ class _MixedButtons extends StatelessWidget {
             icon: const Icon(Icons.play_arrow, size: 16),
             label: const Text('بدء', style: TextStyle(fontSize: 12)),
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.green.shade700,
-              foregroundColor: Colors.white,
+              backgroundColor: DCColors.accent,
+              foregroundColor: DCColors.accentOn,
               padding: const EdgeInsets.symmetric(vertical: 8),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -568,17 +560,16 @@ class _MixedButtons extends StatelessWidget {
               getCurrentOrders: () => Map<String, int>.from(device.orders),
               onOrderChanged: (item, diff) =>
                   state.addOrder(device, item, diff),
-              accentColor: device.deviceType == 'ps5'
-                  ? Colors.purple
-                  : const Color(0xFF38bdf8),
+              accentColor: DCColors.accent,
             ),
             style: OutlinedButton.styleFrom(
               padding: EdgeInsets.zero,
-              side: BorderSide(color: Colors.orange.withOpacity(0.6)),
+              side: const BorderSide(color: DCColors.neutralBorder),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
             ),
-            child: const Icon(Icons.fastfood, color: Colors.orange, size: 16),
+            child: const Icon(Icons.fastfood,
+                color: DCColors.neutralIcon, size: 16),
           ),
         ),
         const SizedBox(width: 4),
@@ -589,7 +580,7 @@ class _MixedButtons extends StatelessWidget {
           child: FilledButton(
             onPressed: () => _showStopDialog(context, state),
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.red.shade700,
+              backgroundColor: DCColors.danger,
               padding: EdgeInsets.zero,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -612,7 +603,7 @@ class _MixedButtons extends StatelessWidget {
         backgroundColor: const Color(0xFF1c2128),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text('إنهاء ${device.displayName}',
-            style: const TextStyle(color: Color(0xFF38bdf8))),
+            style: const TextStyle(color: DCColors.accent)),
         content: Column(mainAxisSize: MainAxisSize.min, children: [
           if (device.orders.isNotEmpty) ...[
             const Align(
@@ -641,7 +632,7 @@ class _MixedButtons extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold)),
             Text('${buffetPrice.toStringAsFixed(1)} ج',
                 style: const TextStyle(
-                    color: Color(0xFF4ade80),
+                    color: DCColors.success,
                     fontWeight: FontWeight.bold,
                     fontSize: 18)),
           ]),
@@ -661,7 +652,7 @@ class _MixedButtons extends StatelessWidget {
                     record: record, shopName: shopName ?? '');
               }
             },
-            style: FilledButton.styleFrom(backgroundColor: Colors.red.shade700),
+            style: FilledButton.styleFrom(backgroundColor: DCColors.danger),
             child: const Text('تأكيد الإنهاء'),
           ),
           if (hasWhatsapp)
@@ -717,9 +708,7 @@ class _ActiveButtons extends StatelessWidget {
       title: device.displayName,
       getCurrentOrders: () => Map<String, int>.from(device.orders),
       onOrderChanged: (item, diff) => state.addOrder(device, item, diff),
-      accentColor: device.deviceType == 'ps5'
-          ? Colors.purple
-          : const Color(0xFF38bdf8),
+      accentColor: DCColors.accent,
     );
   }
 
@@ -737,15 +726,16 @@ class _ActiveButtons extends StatelessWidget {
                     ? Icons.play_circle_fill
                     : Icons.pause_circle_filled,
                 color: device.isPaused
-                    ? Colors.amber
-                    : const Color(0xFF38bdf8),
+                    ? DCColors.warning
+                    : DCColors.accent,
                 size: 30),
             onPressed: () => state.togglePause(device),
           ),
         ),
         // ✅ زرار البوفيه السريع
         IconButton(
-          icon: const Icon(Icons.fastfood, color: Colors.orange, size: 26),
+          icon: const Icon(Icons.fastfood,
+              color: DCColors.neutralIcon, size: 26),
           onPressed: () => _showOrderDialog(context),
         ),
         Expanded(
@@ -755,7 +745,7 @@ class _ActiveButtons extends StatelessWidget {
             label: const Text('إنهاء',
                 style: TextStyle(fontSize: 13)),
             style: FilledButton.styleFrom(
-              backgroundColor: Colors.red.shade700,
+              backgroundColor: DCColors.danger,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 8),
               shape: RoundedRectangleBorder(
@@ -781,7 +771,7 @@ class _ActiveButtons extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)),
         title: Text('إنهاء ${device.displayName}',
-            style: const TextStyle(color: Color(0xFF38bdf8))),
+            style: const TextStyle(color: DCColors.accent)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -845,7 +835,7 @@ class _ActiveButtons extends StatelessWidget {
               }
             },
             style: FilledButton.styleFrom(
-                backgroundColor: Colors.red.shade700),
+                backgroundColor: DCColors.danger),
             child: const Text('تأكيد الإنهاء'),
           ),
           if (hasWhatsapp)
@@ -922,7 +912,7 @@ class _InfoRow extends StatelessWidget {
                       ? FontWeight.bold
                       : FontWeight.normal,
                   color: highlight
-                      ? const Color(0xFF4ade80)
+                      ? DCColors.success
                       : (small
                           ? Colors.white54
                           : Colors.white))),
@@ -1003,7 +993,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
   Widget build(BuildContext context) {
     final state = context.read<AppState>();
     final isPs5 = widget.device.deviceType == 'ps5';
-    final accentColor = isPs5 ? Colors.purple : const Color(0xFF38bdf8);
+    final accentColor = isPs5 ? Colors.purple : const Color(0xFF22D3C9);
 
     return AlertDialog(
       backgroundColor: const Color(0xFF1c2128),
@@ -1167,7 +1157,7 @@ class _StartModeDialogState extends State<_StartModeDialog> {
               label: 'لعب مفتوح',
               sub: 'عداد تصاعدي',
               selected: _timeMode == 'open',
-              color: const Color(0xFF4ade80),
+              color: const Color(0xFF3CCB7F),
               onTap: () => setState(() {
                 _timeMode = 'open';
                 _selectedSeconds = null;

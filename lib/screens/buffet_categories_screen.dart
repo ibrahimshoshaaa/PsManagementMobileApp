@@ -63,7 +63,7 @@ class BuffetCategoriesScreen extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     '${categories.length} قسم | ${state.menu.length} صنف',
-                    style: const TextStyle(color: Color(0xFF4ade80), fontSize: 12),
+                    style: const TextStyle(color: Color(0xFF3CCB7F), fontSize: 12),
                   ),
                 ]),
               ),
@@ -216,10 +216,10 @@ class BuffetCategoriesScreen extends StatelessWidget {
           backgroundColor: const Color(0xFF1c2128),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.edit, color: Color(0xFF38bdf8)),
+            Icon(Icons.edit, color: Color(0xFF22D3C9)),
             SizedBox(width: 8),
             Text('تعديل القسم',
-                style: TextStyle(color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                style: TextStyle(color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
           ]),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
             TextField(
@@ -236,7 +236,7 @@ class BuffetCategoriesScreen extends StatelessWidget {
                 enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: Colors.white12)),
                 focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF38bdf8), width: 2)),
+                    borderSide: const BorderSide(color: Color(0xFF22D3C9), width: 2)),
               ),
             ),
             const SizedBox(height: 16),
@@ -256,11 +256,11 @@ class BuffetCategoriesScreen extends StatelessWidget {
                   width: 44, height: 44,
                   decoration: BoxDecoration(
                     color: selectedEmoji == e
-                        ? const Color(0xFF38bdf8).withOpacity(0.2)
+                        ? const Color(0xFF22D3C9).withOpacity(0.2)
                         : const Color(0xFF0b0e14),
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: selectedEmoji == e ? const Color(0xFF38bdf8) : Colors.white12,
+                      color: selectedEmoji == e ? const Color(0xFF22D3C9) : Colors.white12,
                       width: selectedEmoji == e ? 2 : 1,
                     ),
                   ),
@@ -281,7 +281,7 @@ class BuffetCategoriesScreen extends StatelessWidget {
                 Navigator.pop(ctx);
               },
               style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF38bdf8), foregroundColor: Colors.black),
+                  backgroundColor: const Color(0xFF22D3C9), foregroundColor: Colors.black),
               child: const Text('حفظ'),
             ),
           ],
@@ -426,7 +426,7 @@ class _CategoryTile extends StatelessWidget {
             Text(
               '$itemCount ${itemCount == 1 ? "صنف" : "أصناف"}',
               style: TextStyle(
-                color: itemCount > 0 ? const Color(0xFF4ade80) : Colors.white38,
+                color: itemCount > 0 ? const Color(0xFF3CCB7F) : Colors.white38,
                 fontSize: 12,
               ),
             ),
@@ -435,7 +435,7 @@ class _CategoryTile extends StatelessWidget {
 
         // أزرار
         IconButton(
-          icon: const Icon(Icons.edit, color: Color(0xFF38bdf8), size: 20),
+          icon: const Icon(Icons.edit, color: Color(0xFF22D3C9), size: 20),
           onPressed: onEdit,
         ),
         IconButton(

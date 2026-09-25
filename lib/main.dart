@@ -32,8 +32,8 @@ class PSApp extends StatelessWidget {
         brightness: Brightness.dark,
         scaffoldBackgroundColor: const Color(0xFF0b0e14),
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF38bdf8),
-          secondary: Color(0xFF4ade80),
+          primary: Color(0xFF22D3C9),
+          secondary: Color(0xFF3CCB7F),
           surface: Color(0xFF1c2128),
         ),
         cardColor: const Color(0xFF1c2128),
@@ -43,7 +43,7 @@ class PSApp extends StatelessWidget {
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
-            backgroundColor: const Color(0xFF38bdf8),
+            backgroundColor: const Color(0xFF22D3C9),
             foregroundColor: Colors.black,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12)),

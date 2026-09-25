@@ -22,12 +22,12 @@ class CashiersScreen extends StatelessWidget {
         title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.people, color: Color(0xFF38bdf8), size: 20),
+            Icon(Icons.people, color: Color(0xFF22D3C9), size: 20),
             SizedBox(width: 8),
             Text(
               'إدارة الكاشيرين',
               style: TextStyle(
-                  color: Color(0xFF38bdf8), fontWeight: FontWeight.bold),
+                  color: Color(0xFF22D3C9), fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -35,7 +35,7 @@ class CashiersScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.add_circle,
-                color: Color(0xFF38bdf8), size: 28),
+                color: Color(0xFF22D3C9), size: 28),
             tooltip: 'إضافة كاشير',
             onPressed: () => _showAddDialog(context, state),
           ),
@@ -51,11 +51,11 @@ class CashiersScreen extends StatelessWidget {
               color: const Color(0xFF1c2128),
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                  color: const Color(0xFF38bdf8).withOpacity(0.3)),
+                  color: const Color(0xFF22D3C9).withOpacity(0.3)),
             ),
             child: Row(children: [
               const Icon(Icons.info_outline,
-                  color: Color(0xFF38bdf8), size: 18),
+                  color: Color(0xFF22D3C9), size: 18),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -70,7 +70,7 @@ class CashiersScreen extends StatelessWidget {
                       Text(
                         '${cashiers.length} كاشير متاح',
                         style: const TextStyle(
-                            color: Color(0xFF4ade80),
+                            color: Color(0xFF3CCB7F),
                             fontSize: 12),
                       ),
                     ]),
@@ -110,11 +110,11 @@ class CashiersScreen extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.person_add, color: Color(0xFF4ade80)),
+            Icon(Icons.person_add, color: Color(0xFF3CCB7F)),
             SizedBox(width: 8),
             Text('إضافة كاشير جديد',
                 style: TextStyle(
-                    color: Color(0xFF4ade80),
+                    color: Color(0xFF3CCB7F),
                     fontWeight: FontWeight.bold)),
           ]),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -173,7 +173,7 @@ class CashiersScreen extends StatelessWidget {
                 );
               },
               style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF4ade80),
+                  backgroundColor: const Color(0xFF3CCB7F),
                   foregroundColor: Colors.black),
               child: const Text('إضافة'),
             ),
@@ -209,16 +209,16 @@ class _CashierTile extends StatelessWidget {
           width: 44,
           height: 44,
           decoration: BoxDecoration(
-            color: const Color(0xFF38bdf8).withOpacity(0.12),
+            color: const Color(0xFF22D3C9).withOpacity(0.12),
             shape: BoxShape.circle,
             border: Border.all(
-                color: const Color(0xFF38bdf8).withOpacity(0.4)),
+                color: const Color(0xFF22D3C9).withOpacity(0.4)),
           ),
           child: Center(
             child: Text(
               name.isNotEmpty ? name[0].toUpperCase() : 'K',
               style: const TextStyle(
-                  color: Color(0xFF38bdf8),
+                  color: Color(0xFF22D3C9),
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             ),
@@ -247,7 +247,7 @@ class _CashierTile extends StatelessWidget {
           // تغيير الاسم
           IconButton(
             icon: const Icon(Icons.edit,
-                color: Color(0xFF38bdf8), size: 20),
+                color: Color(0xFF22D3C9), size: 20),
             tooltip: 'تعديل الاسم',
             onPressed: () =>
                 _showEditNameDialog(context, index, name),
@@ -284,11 +284,11 @@ class _CashierTile extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20)),
         title: const Row(children: [
-          Icon(Icons.edit, color: Color(0xFF38bdf8)),
+          Icon(Icons.edit, color: Color(0xFF22D3C9)),
           SizedBox(width: 8),
           Text('تعديل اسم الكاشير',
               style: TextStyle(
-                  color: Color(0xFF38bdf8),
+                  color: Color(0xFF22D3C9),
                   fontWeight: FontWeight.bold)),
         ]),
         content:
@@ -306,7 +306,7 @@ class _CashierTile extends StatelessWidget {
               Navigator.pop(context);
             },
             style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF38bdf8),
+                backgroundColor: const Color(0xFF22D3C9),
                 foregroundColor: Colors.black),
             child: const Text('حفظ'),
           ),
@@ -453,7 +453,7 @@ Widget _inputField(
       labelText: label,
       labelStyle: const TextStyle(color: Colors.white54),
       prefixIcon:
-          Icon(icon, color: const Color(0xFF38bdf8), size: 20),
+          Icon(icon, color: const Color(0xFF22D3C9), size: 20),
       filled: true,
       fillColor: const Color(0xFF0b0e14),
       border: OutlineInputBorder(
@@ -465,7 +465,7 @@ Widget _inputField(
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(
-              color: Color(0xFF38bdf8), width: 2)),
+              color: Color(0xFF22D3C9), width: 2)),
     ),
   );
 }

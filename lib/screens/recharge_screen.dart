@@ -27,11 +27,11 @@ class RechargeScreen extends StatelessWidget {
         title: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.phone_android, color: Color(0xFF38bdf8), size: 20),
+            Icon(Icons.phone_android, color: Color(0xFF22D3C9), size: 20),
             SizedBox(width: 8),
             Text('شحن الرصيد',
                 style: TextStyle(
-                    color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                    color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
           ],
         ),
         centerTitle: true,
@@ -47,14 +47,14 @@ class RechargeScreen extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     const Color(0xFF1c2128),
-                    const Color(0xFF38bdf8).withOpacity(0.08),
+                    const Color(0xFF22D3C9).withOpacity(0.08),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                    color: const Color(0xFF38bdf8).withOpacity(0.4)),
+                    color: const Color(0xFF22D3C9).withOpacity(0.4)),
               ),
               child: Column(children: [
                 // الرصيد الإجمالي
@@ -65,7 +65,7 @@ class RechargeScreen extends StatelessWidget {
                 Text(
                   '${state.rechargeBalance.toStringAsFixed(1)} ج',
                   style: const TextStyle(
-                      color: Color(0xFF4ade80),
+                      color: Color(0xFF3CCB7F),
                       fontSize: 42,
                       fontWeight: FontWeight.bold),
                 ),
@@ -80,7 +80,7 @@ class RechargeScreen extends StatelessWidget {
                         width: 1, height: 36, color: Colors.white12),
                     _BalanceChip('🃏 مبيعات اليوم',
                         '${todaySales.toStringAsFixed(1)} ج',
-                        const Color(0xFF38bdf8)),
+                        const Color(0xFF22D3C9)),
                     Container(
                         width: 1, height: 36, color: Colors.white12),
                     _BalanceChip(
@@ -119,7 +119,7 @@ class RechargeScreen extends StatelessWidget {
               child: _ActionCard(
                 icon: Icons.sim_card,
                 label: '🃏 بيع كارت',
-                color: const Color(0xFF38bdf8),
+                color: const Color(0xFF22D3C9),
                 onTap: () => _showSellCardDialog(context, state),
               ),
             ),
@@ -288,11 +288,11 @@ class RechargeScreen extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Row(children: [
-          Icon(Icons.sim_card, color: Color(0xFF38bdf8)),
+          Icon(Icons.sim_card, color: Color(0xFF22D3C9)),
           SizedBox(width: 8),
           Text('بيع كارت',
               style: TextStyle(
-                  color: Color(0xFF38bdf8), fontWeight: FontWeight.bold)),
+                  color: Color(0xFF22D3C9), fontWeight: FontWeight.bold)),
         ]),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -309,7 +309,7 @@ class RechargeScreen extends StatelessWidget {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text('✅ تم بيع $name (${value.toStringAsFixed(1)} ج)'),
-                  backgroundColor: const Color(0xFF38bdf8),
+                  backgroundColor: const Color(0xFF22D3C9),
                 ));
               },
               child: Container(
@@ -318,14 +318,14 @@ class RechargeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF38bdf8).withOpacity(0.08),
+                  color: const Color(0xFF22D3C9).withOpacity(0.08),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                      color: const Color(0xFF38bdf8).withOpacity(0.3)),
+                      color: const Color(0xFF22D3C9).withOpacity(0.3)),
                 ),
                 child: Row(children: [
                   const Icon(Icons.sim_card,
-                      color: Color(0xFF38bdf8), size: 20),
+                      color: Color(0xFF22D3C9), size: 20),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(name,
@@ -334,7 +334,7 @@ class RechargeScreen extends StatelessWidget {
                   ),
                   Text('${value.toStringAsFixed(1)} ج',
                       style: const TextStyle(
-                          color: Color(0xFF4ade80),
+                          color: Color(0xFF3CCB7F),
                           fontWeight: FontWeight.bold,
                           fontSize: 16)),
                 ]),
@@ -629,7 +629,7 @@ class _TransactionTile extends StatelessWidget {
         typeLabel = '⬆️ إضافة رصيد';
         break;
       case 'card':
-        color = const Color(0xFF38bdf8);
+        color = const Color(0xFF22D3C9);
         icon = Icons.sim_card;
         typeLabel = '🃏 كارت';
         break;
@@ -719,5 +719,5 @@ InputDecoration _inputDeco(String label) => InputDecoration(
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide:
-              const BorderSide(color: Color(0xFF38bdf8), width: 2)),
+              const BorderSide(color: Color(0xFF22D3C9), width: 2)),
     );

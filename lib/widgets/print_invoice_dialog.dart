@@ -120,7 +120,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
         children: [
           // Header
           Row(children: [
-            const Icon(Icons.receipt_long, color: Color(0xFF38bdf8)),
+            const Icon(Icons.receipt_long, color: Color(0xFF22D3C9)),
             const SizedBox(width: 8),
             const Text('معاينة الفاتورة',
                 style: TextStyle(
@@ -141,7 +141,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
             decoration: BoxDecoration(
               color: Colors.black87,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFF38bdf8).withOpacity(0.3)),
+              border: Border.all(color: const Color(0xFF22D3C9).withOpacity(0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -149,7 +149,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                 // اسم المحل
                 Text(widget.shopName,
                     style: const TextStyle(
-                        color: Color(0xFF38bdf8),
+                        color: Color(0xFF22D3C9),
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
                 const SizedBox(height: 4),
@@ -177,7 +177,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                       color: const Color(0xFF1c2128),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                          color: const Color(0xFF38bdf8).withOpacity(0.2)),
+                          color: const Color(0xFF22D3C9).withOpacity(0.2)),
                     ),
                     child: Column(
                       children: [
@@ -186,7 +186,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             _timeBox('بدء', startT ?? '--:--',
-                                const Color(0xFF4ade80)),
+                                const Color(0xFF3CCB7F)),
                             const Icon(Icons.arrow_back,
                                 color: Colors.white38, size: 16),
                             _timeBox('انتهاء', endT ?? '--:--',
@@ -323,22 +323,22 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
               onPressed:
                   _printing ? null : () => _print(_savedAddress!, _savedName ?? ''),
               style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF38bdf8),
+                  backgroundColor: const Color(0xFF22D3C9),
                   foregroundColor: Colors.black),
             ),
             const SizedBox(height: 8),
           ],
           OutlinedButton.icon(
             icon: const Icon(Icons.bluetooth_searching,
-                size: 18, color: Color(0xFF38bdf8)),
+                size: 18, color: Color(0xFF22D3C9)),
             label: const Text('اختر طابعة',
-                style: TextStyle(color: Color(0xFF38bdf8))),
+                style: TextStyle(color: Color(0xFF22D3C9))),
             onPressed: () {
               setState(() { _phase = _Phase.picker; });
               _scan();
             },
             style: OutlinedButton.styleFrom(
-                side: const BorderSide(color: Color(0xFF38bdf8))),
+                side: const BorderSide(color: Color(0xFF22D3C9))),
           ),
         ],
       ),
@@ -372,7 +372,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                   fontSize: highlight ? 15 : 13)),
           Text(value,
               style: TextStyle(
-                  color: highlight ? const Color(0xFF4ade80) : Colors.white,
+                  color: highlight ? const Color(0xFF3CCB7F) : Colors.white,
                   fontWeight:
                       highlight ? FontWeight.bold : FontWeight.normal,
                   fontSize: highlight ? 15 : 13)),
@@ -404,11 +404,11 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                 width: 18,
                 height: 18,
                 child: CircularProgressIndicator(
-                    strokeWidth: 2, color: Color(0xFF38bdf8)))
+                    strokeWidth: 2, color: Color(0xFF22D3C9)))
           else
             IconButton(
               icon: const Icon(Icons.refresh,
-                  color: Color(0xFF38bdf8), size: 20),
+                  color: Color(0xFF22D3C9), size: 20),
               onPressed: _scan,
             ),
         ]),
@@ -441,13 +441,13 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                   dense: true,
                   leading: Icon(Icons.print,
                       color: isSaved
-                          ? const Color(0xFF4ade80)
+                          ? const Color(0xFF3CCB7F)
                           : Colors.white54,
                       size: 20),
                   title: Text(d.name ?? d.address,
                       style: TextStyle(
                           color: isSaved
-                              ? const Color(0xFF4ade80)
+                              ? const Color(0xFF3CCB7F)
                               : Colors.white,
                           fontWeight: isSaved
                               ? FontWeight.bold
@@ -458,7 +458,7 @@ class _PrintInvoiceDialogState extends State<PrintInvoiceDialog> {
                           color: Colors.white38, fontSize: 11)),
                   trailing: isSaved
                       ? const Icon(Icons.check_circle,
-                          color: Color(0xFF4ade80), size: 16)
+                          color: Color(0xFF3CCB7F), size: 16)
                       : null,
                   onTap: () async {
                     await PrinterService.saveAddress(d.address);

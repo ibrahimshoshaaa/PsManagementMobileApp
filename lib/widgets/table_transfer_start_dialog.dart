@@ -120,7 +120,7 @@ class _TableTransferStartDialogState extends State<TableTransferStartDialog> {
                             ? '${widget.gamePrice} ج/لعبة + ${widget.ratePerHour} ج/س'
                             : '${widget.ratePerHour} ج/س',
                     style: const TextStyle(
-                        color: Color(0xFF4ade80),
+                        color: Color(0xFF3CCB7F),
                         fontWeight: FontWeight.bold,
                         fontSize: 13),
                   ),

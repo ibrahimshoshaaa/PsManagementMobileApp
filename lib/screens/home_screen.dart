@@ -208,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen>
       // التعديل الرابع: إضافة تاب الشحن
       if (hasRecharge)
         const Tab(
-            icon: Icon(Icons.phone_android, size: 18, color: Color(0xFF38bdf8)),
+            icon: Icon(Icons.phone_android, size: 18, color: Color(0xFF22D3C9)),
             text: 'شحن'),
     ];
 
@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen>
         title: Text(
           '⚡ ${state.shopName}',
           style: const TextStyle(
-              color: Color(0xFF38bdf8),
+              color: Color(0xFF22D3C9),
               fontWeight: FontWeight.bold,
               fontSize: 18),
         ),
@@ -400,8 +400,8 @@ Stack(
         bottom: showTabs
             ? TabBar(
                 controller: _tabController,
-                indicatorColor: const Color(0xFF38bdf8),
-                labelColor: const Color(0xFF38bdf8),
+                indicatorColor: const Color(0xFF22D3C9),
+                labelColor: const Color(0xFF22D3C9),
                 unselectedLabelColor: Colors.white38,
                 labelStyle: const TextStyle(
                     fontSize: 12, fontWeight: FontWeight.bold),
@@ -440,14 +440,14 @@ class _EmptyWelcomeScreen extends StatelessWidget {
                 color: const Color(0xFF1c2128),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF38bdf8).withOpacity(0.15),
+                    color: const Color(0xFF22D3C9).withOpacity(0.15),
                     blurRadius: 40,
                     spreadRadius: 8,
                   ),
                 ],
               ),
               child: const Icon(Icons.add_circle_outline,
-                  size: 72, color: Color(0xFF38bdf8)),
+                  size: 72, color: Color(0xFF22D3C9)),
             ),
             const SizedBox(height: 28),
             const Text(
@@ -455,7 +455,7 @@ class _EmptyWelcomeScreen extends StatelessWidget {
               style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF38bdf8)),
+                  color: Color(0xFF22D3C9)),
             ),
             const SizedBox(height: 12),
             const Text(
@@ -468,7 +468,7 @@ class _EmptyWelcomeScreen extends StatelessWidget {
             // ── بطاقات الاقتراحات ───────────────────────────────────────
             _SuggestionCard(
               icon: Icons.sports_esports,
-              color: const Color(0xFF38bdf8),
+              color: const Color(0xFF22D3C9),
               title: 'أجهزة بلايستيشن',
               sub: 'أضف PS4 أو PS5 وابدأ التتبع',
             ),
@@ -500,7 +500,7 @@ class _EmptyWelcomeScreen extends StatelessWidget {
                 label: const Text('اذهب للإعدادات',
                     style: TextStyle(fontSize: 16)),
                 style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF38bdf8),
+                  backgroundColor: const Color(0xFF22D3C9),
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
@@ -572,7 +572,7 @@ class _EmptyTab extends StatelessWidget {
     required this.icon,
     required this.message,
     required this.sub,
-    this.color = const Color(0xFF38bdf8),
+    this.color = const Color(0xFF22D3C9),
   });
 
   @override
@@ -745,7 +745,7 @@ onPressed: () => showDialog(
                       onPressed: () =>
                           _confirmStop(context, state),
                       style: FilledButton.styleFrom(
-                        backgroundColor: const Color(0xFF4ade80),
+                        backgroundColor: const Color(0xFF3CCB7F),
                         foregroundColor: Colors.black,
                         padding: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(
@@ -819,7 +819,7 @@ onPressed: () => showDialog(
               state.stopTable(tableIndex);
             },
             style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFF4ade80),
+                backgroundColor: const Color(0xFF3CCB7F),
                 foregroundColor: Colors.black),
             child: const Text('تأكيد'),
           ),
@@ -1082,7 +1082,7 @@ class _DrinkTableCard extends StatelessWidget {
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: total > 0
-                      ? const Color(0xFF4ade80)
+                      ? const Color(0xFF3CCB7F)
                       : Colors.white24,
                 ),
               ),
@@ -1205,19 +1205,19 @@ class _DrinkTableCard extends StatelessWidget {
               if (state.devices.isNotEmpty) ...[
                 const Text('🎮 الأجهزة',
                     style: TextStyle(
-                        color: Color(0xFF38bdf8),
+                        color: Color(0xFF22D3C9),
                         fontWeight: FontWeight.bold,
                         fontSize: 13)),
                 const SizedBox(height: 6),
                ...state.devices.map((d) => ListTile(
   contentPadding: EdgeInsets.zero,
   leading: Icon(Icons.sports_esports,
-      color: d.isActive ? const Color(0xFF38bdf8) : const Color(0xFF4ade80)),
+      color: d.isActive ? const Color(0xFF22D3C9) : const Color(0xFF3CCB7F)),
   title: Text(d.displayName,
       style: const TextStyle(fontWeight: FontWeight.bold)),
   subtitle: Text(d.isActive ? 'شغال' : 'متاح',
       style: TextStyle(
-          color: d.isActive ? const Color(0xFF38bdf8) : const Color(0xFF4ade80),
+          color: d.isActive ? const Color(0xFF22D3C9) : const Color(0xFF3CCB7F),
           fontSize: 12)),
               onTap: () {
                 Navigator.pop(context);
@@ -1363,7 +1363,7 @@ void _showTransferDialog(BuildContext context, AppState state) =>
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Text('${total.toStringAsFixed(1)} ج',
                     style: const TextStyle(
-                        color: Color(0xFF4ade80),
+                        color: Color(0xFF3CCB7F),
                         fontWeight: FontWeight.bold,
                         fontSize: 18)),
               ],
@@ -1409,7 +1409,7 @@ class _BottomBar extends StatelessWidget {
             _BarButton(
               icon: Icons.dashboard_rounded,
               label: 'الداشبورد',
-              color: const Color(0xFF38bdf8),
+              color: const Color(0xFF22D3C9),
               onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -1421,7 +1421,7 @@ class _BottomBar extends StatelessWidget {
             _BarButton(
   icon: Icons.history,
   label: 'السجلات',
-  color: const Color(0xFF4ade80),
+  color: const Color(0xFF3CCB7F),
   onTap: () {
     final state = context.read<AppState>();
     final hash = state.historyPasswordHash;
@@ -1444,11 +1444,11 @@ class _BottomBar extends StatelessWidget {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)),
           title: const Row(children: [
-            Icon(Icons.lock, color: Color(0xFF4ade80)),
+            Icon(Icons.lock, color: Color(0xFF3CCB7F)),
             SizedBox(width: 8),
             Text('باسورد السجلات',
                 style: TextStyle(
-                    color: Color(0xFF4ade80),
+                    color: Color(0xFF3CCB7F),
                     fontWeight: FontWeight.bold)),
           ]),
           content: TextField(
@@ -1473,7 +1473,7 @@ class _BottomBar extends StatelessWidget {
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(
-                      color: Color(0xFF4ade80), width: 2)),
+                      color: Color(0xFF3CCB7F), width: 2)),
               errorText: error ? '❌ باسورد غلط' : null,
             ),
             onSubmitted: (_) {
@@ -1503,7 +1503,7 @@ class _BottomBar extends StatelessWidget {
                 }
               },
               style: FilledButton.styleFrom(
-                  backgroundColor: const Color(0xFF4ade80),
+                  backgroundColor: const Color(0xFF3CCB7F),
                   foregroundColor: Colors.black),
               child: const Text('دخول'),
             ),
@@ -1580,7 +1580,7 @@ class _BillRow extends StatelessWidget {
             Text(value,
                 style: TextStyle(
                     color: green
-                        ? const Color(0xFF4ade80)
+                        ? const Color(0xFF3CCB7F)
                         : Colors.white,
                     fontWeight: FontWeight.bold)),
           ]),

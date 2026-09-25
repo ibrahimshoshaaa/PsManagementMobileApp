@@ -94,14 +94,14 @@ class _StockTab extends StatelessWidget {
                 icon: Icons.inventory,
                 label: 'إجمالي قطع',
                 value: '${inventory.values.fold(0, (s, v) => s + v)}',
-                color: const Color(0xFF38bdf8),
+                color: const Color(0xFF22D3C9),
               ),
               Container(width: 1, height: 36, color: Colors.white12),
               _StatChip(
                 icon: Icons.attach_money,
                 label: 'قيمة المخزون',
                 value: '${totalValue.toStringAsFixed(0)} ج',
-                color: const Color(0xFF4ade80),
+                color: const Color(0xFF3CCB7F),
               ),
             ],
           ),
@@ -479,14 +479,14 @@ class _DailySummaryTab extends StatelessWidget {
                     icon: Icons.shopping_bag,
                     label: 'إجمالي قطع',
                     value: '$totalQty',
-                    color: const Color(0xFF38bdf8),
+                    color: const Color(0xFF22D3C9),
                   ),
                   Container(width: 1, height: 36, color: Colors.white12),
                   _StatChip(
                     icon: Icons.payments_outlined,
                     label: 'إيرادات البوفيه',
                     value: '${totalRevenue.toStringAsFixed(0)} ج',
-                    color: const Color(0xFF4ade80),
+                    color: const Color(0xFF3CCB7F),
                   ),
                 ],
               ),
@@ -591,7 +591,7 @@ class _DailySummaryTab extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _MiniInfo('💰 إيراد', '${revenue} ج',
-                            const Color(0xFF4ade80)),
+                            const Color(0xFF3CCB7F)),
                         _MiniInfo('📦 متبقي', '$remaining قطعة',
                             remaining <= 3
                                 ? Colors.red
@@ -701,7 +701,7 @@ class _StockItemTile extends StatelessWidget {
       stockLabel = 'قليل';
       stockIcon = Icons.warning_outlined;
     } else {
-      stockColor = const Color(0xFF4ade80);
+      stockColor = const Color(0xFF3CCB7F);
       stockLabel = 'متاح';
       stockIcon = Icons.check_circle_outline;
     }
