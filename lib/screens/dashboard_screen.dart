@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/app_state.dart';
+import '../widgets/device_card.dart' show DCColors;
 import 'shift_screen.dart';
 import 'daily_report_screen.dart';
 import 'audit_logs_screen.dart';
@@ -216,7 +217,7 @@ const SizedBox(height: 8),
             _SectionHeader(
               icon: Icons.table_bar,
               title: 'بنج / بلياردو',
-              color: const Color(0xFF34d399),
+              color: DCColors.accent,
               trailing:
                   '${state.tables.where((t) => t['start_time'] != null).length}/${state.tables.length} شغالة',
             ),
@@ -230,7 +231,7 @@ const SizedBox(height: 8),
             _SectionHeader(
               icon: Icons.local_drink,
               title: 'المشروبات',
-              color: Colors.orange,
+              color: DCColors.accent,
               trailing:
                   '${busyDrinkTables.length}/${state.drinkTables.length} فيها طلبات',
             ),
@@ -318,7 +319,7 @@ class _CompactRevenueCard extends StatelessWidget {
         Container(width: 1, height: 32, color: Colors.white12),
         Expanded(child: _RevCol('🎮 لعب', todayTime, const Color(0xFF22D3C9))),
         Container(width: 1, height: 32, color: Colors.white12),
-        Expanded(child: _RevCol('🥤 بوفيه', todayBuffet, Colors.orange)),
+        Expanded(child: _RevCol('🥤 بوفيه', todayBuffet, DCColors.warning)),
       ]),
     );
   }
@@ -367,11 +368,10 @@ class _TinyDevicesGrid extends StatelessWidget {
       ),
       itemBuilder: (ctx, i) {
         final d = devices[i];
-        final isPs5 = d.deviceType == 'ps5';
         final color = d.isPaused
-            ? Colors.amber
+            ? DCColors.warning
             : d.isActive
-                ? (isPs5 ? Colors.purple : const Color(0xFF22D3C9))
+                ? DCColors.accent
                 : Colors.white24;
         final statusLabel = d.isPaused ? 'وقف' : d.isActive ? 'شغال' : 'فاضي';
 
@@ -426,9 +426,9 @@ class _TinyTablesGrid extends StatelessWidget {
         final isPaused = t['is_paused'] == true;
         final tableType = t['table_type'] ?? 'ping';
         final color = isPaused
-            ? Colors.amber
+            ? DCColors.warning
             : isActive
-                ? const Color(0xFF34d399)
+                ? DCColors.accent
                 : Colors.white24;
         final emoji = tableType == 'billiard' ? '🎱' : '🏓';
         final statusLabel = isPaused ? 'وقف' : isActive ? 'شغالة' : 'فاضية';
@@ -481,7 +481,7 @@ class _TinyDrinkGrid extends StatelessWidget {
         final t = drinkTables[i];
         final orders = Map<String, int>.from(t['orders'] ?? {});
         final hasBusy = orders.isNotEmpty;
-        final color = hasBusy ? Colors.orange : Colors.white24;
+        final color = hasBusy ? DCColors.accent : Colors.white24;
 
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
@@ -586,7 +586,7 @@ class _InventoryAlerts extends StatelessWidget {
       spacing: 6,
       runSpacing: 6,
       children: lowStock.map((e) {
-        final color = e.value == 0 ? Colors.red : Colors.orange;
+        final color = e.value == 0 ? DCColors.danger : DCColors.warning;
         final label = e.value == 0 ? 'نفد!' : '${e.value} قطعة';
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
